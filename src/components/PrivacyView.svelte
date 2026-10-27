@@ -17,14 +17,14 @@
         ✓ Summary of Our Privacy Stance: Absolute Local Isolation
       </h3>
       <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.5;">
-        DistroMatch operates <strong>100% inside your web browser</strong>. Your question responses, hardware specifications, answers, and scoring calculations never leave your local device. We have no analytics trackers, no advertising cookies, no server-side telemetry, and zero user databases.
+        LinuxMatch operates <strong>100% inside your web browser</strong>. Your question responses, hardware specifications, answers, and scoring calculations never leave your local device. We have no analytics trackers, no advertising cookies, no server-side telemetry, and zero user databases.
       </p>
     </div>
 
     <div class="legal-content">
       <h2>1. Introduction & General Data Protection Regulation (GDPR) Compliance</h2>
       <p>
-        Under Regulation (EU) 2016/679 of the European Parliament and of the Council (General Data Protection Regulation or GDPR), you have fundamental rights regarding the processing and ownership of personal information. DistroMatch is architected to achieve compliance through the most robust mechanism possible: by declining to collect, store, transmit, or monetize any personal data whatsoever.
+        Under Regulation (EU) 2016/679 of the European Parliament and of the Council (General Data Protection Regulation or GDPR), you have fundamental rights regarding the processing and ownership of personal information. LinuxMatch is architected to achieve compliance through the most robust mechanism possible: by declining to collect, store, transmit, or monetize any personal data whatsoever.
       </p>
 
       <h2>2. Data Collection & Processing Mechanism</h2>
@@ -37,7 +37,7 @@
 
       <h2>3. Your Rights Under GDPR and CCPA</h2>
       <p>
-        Under GDPR Articles 15 through 22 and the California Consumer Privacy Act (CCPA), individuals hold the right of access, rectification, erasure ("right to be forgotten"), and restriction of data processing. Because DistroMatch retains zero identifier records, there is no personal data ledger to access or delete. If you wish to purge the local theme setting, click the button below:
+        Under GDPR Articles 15 through 22 and the California Consumer Privacy Act (CCPA), individuals hold the right of access, rectification, erasure ("right to be forgotten"), and restriction of data processing. Because LinuxMatch retains zero identifier records, there is no personal data ledger to access or delete. If you wish to purge the local theme setting, click the button below:
       </p>
 
       <div style="margin: 20px 0;">
@@ -48,7 +48,7 @@
 
       <h2>4. External Links</h2>
       <p>
-        DistroMatch provides direct outbound hyperlinks to external distribution websites, documentation wikis, and repositories. We do not control and are not responsible for the privacy practices of external projects. When visiting external domains, refer to their respective privacy disclosures.
+        LinuxMatch provides direct outbound hyperlinks to external distribution websites, documentation wikis, and repositories. We do not control and are not responsible for the privacy practices of external projects. When visiting external domains, refer to their respective privacy disclosures.
       </p>
     </div>
   </div>
@@ -75,7 +75,7 @@
   }
 
   .legal-sub {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.85rem;
     color: var(--text-subtle);
     margin-top: 4px;

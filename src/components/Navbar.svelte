@@ -5,7 +5,7 @@
 <header class="site-header">
   <div class="header-container">
     <button class="site-logo-btn" onclick={() => onNavigate('welcome')} aria-label="Go to home">
-      <span class="logo-badge">DISTRO//MATCH</span>
+      <span class="logo-badge">LINUXMATCH</span>
       <span class="brand-tagline">The Linux Triangulator</span>
     </button>
 
@@ -33,22 +33,6 @@
             onclick={() => onNavigate('compare')}
           >
             Comparison Tool
-          </button>
-        </li>
-        <li class="nav-secondary">
-          <button
-            class="nav-btn {activeView === 'privacy' ? 'active' : ''}"
-            onclick={() => onNavigate('privacy')}
-          >
-            Privacy & GDPR
-          </button>
-        </li>
-        <li class="nav-secondary">
-          <button
-            class="nav-btn {activeView === 'terms' ? 'active' : ''}"
-            onclick={() => onNavigate('terms')}
-          >
-            Terms
           </button>
         </li>
         <li>

@@ -51,8 +51,16 @@
     }
   }
 
-  function handleWeightSelect(e) {
-    onWeightChange(currentQuestion.id, Number(e.target.value));
+  const WEIGHT_OPTIONS = [
+    { value: 1, label: 'Normal' },
+    { value: 2, label: 'High priority' },
+    { value: 3, label: 'Dealbreaker' }
+  ];
+
+  function handleWeightSelect(value) {
+    const numeric = Number(value);
+    if (!Number.isFinite(numeric)) return;
+    onWeightChange(currentQuestion.id, numeric);
   }
 </script>
 
@@ -63,7 +71,7 @@
       <span class="round-title-label">
         {currentRound.title.toUpperCase()}
       </span>
-      <span style="font-family: var(--font-mono); font-weight: 700;">
+      <span style="font-family: var(--font-label); font-weight: 700;">
         QUESTION {currentIndex + 1} OF {QUESTIONS_DATA.length}
       </span>
     </div>
@@ -77,7 +85,7 @@
   <div style="margin-bottom: 16px; display: flex; justify-content: flex-end;">
     <button
       class="btn-secondary"
-      style="padding: 4px 10px; font-size: 0.8rem; font-family: var(--font-mono);"
+      style="padding: 4px 10px; font-size: 0.8rem; font-family: var(--font-label);"
       onclick={() => showSteeringDrawer = !showSteeringDrawer}
     >
       {showSteeringDrawer ? '▲ Hide Steering Controls' : '▼ Steer Distro Picker Levers'}
@@ -98,19 +106,20 @@
       </span>
 
       <div class="weight-control">
-        <label for="weight-select" style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted);">
-          Steering Weight:
-        </label>
-        <select
-          id="weight-select"
-          class="weight-dropdown"
-          value={currentWeight}
-          onchange={handleWeightSelect}
-        >
-          <option value="1">Normal</option>
-          <option value="2">High priority</option>
-          <option value="3">Crucial dealbreaker</option>
-        </select>
+        <span class="weight-label" id="weight-label">Steering weight</span>
+        <div class="weight-segments" role="group" aria-labelledby="weight-label">
+          {#each WEIGHT_OPTIONS as option}
+            <button
+              type="button"
+              class="weight-segment"
+              class:active={Number(currentWeight) === option.value}
+              aria-pressed={Number(currentWeight) === option.value}
+              onclick={() => handleWeightSelect(option.value)}
+            >
+              {option.label}
+            </button>
+          {/each}
+        </div>
       </div>
     </div>
 
@@ -176,7 +185,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.85rem;
     color: var(--text-muted);
     margin-bottom: 8px;
@@ -214,7 +223,7 @@
   }
 
   .type-pill {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 800;
     background-color: var(--bg-tertiary);
@@ -225,15 +234,53 @@
   .weight-control {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
-  .weight-dropdown {
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    padding: 4px 8px;
+  .weight-label {
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--text-subtle);
+  }
+
+  .weight-segments {
+    display: inline-flex;
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
+    overflow: hidden;
+  }
+
+  .weight-segment {
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--border-color);
+    padding: 6px 12px;
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+    white-space: nowrap;
+  }
+
+  .weight-segment:last-child {
+    border-right: none;
+  }
+
+  .weight-segment:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-main);
+  }
+
+  .weight-segment.active {
+    background-color: var(--accent-fill);
+    color: var(--accent-contrast);
+    font-weight: 700;
   }
 
   .question-text {
@@ -333,7 +380,7 @@
     background: transparent;
     border: none;
     color: var(--text-subtle);
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.88rem;
     cursor: pointer;
     text-decoration: underline;

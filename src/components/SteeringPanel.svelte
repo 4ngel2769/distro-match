@@ -15,7 +15,7 @@
       <span style="color: var(--accent-color);">⚙</span>
       <span>REAL-TIME USER STEERING DIAL</span>
     </div>
-    <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-subtle);">
+    <span style="font-family: var(--font-label); font-size: 0.78rem; color: var(--text-subtle);">
       Adjust any lever to dynamically steer recommendation scores
     </span>
   </div>

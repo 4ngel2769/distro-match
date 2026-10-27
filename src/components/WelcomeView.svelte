@@ -21,7 +21,7 @@
         <div class="stat-label">Distributions in Catalog</div>
       </div>
       <div class="stat-box">
-        <div class="stat-number">21</div>
+        <div class="stat-number">23</div>
         <div class="stat-label">Precision Questions</div>
       </div>
       <div class="stat-box">
@@ -57,7 +57,7 @@
       How the Triangulation System Operates:
     </h3>
     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; line-height: 1.6;">
-      Rather than asking superficial questions, DistroMatch probes your hardware topology (dGPUs, AMD Ryzen APUs, hybrid graphics, low memory budgets), ideological constraints (100% Libre FSF compliance vs pragmatic drivers), init architecture (systemd vs OpenRC, runit, s6, sysvinit), and filesystem immutability.
+      Rather than asking superficial questions, LinuxMatch probes your hardware topology (dGPUs, AMD Ryzen APUs, hybrid graphics, low memory budgets), ideological constraints (100% Libre FSF compliance vs pragmatic drivers), init architecture (systemd vs OpenRC, runit, s6, sysvinit), and filesystem immutability.
     </p>
     <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
       Between each round, you receive a live candidate report previewing top contenders. You can adjust the importance weight of any question, skip questions anytime, and actively steer the decision engine with live sliders.
@@ -75,7 +75,7 @@
   }
 
   .hero-badge {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 800;
     background-color: var(--border-strong);
@@ -116,7 +116,7 @@
   }
 
   .stat-number {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 1.8rem;
     font-weight: 900;
     line-height: 1;

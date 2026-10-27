@@ -8,17 +8,17 @@
     <div class="legal-content">
       <h2>1. Acceptance of Terms</h2>
       <p>
-        By accessing or utilizing the DistroMatch application, you agree to be bound by these Terms of Service. If you do not agree with any portion of these terms, please discontinue use of the utility.
+        By accessing or utilizing the LinuxMatch application, you agree to be bound by these Terms of Service. If you do not agree with any portion of these terms, please discontinue use of the utility.
       </p>
 
       <h2>2. Informational & Educational Purpose</h2>
       <p>
-        DistroMatch is an open, educational decision-support tool created to assist users in discovering Linux and open-source operating systems based on technical criteria. Operating system recommendations, match scores, and commentary represent informational evaluations derived from community metadata and technical benchmarks.
+        LinuxMatch is an open, educational decision-support tool created to assist users in discovering Linux and open-source operating systems based on technical criteria. Operating system recommendations, match scores, and commentary represent informational evaluations derived from community metadata and technical benchmarks.
       </p>
 
       <h2>3. Hardware & Software Disclaimer</h2>
       <p>
-        DistroMatch does not guarantee that any suggested operating system will run without hardware bugs, firmware conflicts, or installation hazards on your specific system. Users are solely responsible for creating complete external backups of their storage media before attempting any disk partitioning, dual-boot installation, or bootloader modifications.
+        LinuxMatch does not guarantee that any suggested operating system will run without hardware bugs, firmware conflicts, or installation hazards on your specific system. Users are solely responsible for creating complete external backups of their storage media before attempting any disk partitioning, dual-boot installation, or bootloader modifications.
       </p>
 
       <h2>4. Intellectual Property & Trademarks</h2>
@@ -55,7 +55,7 @@
   }
 
   .legal-sub {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.85rem;
     color: var(--text-subtle);
     margin-top: 4px;

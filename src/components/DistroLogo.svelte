@@ -102,7 +102,7 @@
   }
 
   .logo-monogram {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-weight: 800;
     font-size: calc(var(--logo-size) * 0.36);
     line-height: 1;

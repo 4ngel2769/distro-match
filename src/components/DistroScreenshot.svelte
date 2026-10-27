@@ -9,7 +9,7 @@
    */
   import DistroLogo from './DistroLogo.svelte';
 
-  let { distro = null, height = 380, eager = false, compact = false } = $props();
+  let { distro = null, height = 380, eager = false, compact = false, fit = 'cover', showName = true } = $props();
 
   let failed = $state(false);
   let src = $derived(distro?.screenshotUrl || '');
@@ -33,6 +33,7 @@
     <img
       {src}
       class:shot-letterbox={letterbox}
+      class:shot-contain={fit === 'contain'}
       alt="{distro?.name} desktop screenshot"
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
@@ -47,7 +48,9 @@
     >
       {#if compact}
         <DistroLogo {distro} size={34} decorative={true} />
-        <span class="shot-compact-name">{distro?.name}</span>
+        {#if showName}
+          <span class="shot-compact-name">{distro?.name}</span>
+        {/if}
       {:else}
         <div class="shot-placeholder-bar" aria-hidden="true">
           <span></span><span></span><span></span>
@@ -104,6 +107,13 @@
 
   .screenshot-shell img.shot-letterbox {
     object-fit: contain;
+    background: #08080a;
+  }
+
+  /* Show the whole capture — letterboxed rather than cropped. */
+  .screenshot-shell img.shot-contain {
+    object-fit: contain;
+    object-position: center;
     background: #08080a;
   }
 
@@ -176,7 +186,7 @@
   }
 
   .shot-placeholder-link {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
   }
 
@@ -184,7 +194,7 @@
     position: absolute;
     right: 0;
     bottom: 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.68rem;
     padding: 3px 8px;
     background-color: rgba(15, 23, 42, 0.82);

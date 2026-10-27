@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import Navbar from './components/Navbar.svelte';
+  import SiteFooter from './components/SiteFooter.svelte';
   import WelcomeView from './components/WelcomeView.svelte';
   import QuizView from './components/QuizView.svelte';
   import IntermissionView from './components/IntermissionView.svelte';
@@ -152,7 +153,7 @@
     intermissionOpen = false;
     document.title =
       parsed.view === 'compare'
-        ? `${distroFor(compareDistroA)?.name} vs ${distroFor(compareDistroB)?.name} — DistroMatch`
+        ? `${distroFor(compareDistroA)?.name} vs ${distroFor(compareDistroB)?.name} — Linux Distribution Comparison | LinuxMatch`
         : routeTitle(parsed.view, distroFor(parsed.distroId));
     if (!preserveScroll) window.scrollTo({ top: 0 });
   }
@@ -413,19 +414,7 @@
 </main>
 
 <!-- Footer -->
-<footer class="site-footer">
-  <div class="footer-container">
-    <div>
-      <strong>DISTRO//MATCH</strong> — Built with care, sharp corners, zero corporate telemetry, and 100% GDPR compliance.
-    </div>
-    <ul class="nav-links">
-      <li><button class="nav-btn" onclick={() => navigateTo('privacy')}>Privacy Policy</button></li>
-      <li><button class="nav-btn" onclick={() => navigateTo('terms')}>Terms of Service</button></li>
-      <li><button class="nav-btn" onclick={() => navigateTo('directory')}>Distro Directory</button></li>
-      <li><button class="nav-btn" onclick={() => navigateTo('compare')}>Comparison</button></li>
-    </ul>
-  </div>
-</footer>
+<SiteFooter onNavigate={navigateTo} distroCount={LINUX_DISTROS.length} />
 
 <style>
   .not-found-card {
@@ -436,7 +425,7 @@
   }
 
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 800;
     color: var(--accent-red);

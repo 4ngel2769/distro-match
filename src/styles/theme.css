@@ -1,113 +1,126 @@
 /* ==========================================================================
    DISTROMATCH DESIGN SYSTEM: Utilitarian, Sharp, Minimalist
+   Accent family: a single lime/green ramp (lime -> leaf -> deep forest).
+   Every accent, tag, badge and state colour is drawn from that one ramp.
    ========================================================================== */
 
 :root {
   /* Light Theme */
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-tertiary: #F1F5F9;
-  --border-color: #CBD5E1;
-  --border-strong: #0F172A;
-  --text-main: #0F172A;
-  --text-muted: #475569;
-  --text-subtle: #64748B;
-  --accent-color: #0284C7; /* Refined Sky/Azure */
-  --accent-hover: #0369A1;
-  --accent-contrast: #FFFFFF;
-  --accent-gradient-text: #1A0F07;
-  --accent-gradient: linear-gradient(105deg, #F97316 0%, #EC4899 50%, #0EA5E9 100%);
-  --accent-gradient-soft: linear-gradient(105deg, rgba(249, 115, 22, 0.12), rgba(236, 72, 153, 0.1) 50%, rgba(14, 165, 233, 0.12));
-  --accent-blue: #0EA5E9;
-  --accent-pink: #EC4899;
-  --accent-green: #10B981;
-  --accent-red: #EF4444;
-  --accent-amber: #F59E0B;
+  --bg-secondary: #F7F9F3;
+  --bg-tertiary: #EEF3E4;
+  --border-color: #D6DFC6;
+  --border-strong: #16210A;
+  --text-main: #10180A;
+  --text-muted: #45523A;
+  --text-subtle: #6B7959;
+
+  /* Accents — lime/green ramp */
+  --accent-color: #3F6212;        /* readable deep lime on light backgrounds */
+  --accent-hover: #344F0E;
+  --accent-fill: #A0F002;         /* the signature lime */
+  --accent-contrast: #0C1405;
+  --accent-gradient-text: #10180A;
+  --accent-gradient: linear-gradient(100deg, #A0F002 0%, #7FD13A 55%, #4FBF5A 100%);
+  --accent-gradient-soft: linear-gradient(100deg, rgba(160, 240, 2, 0.14), rgba(79, 191, 90, 0.10));
+
+  /* Semantic states (kept inside the same green family + minimal warm signal) */
+  --accent-green: #2E7D32;
+  --accent-red: #C62828;
+  --accent-amber: #B26A00;
+  --accent-moss: #5C8A16;
+
   --card-bg: #FFFFFF;
-  --surface-hover: #F8FAFC;
-  --selected-bg: #E0F2FE;
-  --selected-border: #0284C7;
-  --tag-neutral-bg: #F1F5F9;
-  --tag-neutral-border: #CBD5E1;
-  --tag-neutral-text: #475569;
-  --tag-orange-bg: #FFF1E7;
-  --tag-orange-border: #FDBA74;
-  --tag-orange-text: #9A3412;
-  --tag-blue-bg: #EAF7FF;
-  --tag-blue-border: #7DD3FC;
-  --tag-blue-text: #075985;
-  --tag-pink-bg: #FDF2F8;
-  --tag-pink-border: #F9A8D4;
-  --tag-pink-text: #9D174D;
-  --tier-flagship-bg: #D1FAE5;
-  --tier-flagship-text: #065F46;
-  --tier-flagship-border: #6EE7B7;
-  --tier-specialist-bg: #FFF1E7;
-  --tier-specialist-text: #9A3412;
-  --tier-specialist-border: #FDBA74;
-  --tier-niche-bg: #FEF3C7;
-  --tier-niche-text: #78350F;
-  --tier-niche-border: #FCD34D;
-  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "JetBrains Mono", "Cascadia Code", Consolas, "Courier New", monospace;
-  --shadow-sharp: 4px 4px 0px #0F172A;
-  --shadow-subtle: 2px 2px 0px #94A3B8;
+  --surface-hover: #F7F9F3;
+  --selected-bg: #EEF8D8;
+  --selected-border: #3F6212;
+
+  --tag-neutral-bg: #EFF3E8;
+  --tag-neutral-border: #D6DFC6;
+  --tag-neutral-text: #45523A;
+  --tag-accent-bg: #F1FBD9;
+  --tag-accent-border: #B6D98A;
+  --tag-accent-text: #3F6212;
+  --tag-deep-bg: #E4F2C4;
+  --tag-deep-border: #A9CE74;
+  --tag-deep-text: #2F4A0D;
+
+  --tier-flagship-bg: #E4F2C4;
+  --tier-flagship-text: #2F4A0D;
+  --tier-flagship-border: #A9CE74;
+  --tier-specialist-bg: #F1FBD9;
+  --tier-specialist-text: #3F6212;
+  --tier-specialist-border: #B6D98A;
+  --tier-niche-bg: #EFF3E8;
+  --tier-niche-text: #55624A;
+  --tier-niche-border: #D6DFC6;
+
+  /* Typography */
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-label: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
+
+  --shadow-sharp: 4px 4px 0px #16210A;
+  --shadow-subtle: 2px 2px 0px #C3CFB2;
   --top-loader-color: var(--accent-gradient);
   --transition-speed: 0.18s;
 }
 
 /*
- * Dark theme: warm near-black surfaces with an Instagram-inspired accent
- * (orange -> pink -> blue). Neutral greys replace the old blue-slate tint so
- * screenshots and distro brand colours stay the loudest things on screen.
+ * Dark theme: warm near-black surfaces with a single lime accent.
+ * The lime (#A0F002) is the only saturated colour on the page, so distro
+ * brand colours and screenshots stay the loudest things on screen.
  */
 [data-theme="dark"] {
-  --bg-primary: #0A0A0C;
-  --bg-secondary: #101013;
-  --bg-tertiary: #19191E;
-  --border-color: #2C2C33;
-  --border-strong: #F2EDE7;
-  --text-main: #F7F4F0;
-  --text-muted: #B8B3AD;
-  --text-subtle: #8A857F;
-  --accent-color: #FB923C;
-  --accent-hover: #FDBA74;
-  --accent-contrast: #1A0F07;
-  --accent-gradient-text: #180B05;
-  --accent-gradient: linear-gradient(105deg, #F97316 0%, #F472B6 50%, #38BDF8 100%);
-  --accent-gradient-soft: linear-gradient(105deg, rgba(249, 115, 22, 0.16), rgba(244, 114, 182, 0.12) 50%, rgba(56, 189, 248, 0.16));
-  --accent-blue: #38BDF8;
-  --accent-pink: #F472B6;
-  --accent-green: #4ADE80;
-  --accent-red: #FB7185;
-  --accent-amber: #FBBF24;
-  --card-bg: #101013;
-  --surface-hover: #1A1A1F;
-  --selected-bg: #24170F;
-  --selected-border: #FB923C;
-  --tag-neutral-bg: #1C1C21;
-  --tag-neutral-border: #34343C;
-  --tag-neutral-text: #C9C4BD;
-  --tag-orange-bg: rgba(249, 115, 22, 0.14);
-  --tag-orange-border: rgba(251, 146, 60, 0.42);
-  --tag-orange-text: #FDBA74;
-  --tag-blue-bg: rgba(56, 189, 248, 0.12);
-  --tag-blue-border: rgba(56, 189, 248, 0.38);
-  --tag-blue-text: #7DD3FC;
-  --tag-pink-bg: rgba(244, 114, 182, 0.12);
-  --tag-pink-border: rgba(244, 114, 182, 0.4);
-  --tag-pink-text: #F9A8D4;
-  --tier-flagship-bg: #07291B;
-  --tier-flagship-text: #6EE7B7;
-  --tier-flagship-border: #1E6B4E;
-  --tier-specialist-bg: #2B1710;
-  --tier-specialist-text: #FDBA74;
-  --tier-specialist-border: #7C3A18;
-  --tier-niche-bg: #2A210C;
-  --tier-niche-text: #FCD34D;
-  --tier-niche-border: #6B5312;
-  --shadow-sharp: 4px 4px 0px #2B2B33;
-  --shadow-subtle: 2px 2px 0px #1C1C22;
+  --bg-primary: #0A0C08;
+  --bg-secondary: #0E110B;
+  --bg-tertiary: #161A11;
+  --border-color: #262B1E;
+  --border-strong: #E7EFDA;
+  --text-main: #F2F5EC;
+  --text-muted: #B7C1AA;
+  --text-subtle: #87927C;
+
+  --accent-color: #A0F002;
+  --accent-hover: #B8FF2E;
+  --accent-fill: #A0F002;
+  --accent-contrast: #0A0C08;
+  --accent-gradient-text: #0A0C08;
+  --accent-gradient: linear-gradient(100deg, #A0F002 0%, #86DC3C 55%, #4FC46A 100%);
+  --accent-gradient-soft: linear-gradient(100deg, rgba(160, 240, 2, 0.16), rgba(79, 196, 106, 0.10));
+
+  --accent-green: #86E06A;
+  --accent-red: #FF7A7A;
+  --accent-amber: #FFC44D;
+  --accent-moss: #B6D98A;
+
+  --card-bg: #0E110B;
+  --surface-hover: #161A11;
+  --selected-bg: #1B2409;
+  --selected-border: #A0F002;
+
+  --tag-neutral-bg: #1A1F14;
+  --tag-neutral-border: #2C3324;
+  --tag-neutral-text: #B7C1AA;
+  --tag-accent-bg: rgba(160, 240, 2, 0.12);
+  --tag-accent-border: rgba(160, 240, 2, 0.34);
+  --tag-accent-text: #C6F55C;
+  --tag-deep-bg: rgba(79, 196, 106, 0.12);
+  --tag-deep-border: rgba(79, 196, 106, 0.32);
+  --tag-deep-text: #9BE39B;
+
+  --tier-flagship-bg: #16240A;
+  --tier-flagship-text: #C8F55E;
+  --tier-flagship-border: #3D5A16;
+  --tier-specialist-bg: #14200E;
+  --tier-specialist-text: #A0F002;
+  --tier-specialist-border: #334D14;
+  --tier-niche-bg: #1A1F14;
+  --tier-niche-text: #A8B295;
+  --tier-niche-border: #2C3324;
+
+  --shadow-sharp: 4px 4px 0px #232A1B;
+  --shadow-subtle: 2px 2px 0px #1C2216;
   --top-loader-color: var(--accent-gradient);
   color-scheme: dark;
 }
@@ -124,7 +137,7 @@ body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
   color: var(--text-main);
-  line-height: 1.5;
+  line-height: 1.55;
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
@@ -176,6 +189,11 @@ button, input, select, textarea {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
+}
+
+::selection {
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
 }
 
 /* Buttons */
@@ -274,9 +292,10 @@ button, input, select, textarea {
   background-color: var(--border-strong);
   color: var(--bg-primary);
   padding: 4px 8px;
-  font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-family: var(--font-label);
+  font-size: 0.8rem;
   font-weight: 800;
+  letter-spacing: 0.06em;
 }
 
 .nav-links {
@@ -332,7 +351,7 @@ button, input, select, textarea {
 .main-wrapper {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 32px 24px 80px 24px;
+  padding: 36px 24px 72px 24px;
   flex: 1;
   width: 100%;
 }
@@ -348,8 +367,10 @@ button, input, select, textarea {
 
 .steering-title-row {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px 16px;
   margin-bottom: 16px;
 }
 
@@ -374,22 +395,31 @@ button, input, select, textarea {
 }
 
 .steering-label {
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: var(--text-subtle);
   text-transform: uppercase;
+  letter-spacing: 0.07em;
 }
 
 .steering-select {
-  padding: 6px 10px;
+  padding: 7px 10px;
   border: 1px solid var(--border-color);
   background-color: var(--bg-primary);
   font-size: 0.88rem;
+  font-family: var(--font-label);
 }
 
-.steering-select:focus {
+.steering-select:focus-visible {
   outline: 2px solid var(--accent-color);
+  outline-offset: 1px;
+}
+
+/* Distro logo tiles keep a light plate so light-on-transparent marks stay
+   readable, but the dark theme uses a muted stone tone instead of pure white. */
+[data-theme="dark"] .logo-tile.logo-tile--image {
+  background-color: #E2E7D9;
 }
 
 /* Distro Cards & Images */
@@ -409,11 +439,11 @@ button, input, select, textarea {
 
 /* Tier Badge */
 .tier-badge {
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-family: var(--font-label);
+  font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   padding: 3px 7px;
   display: inline-block;
   border: 1px solid transparent;
@@ -437,7 +467,7 @@ button, input, select, textarea {
   color: var(--tier-niche-text);
 }
 
-/* Gradient accent surfaces for the dark theme */
+/* Dark theme keeps the lime as the single saturated accent */
 [data-theme="dark"] .logo-badge {
   background: var(--accent-gradient);
   color: var(--accent-gradient-text);
@@ -453,6 +483,14 @@ button, input, select, textarea {
   background: var(--accent-gradient);
   color: var(--accent-gradient-text);
   border-color: transparent;
+}
+
+[data-theme="dark"] .btn-primary:hover {
+  box-shadow: 6px 6px 0px var(--border-strong);
+}
+
+[data-theme="dark"] .btn-primary:active {
+  box-shadow: 2px 2px 0px var(--border-strong);
 }
 
 @media (max-width: 720px) {
@@ -479,8 +517,13 @@ button, input, select, textarea {
     right: 16px;
   }
 
+  .site-header nav {
+    width: 100%;
+  }
+
   .nav-links {
     gap: 6px;
+    width: 100%;
   }
 
   .nav-btn {
@@ -489,21 +532,8 @@ button, input, select, textarea {
   }
 
   .main-wrapper {
-    padding: 22px 16px 60px;
+    padding: 24px 16px 56px;
   }
-}
-
-[data-theme="dark"] .btn-primary:hover {
-  box-shadow: 6px 6px 0px var(--border-strong);
-}
-
-[data-theme="dark"] .btn-primary:active {
-  box-shadow: 2px 2px 0px var(--border-strong);
-}
-
-[data-theme="dark"] ::selection {
-  background: rgba(244, 114, 182, 0.35);
-  color: var(--text-main);
 }
 
 /* Distro Detail Modal / Page */
@@ -536,7 +566,7 @@ button, input, select, textarea {
 .site-footer {
   border-top: 2px solid var(--border-strong);
   background-color: var(--bg-secondary);
-  padding: 28px 24px;
+  padding: 36px 24px 28px;
   font-size: 0.88rem;
   color: var(--text-muted);
 }
@@ -544,9 +574,122 @@ button, input, select, textarea {
 .footer-container {
   max-width: 1200px;
   margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  gap: 28px 32px;
+  align-items: start;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 42ch;
+}
+
+.footer-brand-mark {
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text-main);
+}
+
+.footer-brand-note {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-subtle);
+}
+
+.footer-heading {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  margin-bottom: 10px;
+}
+
+.footer-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.footer-list a,
+.footer-list button {
+  font-family: var(--font-label);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.footer-list a:hover,
+.footer-list button:hover {
+  color: var(--text-main);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  background: none;
+}
+
+.footer-credit {
+  font-family: var(--font-label);
+  font-size: 0.85rem;
+  color: var(--text-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-credit strong {
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+.footer-credit a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.footer-credit a:hover {
+  text-decoration: underline;
+  background: none;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 28px auto 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 8px 16px;
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  color: var(--text-subtle);
+}
+
+.footer-bottom span {
+  white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+  .footer-container {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 20px;
+  }
+
+  .footer-brand {
+    grid-column: 1 / -1;
+  }
 }

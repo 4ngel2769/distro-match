@@ -51,7 +51,7 @@
         <tbody>
           {#each liveCandidates as c, idx}
             <tr>
-              <td style="font-family: var(--font-mono); font-weight: 900; font-size: 1rem;">
+              <td style="font-family: var(--font-label); font-weight: 900; font-size: 1rem;">
                 #{idx + 1}
               </td>
               <td>
@@ -67,7 +67,7 @@
                       {c.distro.name}
                       <span class="tier-badge tier-{c.distro.tier}" style="margin-left: 6px;">{c.distro.tier}</span>
                     </div>
-                    <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle);">
+                    <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--text-subtle);">
                       {c.distro.family} • {c.distro.initSystem} • {c.distro.releaseModel}
                     </span>
                   </div>
@@ -108,7 +108,7 @@
   }
 
   .round-complete-badge {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 800;
     background-color: var(--accent-color);
@@ -148,7 +148,7 @@
     border-bottom: 2px solid var(--border-strong);
     padding: 12px 14px;
     text-align: left;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
   }
 
@@ -163,7 +163,7 @@
   }
 
   .match-score-pill {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-weight: 800;
     font-size: 0.88rem;
     background-color: var(--bg-tertiary);

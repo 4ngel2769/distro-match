@@ -192,7 +192,7 @@
         <div class="action-row">
           <a
             class="btn-primary"
-            href={`/distro/${winner.distro.id}`}
+            href={`/distro/${winner.distro.id}/`}
             onclick={(event) => profileClick(event, winner.distro.id)}
           >
             Open full profile →
@@ -243,7 +243,7 @@
                 <DistroLogo distro={r.distro} size={28} decorative={true} />
                 <a
                   class="runner-name"
-                  href={`/distro/${r.distro.id}`}
+                  href={`/distro/${r.distro.id}/`}
                   onclick={(event) => profileClick(event, r.distro.id)}
                 >
                   {r.distro.name}
@@ -259,7 +259,7 @@
               <div class="runner-score">{r.matchPercentage}%</div>
               <a
                 class="btn-secondary compact-btn"
-                href={`/distro/${r.distro.id}`}
+                href={`/distro/${r.distro.id}/`}
                 onclick={(event) => profileClick(event, r.distro.id)}
               >
                 Profile →
@@ -279,7 +279,7 @@
             {#each alsoConsidered as r}
               <a
                 class="also-chip"
-                href={`/distro/${r.distro.id}`}
+                href={`/distro/${r.distro.id}/`}
                 onclick={(event) => profileClick(event, r.distro.id)}
               >
                 <span>{r.distro.name}</span>
@@ -322,7 +322,7 @@
   }
 
   .winner-badge {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.04em;
@@ -333,7 +333,7 @@
   }
 
   .confidence-note {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     color: var(--text-subtle);
   }
@@ -355,7 +355,7 @@
   .compact-btn {
     padding: 5px 10px;
     font-size: 0.78rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     text-decoration: none;
   }
 
@@ -406,7 +406,7 @@
     flex-wrap: wrap;
     gap: 4px 16px;
     margin-top: 10px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     color: var(--text-muted);
   }
@@ -429,7 +429,7 @@
   }
 
   .score-number {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 2.1rem;
     font-weight: 900;
     line-height: 1;
@@ -441,7 +441,7 @@
   }
 
   .score-label {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.62rem;
     letter-spacing: 0.14em;
     margin-top: 4px;
@@ -458,7 +458,7 @@
   }
 
   .block-title {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -519,7 +519,7 @@
   }
 
   .breakdown-value {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.76rem;
     color: var(--text-muted);
   }
@@ -548,7 +548,7 @@
   }
 
   .breakdown-weight {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.63rem;
     color: var(--text-subtle);
     margin-top: 3px;
@@ -598,7 +598,7 @@
   }
 
   .persona-tag {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     font-weight: 800;
     background-color: var(--border-strong);
@@ -607,7 +607,7 @@
   }
 
   .persona-eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     color: var(--text-subtle);
     letter-spacing: 0.08em;
@@ -642,7 +642,7 @@
   }
 
   .trait-pill {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.76rem;
     font-weight: 700;
     background-color: var(--bg-secondary);
@@ -711,7 +711,7 @@
   }
 
   .runner-rank {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 800;
     color: var(--text-subtle);
@@ -737,7 +737,7 @@
   }
 
   .runner-meta {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.7rem;
     color: var(--text-subtle);
     margin-top: 6px;
@@ -753,7 +753,7 @@
   }
 
   .runner-score {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-weight: 900;
     font-size: 1rem;
     border: 1px solid var(--border-color);
@@ -768,7 +768,7 @@
   }
 
   .also-considered h3 {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -799,14 +799,14 @@
   }
 
   .also-score {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.7rem;
     color: var(--text-subtle);
   }
 
   /* Empty state */
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 800;
     color: var(--accent-red);

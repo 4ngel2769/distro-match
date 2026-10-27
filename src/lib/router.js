@@ -37,7 +37,7 @@ export function parseRoute(pathname = '/') {
       view: 'distro',
       distroId: second,
       compareIds: null,
-      path: `/distro/${encodeURIComponent(second)}`
+      path: `/distro/${encodeURIComponent(second)}/`
     };
   }
   if (first === 'compare' && second) {
@@ -56,7 +56,7 @@ export function parseRoute(pathname = '/') {
       view: STATIC_ROUTES[first],
       distroId: null,
       compareIds: null,
-      path: `/${first}`
+      path: `/${first}/`
     };
   }
   return { view: 'notfound', distroId: null, compareIds: null, path: pathname };
@@ -64,8 +64,8 @@ export function parseRoute(pathname = '/') {
 
 export function routePath(view, distroId) {
   if (view === 'welcome') return '/';
-  if (view === 'distro' && distroId) return `/distro/${encodeURIComponent(distroId)}`;
-  return `/${view}`;
+  if (view === 'distro' && distroId) return `/distro/${encodeURIComponent(distroId)}/`;
+  return `/${view}/`;
 }
 
 /** Canonical shareable comparison URL, e.g. /compare/linux-mint+arch-linux/ */
@@ -76,23 +76,25 @@ export function comparePath(a, b) {
 export function routeTitle(view, distro) {
   switch (view) {
     case 'welcome':
-      return 'DistroMatch — Find your Linux distribution';
+      return 'LinuxMatch — Find the Best Linux Distribution for You (116+ Distros)';
     case 'quiz':
-      return 'Distro finder quiz — DistroMatch';
+      return 'Linux Distribution Finder Quiz — 23 Questions | LinuxMatch';
     case 'results':
-      return 'Your matches — DistroMatch';
+      return 'Your Linux Distribution Matches — LinuxMatch';
     case 'directory':
-      return 'Linux distribution directory — DistroMatch';
+      return 'Linux Distribution Directory — All 116+ Linux Distros | LinuxMatch';
     case 'compare':
-      return 'Compare distributions — DistroMatch';
+      return 'Compare Linux Distributions Side by Side | LinuxMatch';
     case 'privacy':
-      return 'Privacy & GDPR — DistroMatch';
+      return 'Privacy & GDPR — No Tracking, No Accounts | LinuxMatch';
     case 'terms':
-      return 'Terms of Service — DistroMatch';
+      return 'Terms of Service — LinuxMatch';
     case 'distro':
-      return distro ? `${distro.name} — DistroMatch` : 'Distribution profile — DistroMatch';
+      return distro
+        ? `${distro.name} — Linux Distribution Profile, Specs & Pros/Cons | LinuxMatch`
+        : 'Distribution profile — LinuxMatch';
     default:
-      return 'Not found — DistroMatch';
+      return 'Page not found — LinuxMatch';
   }
 }
 

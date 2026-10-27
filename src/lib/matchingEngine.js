@@ -1,5 +1,5 @@
 /**
- * DistroMatch recommendation engine.
+ * LinuxMatch recommendation engine.
  *
  * Design goals (v3):
  *  1. Every answer contributes a *normalised* 0..1 satisfaction score, so a

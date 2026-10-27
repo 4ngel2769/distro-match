@@ -132,7 +132,7 @@
       
       <!-- Search A -->
       <div style="position: relative;">
-        <label for="search-a" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
+        <label for="search-a" style="font-family: var(--font-label); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
           SELECT DISTRIBUTION A:
         </label>
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -157,7 +157,7 @@
                 <DistroLogo distro={d} size={22} decorative={true} />
                 <div>
                   <strong>{d.name}</strong>
-                  <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
+                  <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
                     #{d.dwRank || 'N/A'} • {d.family}
                   </span>
                 </div>
@@ -169,7 +169,7 @@
 
       <!-- Search B -->
       <div style="position: relative;">
-        <label for="search-b" style="font-family: var(--font-mono); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
+        <label for="search-b" style="font-family: var(--font-label); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
           SELECT DISTRIBUTION B:
         </label>
         <div style="display: flex; align-items: center; gap: 8px;">
@@ -194,7 +194,7 @@
                 <DistroLogo distro={d} size={22} decorative={true} />
                 <div>
                   <strong>{d.name}</strong>
-                  <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
+                  <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
                     #{d.dwRank || 'N/A'} • {d.family}
                   </span>
                 </div>
@@ -260,11 +260,11 @@
         <tr>
           <td><strong>DistroWatch Rank & Tier</strong></td>
           <td>
-            <span style="font-family: var(--font-mono); font-weight: 800;">#{distroA.dwRank || 'N/A'}</span>
+            <span style="font-family: var(--font-label); font-weight: 800;">#{distroA.dwRank || 'N/A'}</span>
             <span style="color: var(--text-muted); font-size: 0.85rem;">({distroA.tier} classification)</span>
           </td>
           <td>
-            <span style="font-family: var(--font-mono); font-weight: 800;">#{distroB.dwRank || 'N/A'}</span>
+            <span style="font-family: var(--font-label); font-weight: 800;">#{distroB.dwRank || 'N/A'}</span>
             <span style="color: var(--text-muted); font-size: 0.85rem;">({distroB.tier} classification)</span>
           </td>
         </tr>
@@ -283,8 +283,8 @@
 
         <tr>
           <td><strong>Init System (PID 1)</strong></td>
-          <td><span style="font-family: var(--font-mono);">{distroA.initSystem}</span></td>
-          <td><span style="font-family: var(--font-mono);">{distroB.initSystem}</span></td>
+          <td><span style="font-family: var(--font-label);">{distroA.initSystem}</span></td>
+          <td><span style="font-family: var(--font-label);">{distroB.initSystem}</span></td>
         </tr>
 
         <tr>
@@ -295,8 +295,8 @@
 
         <tr>
           <td><strong>Package Management</strong></td>
-          <td><span style="font-family: var(--font-mono);">{distroA.packageManager}</span></td>
-          <td><span style="font-family: var(--font-mono);">{distroB.packageManager}</span></td>
+          <td><span style="font-family: var(--font-label);">{distroA.packageManager}</span></td>
+          <td><span style="font-family: var(--font-label);">{distroB.packageManager}</span></td>
         </tr>
 
         <tr>
@@ -394,7 +394,7 @@
   }
 
   .compare-sort-label {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 700;
     color: var(--text-subtle);
@@ -403,7 +403,7 @@
 
   .compare-sort-btn {
     padding: 6px 12px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.82rem;
     white-space: nowrap;
   }
@@ -469,13 +469,13 @@
   }
 
   .share-note {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     color: var(--text-subtle);
   }
 
   .share-status {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 800;
     color: var(--accent-green);

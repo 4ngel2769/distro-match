@@ -232,7 +232,7 @@
     z-index: 2;
     top: 10px;
     right: 10px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.04em;
@@ -254,7 +254,7 @@
   }
 
   .gallery-caption-text {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.7rem;
     color: var(--text-subtle);
     min-width: 0;

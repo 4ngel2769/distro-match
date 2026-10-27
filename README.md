@@ -1,4 +1,4 @@
-# DistroMatch — The Definitive Linux Distribution Triangulator
+# LinuxMatch — The Definitive Linux Distribution Triangulator
 
 An encyclopedic, precision Linux distribution picker and triangulation engine covering **116+ Linux distributions** across every architectural family, init system, package manager, and hardware setup. Built as a high-performance **Svelte** application.
 
@@ -119,3 +119,41 @@ Wikimedia Commons (under the licence named on the asset), DistroWatch, Simple
 Icons (CC0), and official project websites/repositories. If you redistribute
 this project, check the licence of each credited asset and remove any image whose
 terms do not fit your use.
+
+---
+
+## SEO & Deployment
+
+**LinuxMatch** is served from two domains:
+
+- Canonical: `https://linuxmatch.adev0.eu` (all canonical tags, sitemap and JSON-LD point here)
+- Cloudflare Pages mirror: `https://linuxmatch.pages.dev`
+
+### Build
+
+`bun run build` (or `npm run build`) runs `vite build`, and the `linuxmatch-seo` Vite plugin
+then emits the SEO artefacts into `dist/`:
+
+| File | Purpose |
+| --- | --- |
+| `dist/index.html`, `dist/<route>/index.html` | Pre-rendered static HTML with route-specific `<title>`, meta description, keywords, canonical, Open Graph, Twitter card and JSON-LD. The SPA hydrates over it (`src/main.js` clears the static block on boot). |
+| `dist/sitemap.xml` | 122 URLs: home, quiz, directory, comparison, legal pages and every distribution profile. |
+| `dist/robots.txt` | Allows everything except generated `/compare/*` permutations; points at the sitemap. |
+| `dist/site.webmanifest` | Installable web app metadata. |
+| `dist/og-image.png` / `og-image.svg` | 1200x630 social share card. |
+
+Structured data used: `WebSite` + `Organization` + `FAQPage` (home), `CollectionPage` +
+`ItemList` (directory), `SoftwareApplication` + `BreadcrumbList` (each distro profile),
+`SoftwareApplication` (quiz) and `WebApplication` (comparison).
+
+### Cloudflare Pages settings
+
+- Build command: `bun run build`
+- Build output directory: `dist`
+- `public/_headers` sets long-lived caching for hashed assets and the baseline security headers.
+- `public/_redirects` keeps the SPA fallback for any path that has no pre-rendered file.
+
+### Changing the domain
+
+Update `SITE` in `scripts/seo-build.mjs` (primary + mirror) and rebuild - every canonical,
+sitemap entry and JSON-LD URL is generated from it.

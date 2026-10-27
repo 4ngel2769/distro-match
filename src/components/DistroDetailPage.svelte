@@ -83,21 +83,34 @@
     <!-- Identity header -->
     <header class="profile-header">
       <div class="identity-row">
-        <DistroLogo {distro} size={84} />
+        <DistroLogo {distro} size={72} />
         <div class="identity-text">
           <div class="title-row">
             <h1>{distro.name}</h1>
             <span class="tier-badge tier-{distro.tier}">{distro.tier}</span>
           </div>
           <p class="tagline">{distro.tagline}</p>
-          <div class="meta-row">
-            <span><strong>Family</strong> {distro.family}</span>
-            <span><strong>Base</strong> {distro.base}</span>
-            <span><strong>DistroWatch</strong> {distro.dwRank ? `#${distro.dwRank}` : 'unranked'}</span>
-            <span><strong>Target user</strong> {titleCase(distro.userLevel)}</span>
-          </div>
         </div>
       </div>
+
+      <dl class="meta-grid">
+        <div>
+          <dt>Family</dt>
+          <dd>{distro.family}</dd>
+        </div>
+        <div>
+          <dt>Based on</dt>
+          <dd>{distro.base}</dd>
+        </div>
+        <div>
+          <dt>DistroWatch</dt>
+          <dd>{distro.dwRank ? `#${distro.dwRank}` : 'Unranked'}</dd>
+        </div>
+        <div>
+          <dt>Target user</dt>
+          <dd>{titleCase(distro.userLevel)}</dd>
+        </div>
+      </dl>
 
       <div class="header-actions">
         <a href={distro.website} target="_blank" rel="noopener noreferrer" class="btn-primary">
@@ -131,7 +144,7 @@
       <!-- Main column -->
       <div class="main-column">
         <section class="panel">
-          <h2 class="section-title">What this distribution is good at</h2>
+          <h2 class="section-title">Where it excels</h2>
           <ul class="pros-list">
             {#each distro.pros || [] as pro}
               <li><span class="mark good" aria-hidden="true">■</span> {pro}</li>
@@ -140,7 +153,7 @@
         </section>
 
         <section class="panel">
-          <h2 class="section-title">Trade-offs to accept</h2>
+          <h2 class="section-title">What you trade off</h2>
           <ul class="cons-list">
             {#each distro.cons || [] as con}
               <li><span class="mark bad" aria-hidden="true">■</span> {con}</li>
@@ -149,7 +162,7 @@
         </section>
 
         <section class="panel">
-          <h2 class="section-title">Best suited to</h2>
+          <h2 class="section-title">Best for</h2>
           <div class="tag-row">
             {#each useCases as useCase}
               <span class="use-tag">{USE_CASE_LABELS[useCase] || titleCase(useCase)}</span>
@@ -187,7 +200,7 @@
         </section>
 
         <section class="panel">
-          <h2 class="section-title">Links</h2>
+          <h2 class="section-title">Official links</h2>
           <ul class="link-list">
             <li><a href={distro.website} target="_blank" rel="noopener noreferrer">Official website ↗</a></li>
             {#if distro.documentation}
@@ -208,12 +221,12 @@
 
     {#if suggestions.length}
       <section class="suggestions">
-        <h2 class="section-title">Other distributions in this orbit</h2>
+        <h2 class="section-title">Similar distributions</h2>
         <div class="suggestion-grid">
           {#each suggestions as other}
             <a
               class="suggestion-card"
-              href="/distro/{other.id}"
+              href="/distro/{other.id}/"
               onclick={(e) => {
                 if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
                 e.preventDefault();
@@ -233,7 +246,7 @@
 
     <div class="page-footer-nav">
       <button class="btn-secondary" onclick={onBack}>← Back to directory</button>
-      <span class="footer-hint">Profiles are sourced from project documentation and DistroWatch.</span>
+      <span class="footer-hint">Facts are sourced from project documentation and DistroWatch.</span>
     </div>
   </div>
 {/if}
@@ -249,7 +262,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     color: var(--text-subtle);
     flex-wrap: wrap;
@@ -316,28 +329,46 @@
     line-height: 1.5;
   }
 
-  .meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 18px;
-    margin-top: 12px;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    color: var(--text-muted);
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    border: 1px solid var(--border-color);
   }
 
-  .meta-row strong {
-    color: var(--text-subtle);
+  .meta-grid > div {
+    padding: 10px 14px;
+    border-right: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .meta-grid dt {
+    font-family: var(--font-label);
+    font-size: 0.66rem;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.7rem;
-    margin-right: 4px;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+  }
+
+  .meta-grid dd {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-main);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .header-actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
+    border-top: 1px solid var(--border-color);
+    padding-top: 18px;
   }
 
   .shot-section {
@@ -358,7 +389,7 @@
     background-color: var(--bg-tertiary);
     border-top: 1px solid var(--border-color);
     padding: 10px 16px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.76rem;
     color: var(--text-muted);
   }
@@ -393,7 +424,7 @@
   .section-title {
     font-size: 0.82rem;
     font-weight: 800;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     color: var(--text-subtle);
@@ -439,7 +470,7 @@
   }
 
   .use-tag {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.76rem;
     font-weight: 700;
     border: 1px solid var(--border-color);
@@ -449,7 +480,7 @@
 
   .footnote {
     margin-top: 12px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     color: var(--text-subtle);
   }
@@ -474,7 +505,7 @@
   }
 
   .spec-list dt {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     text-transform: uppercase;
     color: var(--text-subtle);
@@ -531,7 +562,7 @@
   }
 
   .suggestion-meta {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     color: var(--text-subtle);
     margin-top: 2px;
@@ -546,7 +577,7 @@
   }
 
   .footer-hint {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.74rem;
     color: var(--text-subtle);
   }
@@ -559,7 +590,7 @@
   }
 
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 800;
     color: var(--accent-red);

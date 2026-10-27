@@ -224,33 +224,33 @@
       {#each filteredDistros as distro (distro.id)}
         <a
           class="distro-card"
-          href={`/distro/${distro.id}`}
+          href={`/distro/${distro.id}/`}
           onclick={(event) => handleClick(event, distro)}
           aria-label={`Open the ${distro.name} profile`}
         >
           <div class="card-media">
-            <DistroScreenshot {distro} height={132} compact={true} />
+            <DistroScreenshot {distro} height={210} compact={true} fit="contain" showName={false} />
+            <span class="card-scrim" aria-hidden="true"></span>
             <span class="tier-badge tier-{distro.tier} card-tier">{distro.tier}</span>
+
+            <div class="card-overlay">
+              <div class="card-title-row">
+                <DistroLogo {distro} size={30} decorative={true} />
+                <div class="card-title-text">
+                  <span class="card-distro-name">{distro.name}</span>
+                  <span class="card-subline">{distro.family} · {rankLabel(distro)}</span>
+                </div>
+              </div>
+              <p class="card-tagline">{distro.tagline}</p>
+            </div>
           </div>
 
           <div class="card-body">
-            <div class="card-title-row">
-              <DistroLogo {distro} size={34} decorative={true} />
-              <div class="card-title-text">
-                <span class="card-distro-name">{distro.name}</span>
-                <span class="card-subline">
-                  {distro.family} · {rankLabel(distro)}
-                </span>
-              </div>
-            </div>
-
-            <p class="card-distro-tagline">{distro.tagline}</p>
-
             <div class="card-chip-row">
-              <span class="chip chip--release">{distro.releaseModel}</span>
-              <span class="chip chip--init">{distro.initSystem}</span>
+              <span class="chip chip--accent">{distro.releaseModel}</span>
+              <span class="chip">{distro.initSystem}</span>
               {#each (distro.desktopEnvironments || []).slice(0, 2) as de}
-                <span class="chip chip--de">{de}</span>
+                <span class="chip chip--outline">{de}</span>
               {/each}
             </div>
 
@@ -308,7 +308,7 @@
   }
 
   .control-label {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -325,7 +325,7 @@
   .sort-btn {
     padding: 6px 12px;
     font-size: 0.8rem;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
   }
 
   .sort-year-label {
@@ -339,7 +339,7 @@
     border: 2px solid var(--border-strong);
     background-color: var(--bg-primary);
     color: var(--text-main);
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
@@ -409,7 +409,7 @@
     background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
     padding: 5px 12px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     cursor: pointer;
     transition: all 0.1s ease;
@@ -427,7 +427,7 @@
   }
 
   .result-count {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.78rem;
     color: var(--text-subtle);
     margin-top: 14px;
@@ -461,6 +461,10 @@
     box-shadow: var(--shadow-sharp);
   }
 
+  .distro-card:hover .card-arrow {
+    transform: translateX(3px);
+  }
+
   .distro-card:focus-visible {
     outline: 3px solid var(--accent-color);
     outline-offset: 2px;
@@ -468,25 +472,54 @@
 
   .card-media {
     position: relative;
+    aspect-ratio: 16 / 9;
     border-bottom: 1px solid var(--border-color);
-    background-color: var(--bg-tertiary);
+    background-color: #08080a;
+    overflow: hidden;
+  }
+
+  /* The screenshot fills the media box exactly, so a 16:9 capture shows the
+     whole desktop with no crop and no letterbox bars. */
+  .card-media :global(.screenshot-shell) {
+    height: 100%;
+    border: none;
+  }
+
+  .card-media :global(.screenshot-shell img) {
+    height: 100%;
+  }
+
+  /* Soft upward gradient so the identity block stays legible on any screenshot. */
+  .card-scrim {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to top,
+      rgba(6, 8, 4, 0.94) 0%,
+      rgba(6, 8, 4, 0.86) 22%,
+      rgba(6, 8, 4, 0.62) 42%,
+      rgba(6, 8, 4, 0.18) 68%,
+      rgba(6, 8, 4, 0) 100%
+    );
   }
 
   .card-tier {
     position: absolute;
     top: 8px;
     right: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.28);
-    box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.28);
+    z-index: 2;
     letter-spacing: 0.08em;
   }
 
-  .card-body {
-    padding: 14px 16px 12px;
+  .card-overlay {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 14px 16px 16px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    flex: 1;
+    gap: 8px;
+    color: #FFFFFF;
   }
 
   .card-title-row {
@@ -513,75 +546,77 @@
   }
 
   .card-subline {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-subtle);
+    font-family: var(--font-label);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.68);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .card-distro-tagline {
-    font-size: 0.86rem;
-    color: var(--text-muted);
+  .card-tagline {
+    font-size: 0.87rem;
+    color: rgba(255, 255, 255, 0.82);
     line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .card-body {
+    padding: 14px 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     flex: 1;
   }
 
   .card-chip-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
   }
 
   .chip {
-    font-family: var(--font-mono);
-    font-size: 0.67rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    padding: 3px 7px;
+    font-family: var(--font-label);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    padding: 4px 8px;
     background-color: var(--tag-neutral-bg);
     border: 1px solid var(--tag-neutral-border);
     color: var(--tag-neutral-text);
     white-space: nowrap;
-    max-width: 14ch;
+    max-width: 16ch;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  .chip--release {
-    background-color: var(--tag-orange-bg);
-    border-color: var(--tag-orange-border);
-    color: var(--tag-orange-text);
+  .chip--accent {
+    background-color: var(--tag-accent-bg);
+    border-color: var(--tag-accent-border);
+    color: var(--tag-accent-text);
+    font-weight: 700;
   }
 
-  .chip--init {
-    background-color: var(--tag-blue-bg);
-    border-color: var(--tag-blue-border);
-    color: var(--tag-blue-text);
-  }
-
-  .chip--de {
-    background-color: var(--tag-pink-bg);
-    border-color: var(--tag-pink-border);
-    color: var(--tag-pink-text);
+  .chip--outline {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-muted);
   }
 
   .card-specs-row {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-family: var(--font-label);
+    font-size: 0.72rem;
     color: var(--text-subtle);
-    border-top: 1px dashed var(--border-color);
-    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 4px 10px;
+    gap: 6px 12px;
     min-width: 0;
   }
 
@@ -596,7 +631,8 @@
     color: var(--text-subtle);
     text-transform: uppercase;
     font-size: 0.64rem;
-    letter-spacing: 0.05em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     margin-right: 5px;
   }
 
@@ -604,22 +640,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 9px 16px;
+    padding: 10px 16px;
     border-top: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.76rem;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-main);
   }
 
   .card-arrow {
     color: var(--accent-color);
     transition: transform 0.12s ease;
-  }
-
-  .distro-card:hover .card-arrow {
-    transform: translateX(3px);
   }
 
   .empty-state {
@@ -630,7 +662,7 @@
   }
 
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 800;
     color: var(--accent-red);
