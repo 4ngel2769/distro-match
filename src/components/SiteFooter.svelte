@@ -1,4 +1,6 @@
 <script>
+  import { FAMILY_PAGES, USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
+
   let { onNavigate, distroCount = 0 } = $props();
 </script>
 
@@ -19,6 +21,25 @@
         <li><button onclick={() => onNavigate('welcome')}>Finder quiz</button></li>
         <li><button onclick={() => onNavigate('directory')}>Distro directory</button></li>
         <li><button onclick={() => onNavigate('compare')}>Side-by-side comparison</button></li>
+        <li><a href={landingPath('hub', '')}>All Linux distributions</a></li>
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="footer-heading">Families</h3>
+      <ul class="footer-list">
+        {#each FAMILY_PAGES as family}
+          <li><a href={landingPath('family', family.slug)}>{family.label}</a></li>
+        {/each}
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="footer-heading">Use cases</h3>
+      <ul class="footer-list">
+        {#each USE_CASE_PAGES as useCase}
+          <li><a href={landingPath('use-case', useCase.slug)}>{useCase.label}</a></li>
+        {/each}
       </ul>
     </div>
 

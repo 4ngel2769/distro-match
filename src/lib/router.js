@@ -2,6 +2,7 @@
  * Tiny history-API router. No dependency, works with `vite dev`, `vite preview`
  * and any static host that rewrites unknown paths to index.html.
  */
+import { landingPageFor, landingPath } from '../data/landingPages.js';
 
 const STATIC_ROUTES = {
   '': 'welcome',
@@ -59,6 +60,20 @@ export function parseRoute(pathname = '/') {
       path: `/${first}/`
     };
   }
+
+  // Keyword landing pages: /linux-distributions/[/family/] and /linux-for-<use-case>/
+  const landing = landingPageFor(pathname);
+  if (landing) {
+    return {
+      view: 'landing',
+      distroId: null,
+      compareIds: null,
+      landingKind: landing.kind,
+      landingSlug: landing.slug,
+      path: landingPath(landing.kind, landing.slug)
+    };
+  }
+
   return { view: 'notfound', distroId: null, compareIds: null, path: pathname };
 }
 
@@ -93,6 +108,8 @@ export function routeTitle(view, distro) {
       return distro
         ? `${distro.name} — Linux Distribution Profile, Specs & Pros/Cons | LinuxMatch`
         : 'Distribution profile — LinuxMatch';
+    case 'landing':
+      return 'Linux Distributions — Lists, Families and Use Cases | LinuxMatch';
     default:
       return 'Page not found — LinuxMatch';
   }

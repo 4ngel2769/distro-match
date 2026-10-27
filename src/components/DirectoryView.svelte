@@ -1,6 +1,7 @@
 <script>
   import { LINUX_DISTROS } from '../data/distros.js';
   import { POPULARITY_YEARS } from '../data/distroFacts.js';
+  import { FAMILY_PAGES, USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
   import DistroLogo from './DistroLogo.svelte';
   import DistroScreenshot from './DistroScreenshot.svelte';
 
@@ -201,6 +202,22 @@
           : sortBy === 'updated'
             ? `last update (${sortDir === 'desc' ? 'newest' : 'oldest'} first)`
             : 'name'}
+    </div>
+
+    <div class="browse-hubs">
+      <span class="control-label">Browse by family</span>
+      <div class="hub-row">
+        {#each FAMILY_PAGES as family}
+          <a class="hub-link" href={landingPath('family', family.slug)}>{family.label}</a>
+        {/each}
+      </div>
+
+      <span class="control-label">Browse by use case</span>
+      <div class="hub-row">
+        {#each USE_CASE_PAGES as useCase}
+          <a class="hub-link" href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
+        {/each}
+      </div>
     </div>
   </div>
 
@@ -435,6 +452,38 @@
 
   .result-count strong {
     color: var(--text-main);
+  }
+
+  .browse-hubs {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hub-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 6px;
+  }
+
+  .hub-link {
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    font-weight: 600;
+    border: 1px solid var(--border-color);
+    padding: 5px 11px;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: border-color 0.12s ease, background-color 0.12s ease;
+  }
+
+  .hub-link:hover {
+    border-color: var(--border-strong);
+    background-color: var(--bg-tertiary);
   }
 
   .directory-cards-grid {

@@ -157,3 +157,17 @@ Structured data used: `WebSite` + `Organization` + `FAQPage` (home), `Collection
 
 Update `SITE` in `scripts/seo-build.mjs` (primary + mirror) and rebuild - every canonical,
 sitemap entry and JSON-LD URL is generated from it.
+### Keyword landing pages
+
+`src/data/landingPages.js` is the single source of truth for the landing pages; both the SPA
+(`src/components/LandingView.svelte`) and the pre-render read from it, so the client-rendered
+page and the static HTML always match.
+
+| Path | Target query |
+| --- | --- |
+| `/linux-distributions/` | "linux distributions list", "all linux distros" |
+| `/linux-distributions/{ubuntu,debian,arch,fedora-rhel,opensuse,gentoo,slackware,independent}/` | "ubuntu based linux distributions", "arch based distros", ... |
+| `/linux-for-{gaming,beginners,developers,privacy,old-hardware,servers,minimal,multimedia,education,security,enterprise}/` | "best linux distro for gaming", "linux for beginners", "lightweight linux for old pcs", ... |
+
+They are linked from the footer (Families / Use cases columns) and from the "Browse by family" /
+"Browse by use case" rows on the directory page, and every one of them is in `sitemap.xml`.

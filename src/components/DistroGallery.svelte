@@ -214,8 +214,8 @@
   }
 
   .gallery-nav:hover {
-    background: var(--accent-gradient);
-    color: var(--accent-gradient-text);
+    background: var(--accent-fill);
+    color: var(--accent-contrast);
     border-color: transparent;
   }
 

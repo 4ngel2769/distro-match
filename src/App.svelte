@@ -11,9 +11,11 @@
   import PrivacyView from './components/PrivacyView.svelte';
   import TermsView from './components/TermsView.svelte';
   import DistroDetailPage from './components/DistroDetailPage.svelte';
+  import LandingView from './components/LandingView.svelte';
   import { QUESTIONS_DATA } from './data/questions.js';
   import { LINUX_DISTROS, DISTRO_MAP } from './data/distros.js';
   import { parseRoute, routePath, routeTitle, comparePath } from './lib/router.js';
+  import { landingPageFor } from './data/landingPages.js';
 
   const initialRoute = parseRoute(window.location.pathname);
   let route = $state(initialRoute);
@@ -48,7 +50,7 @@
     route.distroId ? LINUX_DISTROS.find((d) => d.id === route.distroId) || null : null
   );
   let navView = $derived(
-    route.view === 'distro'
+    route.view === 'distro' || route.view === 'landing'
       ? 'directory'
       : route.view === 'intermission'
         ? 'quiz'
@@ -154,8 +156,16 @@
     document.title =
       parsed.view === 'compare'
         ? `${distroFor(compareDistroA)?.name} vs ${distroFor(compareDistroB)?.name} — Linux Distribution Comparison | LinuxMatch`
-        : routeTitle(parsed.view, distroFor(parsed.distroId));
+        : parsed.view === 'landing'
+          ? landingTitleFor(parsed)
+          : routeTitle(parsed.view, distroFor(parsed.distroId));
     if (!preserveScroll) window.scrollTo({ top: 0 });
+  }
+
+  /** Keyword landing pages carry their own SEO title. */
+  function landingTitleFor(parsed) {
+    const landing = landingPageFor(parsed.path);
+    return landing ? landing.page.title : routeTitle('landing');
   }
 
   function distroFor(id) {
@@ -394,6 +404,8 @@
       initialDistroB={compareDistroB}
       onCompareChange={handleCompareChange}
     />
+  {:else if activeView === 'landing'}
+    <LandingView kind={route.landingKind} slug={route.landingSlug} />
   {:else if activeView === 'privacy'}
     <PrivacyView />
   {:else if activeView === 'terms'}

@@ -20,9 +20,7 @@
   --accent-hover: #344F0E;
   --accent-fill: #A0F002;         /* the signature lime */
   --accent-contrast: #0C1405;
-  --accent-gradient-text: #10180A;
-  --accent-gradient: linear-gradient(100deg, #A0F002 0%, #7FD13A 55%, #4FBF5A 100%);
-  --accent-gradient-soft: linear-gradient(100deg, rgba(160, 240, 2, 0.14), rgba(79, 191, 90, 0.10));
+  --accent-wash: rgba(160, 240, 2, 0.14);
 
   /* Semantic states (kept inside the same green family + minimal warm signal) */
   --accent-green: #2E7D32;
@@ -62,7 +60,7 @@
 
   --shadow-sharp: 4px 4px 0px #16210A;
   --shadow-subtle: 2px 2px 0px #C3CFB2;
-  --top-loader-color: var(--accent-gradient);
+  --top-loader-color: var(--accent-fill);
   --transition-speed: 0.18s;
 }
 
@@ -85,9 +83,7 @@
   --accent-hover: #B8FF2E;
   --accent-fill: #A0F002;
   --accent-contrast: #0A0C08;
-  --accent-gradient-text: #0A0C08;
-  --accent-gradient: linear-gradient(100deg, #A0F002 0%, #86DC3C 55%, #4FC46A 100%);
-  --accent-gradient-soft: linear-gradient(100deg, rgba(160, 240, 2, 0.16), rgba(79, 196, 106, 0.10));
+  --accent-wash: rgba(160, 240, 2, 0.16);
 
   --accent-green: #86E06A;
   --accent-red: #FF7A7A;
@@ -121,7 +117,7 @@
 
   --shadow-sharp: 4px 4px 0px #232A1B;
   --shadow-subtle: 2px 2px 0px #1C2216;
-  --top-loader-color: var(--accent-gradient);
+  --top-loader-color: var(--accent-fill);
   color-scheme: dark;
 }
 
@@ -243,8 +239,8 @@ button, input, select, textarea {
 }
 
 .btn-accent {
-  background: var(--accent-gradient);
-  color: var(--accent-gradient-text);
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
   border: 2px solid var(--border-strong);
   padding: 10px 20px;
   font-weight: 800;
@@ -469,19 +465,19 @@ button, input, select, textarea {
 
 /* Dark theme keeps the lime as the single saturated accent */
 [data-theme="dark"] .logo-badge {
-  background: var(--accent-gradient);
-  color: var(--accent-gradient-text);
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
 }
 
 [data-theme="dark"] .nav-btn.active {
-  background: var(--accent-gradient);
-  color: var(--accent-gradient-text);
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
   border-color: transparent;
 }
 
 [data-theme="dark"] .btn-primary {
-  background: var(--accent-gradient);
-  color: var(--accent-gradient-text);
+  background: var(--accent-fill);
+  color: var(--accent-contrast);
   border-color: transparent;
 }
 
@@ -575,7 +571,7 @@ button, input, select, textarea {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr));
   gap: 28px 32px;
   align-items: start;
 }

@@ -16,6 +16,12 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import { LINUX_DISTROS } from '../src/data/distros.js';
+import {
+  FAMILY_PAGES,
+  USE_CASE_PAGES,
+  HUB_PAGE,
+  landingPath
+} from '../src/data/landingPages.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -364,6 +370,143 @@ function buildRoutes() {
     });
   }
 
+  // --- Keyword landing pages -------------------------------------------------
+  const landingList = (items) =>
+    items
+      .map(
+        (d) =>
+          `<li><a href="/distro/${d.id}/">${escapeHtml(d.name)}</a> — ${escapeHtml(
+            d.family
+          )} family, ${escapeHtml(d.initSystem)}, ${escapeHtml(d.packageManager.split('/')[0].trim())}</li>`
+      )
+      .join('\n            ');
+
+  const familyLinks = FAMILY_PAGES.map(
+    (f) => `<li><a href="${landingPath('family', f.slug)}">${escapeHtml(f.label)} Linux distributions</a></li>`
+  ).join('\n            ');
+
+  const useCaseLinks = USE_CASE_PAGES.map(
+    (u) => `<li><a href="${landingPath('use-case', u.slug)}">${escapeHtml(u.label)}</a></li>`
+  ).join('\n            ');
+
+  routes.push({
+    path: landingPath('hub', ''),
+    title: HUB_PAGE.title,
+    description: HUB_PAGE.description,
+    priority: '0.9',
+    changefreq: 'weekly',
+    jsonLd: [
+      {
+        '@type': 'CollectionPage',
+        name: 'All Linux distributions',
+        description: HUB_PAGE.description,
+        url: abs(landingPath('hub', '')),
+        isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.primary },
+        mainEntity: {
+          '@type': 'ItemList',
+          numberOfItems: LINUX_DISTROS.length,
+          itemListElement: LINUX_DISTROS.map((d, i) => ({
+            '@type': 'ListItem',
+            position: i + 1,
+            name: d.name,
+            url: abs(`/distro/${d.id}`)
+          }))
+        }
+      }
+    ],
+    content: `
+      <h1>All Linux distributions</h1>
+      <p>${escapeHtml(HUB_PAGE.intro)}</p>
+      <h2>Browse Linux distributions by family</h2>
+      <ul>
+            ${familyLinks}
+      </ul>
+      <h2>Browse Linux distributions by use case</h2>
+      <ul>
+            ${useCaseLinks}
+      </ul>
+      <h2>Complete list of ${LINUX_DISTROS.length} Linux distributions</h2>
+      <ul>
+            ${landingList(LINUX_DISTROS)}
+      </ul>`
+  });
+
+  for (const family of FAMILY_PAGES) {
+    const items = LINUX_DISTROS.filter(family.match);
+    routes.push({
+      path: landingPath('family', family.slug),
+      title: family.title,
+      description: family.description,
+      priority: '0.8',
+      changefreq: 'weekly',
+      jsonLd: [
+        {
+          '@type': 'CollectionPage',
+          name: `${family.label} Linux distributions`,
+          description: family.description,
+          url: abs(landingPath('family', family.slug)),
+          isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.primary },
+          mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: items.length,
+            itemListElement: items.map((d, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: d.name,
+              url: abs(`/distro/${d.id}`)
+            }))
+          }
+        }
+      ],
+      content: `
+      <h1>${escapeHtml(family.label)} Linux distributions</h1>
+      <p>${escapeHtml(family.intro)}</p>
+      <h2>${items.length} ${escapeHtml(family.label)}-family distributions</h2>
+      <ul>
+            ${landingList(items)}
+      </ul>
+      <p><a href="/linux-distributions/">All Linux distributions</a> · <a href="/directory/">Open the directory</a> · <a href="/quiz/">Find my distribution</a></p>`
+    });
+  }
+
+  for (const useCase of USE_CASE_PAGES) {
+    const items = LINUX_DISTROS.filter((d) => (d.primaryUseCases || []).includes(useCase.useCase));
+    routes.push({
+      path: landingPath('use-case', useCase.slug),
+      title: useCase.title,
+      description: useCase.description,
+      priority: '0.8',
+      changefreq: 'weekly',
+      jsonLd: [
+        {
+          '@type': 'CollectionPage',
+          name: useCase.label,
+          description: useCase.description,
+          url: abs(landingPath('use-case', useCase.slug)),
+          isPartOf: { '@type': 'WebSite', name: SITE.name, url: SITE.primary },
+          mainEntity: {
+            '@type': 'ItemList',
+            numberOfItems: items.length,
+            itemListElement: items.map((d, i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: d.name,
+              url: abs(`/distro/${d.id}`)
+            }))
+          }
+        }
+      ],
+      content: `
+      <h1>${escapeHtml(useCase.title.replace(' | LinuxMatch', ''))}</h1>
+      <p>${escapeHtml(useCase.intro)}</p>
+      <h2>${items.length} distributions suited to ${escapeHtml(useCase.label.toLowerCase())}</h2>
+      <ul>
+            ${landingList(items)}
+      </ul>
+      <p><a href="/linux-distributions/">All Linux distributions</a> · <a href="/directory/">Open the directory</a> · <a href="/quiz/">Find my distribution</a></p>`
+    });
+  }
+
   routes.push({
     path: '/privacy',
     title: 'Privacy & GDPR — No Tracking, No Accounts | LinuxMatch',
@@ -434,6 +577,7 @@ function buildHead(route, originalHead = '') {
   <link rel="alternate" hreflang="x-default" href="${canonical}">
   <link rel="alternate" hreflang="en" href="${canonical}">
   <link rel="alternate" type="application/manifest" href="/site.webmanifest">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="${escapeHtml(SITE.name)}">
   <meta property="og:locale" content="${SITE.locale}">
