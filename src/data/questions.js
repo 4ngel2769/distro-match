@@ -187,7 +187,7 @@ export const QUESTIONS_DATA = [
       },
       {
         id: "prefer-immutable",
-        label: "I Love Immutable / Atomic Systems (SteamOS / Silverblue style)",
+        label: "I Love Immutable / Atomic Systems (SteamOS, Fedora Silverblue)",
         description: "Bulletproof reliability, instant rollback pins, and Flatpak application isolation appeal to me.",
         matchAttribute: { releaseModel: ["immutable-atomic"] },
         steerTags: ["immutable-root"]
@@ -511,7 +511,7 @@ export const QUESTIONS_DATA = [
     round: 3,
     question: "What is your stance on Init Systems (systemd vs non-systemd)?",
     subtitle: "The init system is PID 1 — the very first process launched by the kernel that manages all system services.",
-    explanation: "systemd is the modern standard used by 90% of Linux distros (Ubuntu, Fedora, Arch, Debian). Some UNIX purists prefer lighter, simpler alternatives (OpenRC, Runit, s6, sysvinit, Dinit, Shepherd) adhering strictly to the UNIX philosophy.",
+    explanation: "systemd is the modern standard used by 90% of Linux distros (Ubuntu, Fedora, Arch, Debian). A few distros you may know — Alpine, Void, Devuan — deliberately ship a lighter, simpler init system instead, adhering more closely to classic UNIX philosophy.",
     isMultiSelect: false,
     defaultWeight: 3,
     options: [
@@ -524,9 +524,9 @@ export const QUESTIONS_DATA = [
       },
       {
         id: "non-systemd-strict",
-        label: "Strictly Non-systemd (OpenRC, Runit, s6, sysvinit, Dinit)",
+        label: "Strictly Non-systemd (Alpine, Void, Devuan style)",
         description: "I deliberately reject systemd. I want faster boot times, lightweight process supervision, and classic UNIX simplicity.",
-        matchAttribute: { initSystem: ["openrc", "runit", "s6", "sysvinit", "dinit", "shepherd", "custom"] },
+        matchAttribute: { initSystem: ["openrc", "runit", "sysvinit", "dinit", "shepherd", "procd", "custom"] },
         steerTags: ["no-systemd", "init-freedom"]
       },
       {
@@ -634,7 +634,7 @@ export const QUESTIONS_DATA = [
       },
       {
         id: "independent-unique",
-        label: "Independent / Unique Architectures (NixOS, Void, Alpine, Gentoo, Solus)",
+        label: "Independent / Unique Architectures (NixOS, Void, Alpine, Gentoo)",
         description: "Distros built from scratch with novel package managers (nix, apk, xbps, portage, eopkg).",
         matchAttribute: { family: ["Independent", "Gentoo", "Slackware"] },
         steerTags: ["independent-lineage"]
@@ -656,25 +656,25 @@ export const QUESTIONS_DATA = [
     round: 4,
     question: "What is your preferred Desktop Environment or Window Management style?",
     subtitle: "The visual interface you interact with every second.",
-    explanation: "GNOME is sleek and gesture-driven. KDE Plasma is customizable and Windows-like. Tiling WMs (i3, Hyprland, Sway) are keyboard-centric. XFCE is lightweight and snappy.",
+    explanation: "GNOME is sleek and gesture-driven (default on Ubuntu, Fedora and Pop!_OS). KDE Plasma is customizable and Windows-like (default on Kubuntu, openSUSE and TUXEDO OS). XFCE, MATE and Cinnamon are light and traditional (default on Linux Mint, Xubuntu and elementary).",
     isMultiSelect: true,
     defaultWeight: 3,
     options: [
       {
         id: "gnome-cosmic",
-        label: "Modern & Sleek: GNOME / COSMIC",
+        label: "Modern & Sleek: GNOME (Ubuntu, Fedora, Pop!_OS)",
         description: "Clean, distraction-free workflow with smooth multi-finger trackpad gestures and dynamic workspaces.",
         steerTags: ["GNOME", "COSMIC"]
       },
       {
         id: "kde-plasma",
-        label: "Ultra-Customizable: KDE Plasma",
+        label: "Ultra-Customizable: KDE Plasma (Kubuntu, openSUSE, TUXEDO OS)",
         description: "Infinitely tweakable, low memory usage, familiar taskbar, and rich widget ecosystem.",
         steerTags: ["KDE Plasma"]
       },
       {
         id: "traditional-lightweight",
-        label: "Classic & Traditional: XFCE / MATE / Cinnamon",
+        label: "Classic & Traditional: XFCE / MATE / Cinnamon (Mint, Xubuntu)",
         description: "Reliable Windows-style bottom taskbar, start menu, and low CPU/RAM overhead.",
         steerTags: ["XFCE", "MATE", "Cinnamon"]
       },
@@ -744,7 +744,7 @@ export const QUESTIONS_DATA = [
     round: 4,
     question: "How intensive are your PC gaming requirements?",
     subtitle: "Determines whether specialized low-latency kernels and pre-configured gaming tools are needed.",
-    explanation: "Distros like Nobara, Bazzite, and CachyOS bundle custom kernels with fsync, Steam, Lutris, and Wine dependencies pre-configured.",
+    explanation: "Distros like Nobara, Bazzite and CachyOS bundle custom gaming kernels with Steam, Proton and Wine dependencies pre-configured.",
     isMultiSelect: false,
     defaultWeight: 2,
     options: [
@@ -773,7 +773,7 @@ export const QUESTIONS_DATA = [
     round: 4,
     question: "Do you want automated System Snapshots and Rollback Protection?",
     subtitle: "Ensures you can reverse an update or bad configuration directly from the bootloader menu.",
-    explanation: "Filesystems like Btrfs or ZFS take sub-second snapshots. Distros like openSUSE (Snapper), Fedora, Garuda, and CachyOS automatically take a snapshot before every package transaction.",
+    explanation: "Filesystems like Btrfs or ZFS take sub-second snapshots. openSUSE, Fedora, Mint and CachyOS automatically take a snapshot before every package transaction, so a bad update is one boot-menu click away from undoing.",
     isMultiSelect: false,
     defaultWeight: 1,
     options: [
@@ -808,13 +808,13 @@ export const QUESTIONS_DATA = [
     options: [
       {
         id: "encyclopedic-wiki",
-        label: "Exhaustive Wiki & Knowledge Base (Arch Wiki / Gentoo Wiki style)",
+        label: "Arch Wiki & Gentoo Handbook (deep documentation)",
         description: "I love reading in-depth technical documentation that explains how every daemon and config file works.",
         steerTags: ["wiki-encyclopedia"]
       },
       {
         id: "massive-forum-stack-overflow",
-        label: "Massive Forum Search Results (Ubuntu / Debian / Reddit forums)",
+        label: "Ubuntu / Debian / Arch forums (huge answer ecosystem)",
         description: "I want to be able to copy-paste any error message into Google and immediately find 50 solved forum threads.",
         steerTags: ["massive-forum"]
       },

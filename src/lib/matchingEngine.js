@@ -30,8 +30,10 @@ const LEVEL_FIT = {
 
 const RELEASE_FIT = {
   // How well a distro's release model serves each requested cadence.
+  // A rolling distro is *not* a good answer to "give me a 6-month cadence" —
+  // it is a different promise, so it must not score near a true point release.
   'fixed-rock-solid': { fixed: 1, 'semi-rolling': 0.72, rolling: 0.32, 'immutable-atomic': 0.78 },
-  'semi-rolling-balanced': { fixed: 0.78, 'semi-rolling': 1, rolling: 0.82, 'immutable-atomic': 0.6 },
+  'semi-rolling-balanced': { fixed: 0.86, 'semi-rolling': 1, rolling: 0.58, 'immutable-atomic': 0.5 },
   'rolling-bleeding-edge': { fixed: 0.3, 'semi-rolling': 0.72, rolling: 1, 'immutable-atomic': 0.45 },
   'immutable-atomic': { fixed: 0.25, 'semi-rolling': 0.4, rolling: 0.3, 'immutable-atomic': 1 }
 };
@@ -76,6 +78,15 @@ const GAMING_SPECIALISTS = new Set([
 ]);
 
 const PRIVACY_SPECIALISTS = new Set(['tails', 'whonix', 'qubes-os', 'kodachi', 'pureos', 'parrot-sec']);
+
+/**
+ * Live and rescue images. They are legitimate projects and they belong in the
+ * directory, but they are not installable desktop systems — recommending one
+ * as "your Linux distribution" is nonsense, so they never win a shortlist.
+ */
+const LIVE_IMAGE_DISTROS = new Set([
+  'gparted-live', 'clonezilla', 'systemrescuecd', 'ventoy', 'rescatux'
+]);
 
 /** Distros engineered around amnesic sessions or Tor-by-default. */
 const AMNESIC_SPECIALISTS = new Set(['tails', 'whonix', 'qubes-os', 'kodachi']);
@@ -164,6 +175,25 @@ function buildCriteria(distro, answers, questionWeights) {
       weight: weightFor(id),
       note: note || null,
       gap: gap || null
+    });
+  };
+
+  /**
+   * A criterion that returns the same value for every distro carries no
+   * information. It is still shown in the breakdown, but it must not dilute the
+   * weighted average — otherwise a stack of flat 0.85s compresses the real
+   * differences until a rounding-level prior decides the winner.
+   */
+  const addNeutral = (id, label, value) => {
+    if (value == null) return;
+    criteria.push({
+      id,
+      label,
+      value: clamp01(value),
+      weight: 0,
+      note: null,
+      gap: null,
+      neutral: true
     });
   };
 
@@ -330,7 +360,7 @@ function buildCriteria(distro, answers, questionWeights) {
     add('q8_device_form_factor', 'Laptop power tuning', v,
       v === 1 ? 'Laptop power tooling included' : null);
   } else if (device === 'desktop-pc' || device === 'mini-pc-htpc') {
-    add('q8_device_form_factor', 'Desktop form factor', 0.85);
+    addNeutral('q8_device_form_factor', 'Desktop form factor', 0.85);
   }
 
   // 9 — RAM
@@ -357,7 +387,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v === 1 ? 'Power tuning / light footprint for long battery life' : null,
       v < 0.5 ? 'No special power management' : null);
   } else if (battery === 'balanced-power') {
-    add('q10_battery_power', 'Battery endurance tooling', 0.85);
+    addNeutral('q10_battery_power', 'Battery endurance tooling', 0.85);
   }
 
   // 11 — Software freedom
@@ -411,7 +441,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v === 1 ? 'No telemetry by default' : null,
       v < 0.7 ? 'Parent project collects some opt-out telemetry' : null);
   } else if (telemetry === 'standard-open-source-telemetry') {
-    add('q13_telemetry_privacy', 'Telemetry expectations', 0.85);
+    addNeutral('q13_telemetry_privacy', 'Telemetry expectations', 0.85);
   }
 
   // 14 — Governance
@@ -475,7 +505,7 @@ function buildCriteria(distro, answers, questionWeights) {
     add('q17_package_formats', 'Flatpak / app center', v,
       v === 1 ? 'Flatpak-first with a graphical app store' : null);
   } else if (pkg === 'traditional-native-repos') {
-    add('q17_package_formats', 'Native repositories', 0.95);
+    addNeutral('q17_package_formats', 'Native repositories', 0.95);
   }
 
   // 18 — Gaming intensity
@@ -504,7 +534,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v === 1 ? 'Automated snapshots or atomic rollback' : null,
       v < 0.5 ? 'No first-class snapshot integration' : null);
   } else if (snapshots === 'standard-manual-backups') {
-    add('q19_snapshots_rollback', 'Standard backup options', 0.85);
+    addNeutral('q19_snapshots_rollback', 'Standard backup options', 0.85);
   }
 
   // 20 — Documentation & community
@@ -522,7 +552,6 @@ function buildCriteria(distro, answers, questionWeights) {
     const v = ['Independent', 'Gentoo', 'Slackware', 'Arch'].includes(distro.family) ? 1 : 0.7;
     add('q20_documentation_community', 'Small friendly community', v);
   }
-
   // 21 — Single highest priority (3x)
   const priority = answers.q21_steering_priority;
   if (priority) {
@@ -613,7 +642,7 @@ const RELEASE_LABELS = {
 const prettyRelease = (id) => RELEASE_LABELS[id] || id;
 
 const DESKTOP_LABELS = {
-  'gnome-cosmic': 'GNOME/COSMIC',
+  'gnome-cosmic': 'GNOME',
   'kde-plasma': 'KDE Plasma',
   'traditional-lightweight': 'traditional (XFCE/MATE/Cinnamon)',
   'tiling-window-manager': 'tiling',
@@ -636,18 +665,42 @@ const prettyPriority = (id) => PRIORITY_LABELS[id] || id;
 
 /* ------------------------------- scoring ------------------------------- */
 
-function tierPrior(distro) {
-  if (distro.tier === 'flagship') return 0.022;
-  if (distro.tier === 'specialist') return 0.012;
+function tierPrior(distro, wantsIndependent = false) {
+  // An explicit "give me something off the beaten path" answer means the
+  // flagship bias has to step back, otherwise it cancels out the question.
+  if (wantsIndependent) {
+    if (distro.tier === 'flagship') return 0.008;
+    if (distro.tier === 'specialist') return 0.014;
+    return 0.02;
+  }
+  if (distro.tier === 'flagship') return 0.045;
+  if (distro.tier === 'specialist') return 0.018;
   return 0; // niche gets no free boost; it has to earn its place
 }
 
-function popularityPrior(distro) {
-  const rank = distro.dwRank || 200;
-  if (rank <= 10) return 0.012;
-  if (rank <= 30) return 0.008;
-  if (rank <= 60) return 0.004;
-  return 0;
+/**
+ * Real-world familiarity prior.
+ *
+ * DistroWatch rank is the only objective "how many people actually use this"
+ * signal in the dataset, and it matters: two distros can satisfy every
+ * technical criterion equally well, and the one people can actually find help
+ * for should win. The curve is steep on purpose so that a rank-2 project
+ * (Mint, Ubuntu) always outranks a rank-180 curiosity.
+ *
+ * `wantsIndependent` damps it: if the user explicitly asked for an independent
+ * project, raw popularity is exactly the wrong thing to reward.
+ */
+function popularityPrior(distro, wantsIndependent = false) {
+  const rank = distro.dwRank || 999;
+  let bonus;
+  if (rank <= 3) bonus = 0.05;
+  else if (rank <= 10) bonus = 0.04;
+  else if (rank <= 25) bonus = 0.028;
+  else if (rank <= 50) bonus = 0.016;
+  else if (rank <= 100) bonus = 0.008;
+  else if (rank <= 200) bonus = 0.002;
+  else bonus = 0;
+  return wantsIndependent ? bonus * 0.3 : bonus;
 }
 
 function steeringAdjustment(distro, steering) {
@@ -711,16 +764,44 @@ export const MatchingEngine = {
         }
       }
 
+      // --- Unpopularity gate: a project that barely registers on DistroWatch
+      // is not a sensible recommendation for anyone who did not specifically
+      // ask for an off-the-beaten-path system, even if it ticks every box.
+      // Without this, a handful of near-identical niche projects crawl into
+      // the shortlist purely because their data happens to line up.
+      const wantsIndependent = userAnswers.q23_mainstream_vs_indie === 'independent-novelty';
+      const rank = distro.dwRank || 999;
+      const obscure = rank > 150;
+      if (scope !== 'all' && obscure && !wantsIndependent && !specialtyRequested) {
+        hardFails.push('Very small project — little community, documentation or hardware support');
+      }
+
+      // --- Live/rescue images are tools, not desktop distributions. They can
+      // never be the recommendation, only ever a directory entry.
+      if (LIVE_IMAGE_DISTROS.has(distro.id)) {
+        hardFails.push('Live/rescue image — not an installable desktop system');
+      }
+
       let satisfaction = 0;
       let weightSum = 0;
       for (const c of criteria) {
+        // Neutral criteria are identical for every distro, so they cannot
+        // express a preference. Excluding them keeps the weighted average
+        // focused on the answers that actually separate the candidates.
+        if (c.neutral || c.weight <= 0) continue;
         satisfaction += c.value * c.weight;
         weightSum += c.weight;
       }
-      satisfaction = weightSum > 0 ? satisfaction / weightSum : 0.5;
+      // Leave headroom above 0 for the priors below. If the criteria average
+      // could reach 1.0 on its own, clamping would erase the popularity and
+      // tier signal exactly where it matters most — and a dozen distros would
+      // tie at 98% with the winner decided by an arbitrary tie-break.
+      satisfaction = weightSum > 0 ? (satisfaction / weightSum) * 0.88 : 0.44;
 
       const { delta } = steeringAdjustment(distro, steering);
-      satisfaction = clamp01(satisfaction + delta + tierPrior(distro) + popularityPrior(distro));
+      satisfaction = clamp01(
+        satisfaction + delta + tierPrior(distro, wantsIndependent) + popularityPrior(distro, wantsIndependent)
+      );
 
       const disqualified = hardFails.length > 0;
       // A hard requirement violation should dominate the percentage, but keep it
@@ -728,7 +809,6 @@ export const MatchingEngine = {
       const matchPercentage = disqualified
         ? Math.max(3, Math.round(22 * satisfaction))
         : Math.round(8 + 90 * Math.pow(satisfaction, 1.15));
-
       const strong = criteria
         .filter((c) => c.value >= 0.9 && c.weight >= 3 && c.note)
         .sort((a, b) => b.weight - a.weight);
@@ -744,6 +824,9 @@ export const MatchingEngine = {
         .slice(0, 4);
 
       const breakdown = [...criteria]
+        // Neutral criteria carry no weight and no information, so they are not
+        // part of the score anatomy shown to the user.
+        .filter((c) => !c.neutral)
         .sort((a, b) => b.weight * b.value - a.weight * a.value)
         .map((c) => ({
           id: c.id,
