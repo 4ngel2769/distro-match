@@ -459,6 +459,7 @@ button, input, select, textarea {
   .header-container {
     padding: 10px 16px;
     gap: 10px;
+    position: relative;
   }
 
   .site-logo-btn {
@@ -468,6 +469,14 @@ button, input, select, textarea {
   .brand-tagline,
   .site-header .nav-secondary {
     display: none;
+  }
+
+  /* Keep the theme switch on the logo row instead of letting it wrap onto a
+     third row of the sticky header. */
+  .nav-links > li:last-child {
+    position: absolute;
+    top: 10px;
+    right: 16px;
   }
 
   .nav-links {
