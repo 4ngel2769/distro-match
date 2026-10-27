@@ -53,13 +53,13 @@
 
     <div class="footer-credit">
       <h3 class="footer-heading">Build</h3>
-      <span>Built by <strong>buyangeldev0</strong></span>
+      <span>Built by <strong>angeldev0</strong></span>
       <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">adev0.eu ↗</a>
     </div>
   </div>
 
   <div class="footer-bottom">
     <span>© {new Date().getFullYear()} LinuxMatch — zero telemetry, no accounts, nothing stored.</span>
-    <span>Design &amp; code by buyangeldev0 · <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">adev0.eu</a></span>
+    <span>Design &amp; code by angeldev0 · <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">adev0.eu</a></span>
   </div>
 </footer>
