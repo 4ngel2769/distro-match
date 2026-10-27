@@ -9,7 +9,7 @@
    */
   import DistroLogo from './DistroLogo.svelte';
 
-  let { distro = null, height = 380, eager = false, compact = false, fit = 'cover', showName = true } = $props();
+  let { distro = null, height = 380, eager = false, compact = false, fit = 'contain', showName = true } = $props();
 
   let failed = $state(false);
   let src = $derived(distro?.screenshotUrl || '');
@@ -101,8 +101,9 @@
     display: block;
     width: 100%;
     height: var(--shot-height);
-    object-fit: cover;
-    object-position: top center;
+    object-fit: contain;
+    object-position: center;
+    background: #08080a;
   }
 
   .screenshot-shell img.shot-letterbox {

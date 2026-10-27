@@ -521,13 +521,13 @@
 
   .card-media {
     position: relative;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 8 / 5;
     border-bottom: 1px solid var(--border-color);
     background-color: #08080a;
     overflow: hidden;
   }
 
-  /* The screenshot fills the media box exactly, so a 16:9 capture shows the
+  /* The screenshot fills the media box exactly, so a 16:10 capture shows the
      whole desktop with no crop and no letterbox bars. */
   .card-media :global(.screenshot-shell) {
     height: 100%;
@@ -536,6 +536,8 @@
 
   .card-media :global(.screenshot-shell img) {
     height: 100%;
+    object-fit: contain;
+    object-position: center;
   }
 
   /* Soft upward gradient so the identity block stays legible on any screenshot. */

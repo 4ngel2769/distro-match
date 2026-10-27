@@ -293,7 +293,8 @@
   .gallery-thumb img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background: #08080a;
     display: block;
   }
 
