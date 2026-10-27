@@ -1,0 +1,238 @@
+{
+  "linux-mint": { "logo": "File:Linux Mint logo without wordmark.svg" },
+  "ubuntu": { "logo": "File:Ubuntu-Logo ohne Schriftzug.svg" },
+  "fedora-workstation": {
+    "logo": "File:Fedora logo.svg",
+    "screenshot": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Fedora_Workstation_40_Desktop_English.png",
+      "credit": "Wikimedia Commons",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:Fedora_Workstation_40_Desktop_English.png",
+      "license": "CC BY-SA 4.0",
+      "artist": "Bakabaka9"
+    }
+  },
+  "opensuse-tumbleweed": { "logo": "File:OpenSUSE Tumbleweed green logo.svg" },
+  "opensuse-leap": { "logo": "File:OpenSUSE Leap green logo.svg" },
+  "ubuntu-budgie": { "logo": "File:Ubuntu Budgie No Wordmark.svg" },
+  "blackarch": { "logo": "File:BlackArch logo.png" },
+  "proxmox-ve": { "logo": "File:Logo Proxmox.svg" },
+  "calculate-linux": { "logo": "File:Calculatelinux-logo.png" },
+  "bunsenlabs": { "logo": "File:BunsenLabs logo 2024.png" },
+  "zorin-os": { "logo": "File:Zorin OS.svg" },
+  "tiny-core": { "logo": "File:Tcl logo.png" },
+  "nixos": { "logo": "File:NixOS rainbow snowflake 01.svg" },
+  "peppermint-os": { "logo": "File:Peppermint OS Master Banner 1.svg" },
+  "raspberry-pi-os": {
+    "logo": {
+      "url": "https://cdn.simpleicons.org/raspberrypi",
+      "mime": "image/svg+xml",
+      "credit": "Simple Icons",
+      "creditUrl": "https://simpleicons.org/?q=raspberrypi",
+      "license": "CC0 1.0"
+    },
+    "screenshot": "File:Raspberry Pi OS 13 screenshot.png"
+  },
+  "rhino-linux": {
+    "logo": {
+      "url": "https://rhinolinux.org/img/logo.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://rhinolinux.org",
+      "license": "Project trademark"
+    }
+  },
+  "chimeraos": {
+    "logo": {
+      "url": "https://chimeraos.org/logo.svg",
+      "mime": "image/svg+xml",
+      "credit": "Official project logo",
+      "creditUrl": "https://chimeraos.org",
+      "license": "Project trademark"
+    },
+    "screenshot": {
+      "url": "https://raw.githubusercontent.com/ChimeraOS/chimeraos.github.io/HEAD/src/_assets/screenshots/02f.png",
+      "credit": "Official project screenshot",
+      "creditUrl": "https://github.com/ChimeraOS/chimeraos.github.io",
+      "license": "Project screenshot"
+    }
+  },
+  "mabox": {
+    "logo": {
+      "url": "https://maboxlinux.org/wp-content/uploads/2018/12/3D_logo.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://maboxlinux.org",
+      "license": "Project trademark"
+    }
+  },
+  "bluefin": {
+    "logo": {
+      "url": "https://projectbluefin.io/favicons/favicon.svg",
+      "mime": "image/svg+xml",
+      "credit": "Official project logo",
+      "creditUrl": "https://projectbluefin.io",
+      "license": "Project trademark"
+    }
+  },
+  "voyager-live": {
+    "logo": {
+      "url": "https://voyagerlive.org/wp-content/uploads/2025/01/logo-25.04.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://voyagerlive.org",
+      "license": "Project trademark"
+    }
+  },
+  "drauger-os": {
+    "logo": {
+      "url": "https://draugeros.org/assets/images/favicon.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://draugeros.org",
+      "license": "Project trademark"
+    }
+  },
+  "wattos": {
+    "logo": {
+      "url": "https://www.planetwatt.com/wp-content/uploads/2021/01/logo.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://www.planetwatt.com",
+      "license": "Project trademark"
+    }
+  },
+  "flatcar": {
+    "logo": {
+      "url": "https://www.flatcar.org/media/brand-logo.svg",
+      "mime": "image/svg+xml",
+      "credit": "Official project logo",
+      "creditUrl": "https://www.flatcar.org",
+      "license": "Project trademark"
+    }
+  },
+  "geckolinux": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/2692138?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/GeckoLinux",
+      "license": "Project trademark"
+    }
+  },
+  "redcore-linux": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/58997832?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/redcorelinux",
+      "license": "Project trademark"
+    }
+  },
+  "clear-linux": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/12545216?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/clearlinux",
+      "license": "Project trademark"
+    }
+  },
+  "regata-os": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/84072412?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/regataos",
+      "license": "Project trademark"
+    }
+  },
+  "bedrock-linux": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/5713885?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/bedrocklinux",
+      "license": "Project trademark"
+    }
+  },
+  "fourm-linux": { "logo": "none" },
+  "openmediavault": { "logo": "File:OpenMediaVault Logo.png" },
+  "easyos": {
+    "logo": {
+      "url": "https://easyos.org/images0/top-banner.png",
+      "credit": "Official project logo",
+      "creditUrl": "https://easyos.org",
+      "license": "Project trademark"
+    }
+  },
+  "truenas-scale": {
+    "logo": {
+      "url": "https://cdn.simpleicons.org/truenas",
+      "mime": "image/svg+xml",
+      "credit": "Simple Icons",
+      "creditUrl": "https://simpleicons.org/?q=truenas",
+      "license": "CC0 1.0"
+    }
+  },
+  "caine": { "logo": "none" },
+  "openwrt": {
+    "logo": {
+      "url": "https://cdn.simpleicons.org/openwrt",
+      "mime": "image/svg+xml",
+      "credit": "Simple Icons",
+      "creditUrl": "https://simpleicons.org/?q=openwrt",
+      "license": "CC0 1.0"
+    }
+  },
+  "chromeos-flex": {
+    "logo": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/c/ce/ChromeOS_Logo.svg",
+      "mime": "image/svg+xml",
+      "credit": "Wikimedia Commons",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:ChromeOS_Logo.svg",
+      "license": "Public domain",
+      "artist": "Google"
+    }
+  },
+  "oracle-linux": { "logo": "File:Oracle linux logo.svg" },
+  "talos-linux": {
+    "logo": {
+      "url": "https://www.siderolabs.com/redesign-2026/icons/icon-talos.svg",
+      "mime": "image/svg+xml",
+      "credit": "Official project logo",
+      "creditUrl": "https://www.talos.dev",
+      "license": "Project trademark"
+    },
+    "screenshot": "none"
+  },
+  "regolith-linux": {
+    "logo": {
+      "url": "https://avatars.githubusercontent.com/u/47926816?v=4",
+      "credit": "Official project avatar",
+      "creditUrl": "https://github.com/regolith-linux",
+      "license": "Project trademark"
+    },
+    "screenshot": {
+      "url": "https://regolith-linux.org/images/regolith-screenshot-intro.png",
+      "credit": "Official project screenshot",
+      "creditUrl": "https://regolith-linux.org",
+      "license": "Project screenshot"
+    }
+  },
+  "funtoo": { "screenshot": "none" },
+  "postmarketos": {
+    "screenshot": {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/0/0f/PostmarketOS-With-Phosh.png",
+      "credit": "Wikimedia Commons",
+      "creditUrl": "https://commons.wikimedia.org/wiki/File:PostmarketOS-With-Phosh.png",
+      "license": "GPLv3",
+      "artist": "Knuxfanwin8"
+    }
+  },
+  "opensuse-aeon": {
+    "screenshot": {
+      "url": "https://raw.githubusercontent.com/AeonDesktop/os-autoinst-needles-aeon/HEAD/gnome-shell-overview-20260316.png",
+      "credit": "Official project screenshot",
+      "creditUrl": "https://github.com/AeonDesktop/os-autoinst-needles-aeon",
+      "license": "Project screenshot"
+    }
+  },
+  "recalbox": {
+    "screenshot": {
+      "url": "https://raw.githubusercontent.com/recalbox/recalbox-themes/HEAD/resources/recalbox/screenshots/startup.png",
+      "credit": "Official project screenshot",
+      "creditUrl": "https://github.com/recalbox/recalbox-themes",
+      "license": "Project screenshot"
+    }
+  }
+}

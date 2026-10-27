@@ -1,0 +1,662 @@
+{
+  "linux-mint": {
+    "slug": "mint",
+    "status": 200,
+    "title": "Linux Mint",
+    "pageTitle": "DistroWatch.com: Linux Mint"
+  },
+  "ubuntu": {
+    "slug": "ubuntu",
+    "status": 200,
+    "title": "Ubuntu",
+    "pageTitle": "DistroWatch.com: Ubuntu"
+  },
+  "debian": {
+    "slug": "debian",
+    "status": 200,
+    "title": "Debian",
+    "pageTitle": "DistroWatch.com: Debian"
+  },
+  "arch-linux": {
+    "slug": "arch",
+    "status": 200,
+    "title": "Arch Linux",
+    "pageTitle": "DistroWatch.com: Arch Linux"
+  },
+  "fedora-workstation": {
+    "slug": "fedora",
+    "status": 200,
+    "title": "Fedora",
+    "pageTitle": "DistroWatch.com: Fedora"
+  },
+  "pop-os": {
+    "slug": "popos",
+    "status": 200,
+    "title": "Pop!_OS",
+    "pageTitle": "DistroWatch.com: Pop!_OS"
+  },
+  "manjaro": {
+    "slug": "manjaro",
+    "status": 200,
+    "title": "Manjaro Linux",
+    "pageTitle": "DistroWatch.com: Manjaro Linux"
+  },
+  "opensuse-tumbleweed": {
+    "slug": "opensuse",
+    "status": 200,
+    "title": "openSUSE",
+    "pageTitle": "DistroWatch.com: openSUSE"
+  },
+  "zorin-os": {
+    "slug": "zorin",
+    "status": 200,
+    "title": "Zorin OS",
+    "pageTitle": "DistroWatch.com: Zorin OS"
+  },
+  "bazzite": {
+    "slug": "bazzite",
+    "status": 200,
+    "title": "Bazzite",
+    "pageTitle": "DistroWatch.com: Bazzite"
+  },
+  "nobara-linux": {
+    "slug": "nobara",
+    "status": 200,
+    "title": "Nobara Project",
+    "pageTitle": "DistroWatch.com: Nobara Project"
+  },
+  "cachyos": {
+    "slug": "cachyos",
+    "status": 200,
+    "title": "CachyOS",
+    "pageTitle": "DistroWatch.com: CachyOS"
+  },
+  "steamos": {
+    "slug": "steamos",
+    "status": 200,
+    "title": "SteamOS",
+    "pageTitle": "DistroWatch.com: SteamOS"
+  },
+  "mx-linux": {
+    "slug": "mx",
+    "status": 200,
+    "title": "MX Linux",
+    "pageTitle": "DistroWatch.com: MX Linux"
+  },
+  "elementary-os": {
+    "slug": "elementary",
+    "status": 200,
+    "title": "elementary OS",
+    "pageTitle": "DistroWatch.com: elementary OS"
+  },
+  "kde-neon": {
+    "slug": "kdeneon",
+    "status": 200,
+    "title": "KDE neon",
+    "pageTitle": "DistroWatch.com: KDE neon"
+  },
+  "nixos": {
+    "slug": "nixos",
+    "status": 200,
+    "title": "NixOS",
+    "pageTitle": "DistroWatch.com: NixOS"
+  },
+  "void-linux": {
+    "slug": "void",
+    "status": 200,
+    "title": "Void",
+    "pageTitle": "DistroWatch.com: Void"
+  },
+  "alpine-linux": {
+    "slug": "alpine",
+    "status": 200,
+    "title": "Alpine Linux",
+    "pageTitle": "DistroWatch.com: Alpine Linux"
+  },
+  "kali-linux": {
+    "slug": "kali",
+    "status": 200,
+    "title": "Kali Linux",
+    "pageTitle": "DistroWatch.com: Kali Linux"
+  },
+  "tails": {
+    "slug": "tails",
+    "status": 200,
+    "title": "Tails",
+    "pageTitle": "DistroWatch.com: Tails"
+  },
+  "qubes-os": {
+    "slug": "qubes",
+    "status": 200,
+    "title": "Qubes OS",
+    "pageTitle": "DistroWatch.com: Qubes OS"
+  },
+  "solus": {
+    "slug": "solus",
+    "status": 200,
+    "title": "Solus",
+    "pageTitle": "DistroWatch.com: Solus"
+  },
+  "garuda-linux": {
+    "slug": "garuda",
+    "status": 200,
+    "title": "Garuda Linux",
+    "pageTitle": "DistroWatch.com: Garuda Linux"
+  },
+  "antix": {
+    "slug": "antix",
+    "status": 200,
+    "title": "antiX",
+    "pageTitle": "DistroWatch.com: antiX"
+  },
+  "artix-linux": {
+    "slug": "artix",
+    "status": 200,
+    "title": "Artix Linux",
+    "pageTitle": "DistroWatch.com: Artix Linux"
+  },
+  "devuan": {
+    "slug": "devuan",
+    "status": 200,
+    "title": "Devuan GNU+Linux",
+    "pageTitle": "DistroWatch.com: Devuan GNU+Linux"
+  },
+  "tuxedo-os": {
+    "slug": "tuxedo",
+    "status": 200,
+    "title": "TUXEDO OS",
+    "pageTitle": "DistroWatch.com: TUXEDO OS"
+  },
+  "fedora-silverblue": {
+    "slug": "fedora",
+    "status": 200,
+    "title": "Fedora",
+    "pageTitle": "DistroWatch.com: Fedora"
+  },
+  "deepin": {
+    "slug": "deepin",
+    "status": 200,
+    "title": "deepin",
+    "pageTitle": "DistroWatch.com: deepin"
+  },
+  "puppy-linux": {
+    "slug": "puppy",
+    "status": 200,
+    "title": "Puppy Linux",
+    "pageTitle": "DistroWatch.com: Puppy Linux"
+  },
+  "kubuntu": {
+    "slug": "kubuntu",
+    "status": 200,
+    "title": "Kubuntu",
+    "pageTitle": "DistroWatch.com: Kubuntu"
+  },
+  "xubuntu": {
+    "slug": "xubuntu",
+    "status": 200,
+    "title": "Xubuntu",
+    "pageTitle": "DistroWatch.com: Xubuntu"
+  },
+  "lubuntu": {
+    "slug": "lubuntu",
+    "status": 200,
+    "title": "Lubuntu",
+    "pageTitle": "DistroWatch.com: Lubuntu"
+  },
+  "ubuntu-budgie": {
+    "slug": "ubuntubudgie",
+    "status": 200,
+    "title": "Ubuntu Budgie",
+    "pageTitle": "DistroWatch.com: Ubuntu Budgie"
+  },
+  "ubuntu-studio": {
+    "slug": "ubuntustudio",
+    "status": 200,
+    "title": "Ubuntu Studio",
+    "pageTitle": "DistroWatch.com: Ubuntu Studio"
+  },
+  "gentoo": {
+    "slug": "gentoo",
+    "status": 200,
+    "title": "Gentoo Linux",
+    "pageTitle": "DistroWatch.com: Gentoo Linux"
+  },
+  "linux-lite": {
+    "slug": "lite",
+    "status": 200,
+    "title": "Linux Lite",
+    "pageTitle": "DistroWatch.com: Linux Lite"
+  },
+  "bodhi-linux": {
+    "slug": "bodhi",
+    "status": 200,
+    "title": "Bodhi Linux",
+    "pageTitle": "DistroWatch.com: Bodhi Linux"
+  },
+  "slackware": {
+    "slug": "slackware",
+    "status": 200,
+    "title": "Slackware Linux",
+    "pageTitle": "DistroWatch.com: Slackware Linux"
+  },
+  "peppermint-os": {
+    "slug": "peppermint",
+    "status": 200,
+    "title": "Peppermint OS",
+    "pageTitle": "DistroWatch.com: Peppermint OS"
+  },
+  "vanilla-os": {
+    "slug": "vanilla",
+    "status": 200,
+    "title": "Vanilla OS",
+    "pageTitle": "DistroWatch.com: Vanilla OS"
+  },
+  "rhino-linux": {
+    "slug": "rhino",
+    "status": 200,
+    "title": "Rhino Linux",
+    "pageTitle": "DistroWatch.com: Rhino Linux"
+  },
+  "q4os": {
+    "slug": "q4os",
+    "status": 200,
+    "title": "Q4OS",
+    "pageTitle": "DistroWatch.com: Q4OS"
+  },
+  "trisquel": {
+    "slug": "trisquel",
+    "status": 200,
+    "title": "Trisquel GNU/Linux",
+    "pageTitle": "DistroWatch.com: Trisquel GNU/Linux"
+  },
+  "sparkylinux": {
+    "slug": "sparky",
+    "status": 200,
+    "title": "SparkyLinux",
+    "pageTitle": "DistroWatch.com: SparkyLinux"
+  },
+  "bunsenlabs": {
+    "slug": "bunsenlabs",
+    "status": 200,
+    "title": "BunsenLabs Linux",
+    "pageTitle": "DistroWatch.com: BunsenLabs Linux"
+  },
+  "parrot-sec": {
+    "slug": "parrot",
+    "status": 200,
+    "title": "Parrot",
+    "pageTitle": "DistroWatch.com: Parrot"
+  },
+  "guix-system": {
+    "slug": "guixsd",
+    "status": 200,
+    "title": "Guix System",
+    "pageTitle": "DistroWatch.com: Guix System"
+  },
+  "whonix": {
+    "slug": "whonix",
+    "status": 200,
+    "title": "Whonix",
+    "pageTitle": "DistroWatch.com: Whonix"
+  },
+  "pureos": {
+    "slug": "pureos",
+    "status": 200,
+    "title": "PureOS",
+    "pageTitle": "DistroWatch.com: PureOS"
+  },
+  "dietpi": {
+    "slug": "dietpi",
+    "status": 200,
+    "title": "DietPi",
+    "pageTitle": "DistroWatch.com: DietPi"
+  },
+  "armbian": {
+    "slug": "armbian",
+    "status": 200,
+    "title": "Armbian",
+    "pageTitle": "DistroWatch.com: Armbian"
+  },
+  "raspberry-pi-os": {
+    "slug": "pi",
+    "status": 200,
+    "title": "Search Distributions",
+    "pageTitle": "DistroWatch.com: Put the fun back into computing. Use Linux, BSD."
+  },
+  "proxmox-ve": {
+    "slug": "proxmox",
+    "status": 200,
+    "title": "Proxmox",
+    "pageTitle": "DistroWatch.com: Proxmox"
+  },
+  "calculate-linux": {
+    "slug": "calculate",
+    "status": 200,
+    "title": "Calculate Linux",
+    "pageTitle": "DistroWatch.com: Calculate Linux"
+  },
+  "openmediavault": {
+    "slug": "openmediavault",
+    "status": 200,
+    "title": "OpenMediaVault",
+    "pageTitle": "DistroWatch.com: OpenMediaVault"
+  },
+  "tiny-core": {
+    "slug": "tinycore",
+    "status": 200,
+    "title": "Tiny Core Linux",
+    "pageTitle": "DistroWatch.com: Tiny Core Linux"
+  },
+  "parabola": {
+    "slug": "parabola",
+    "status": 200,
+    "title": "Parabola GNU/Linux-libre",
+    "pageTitle": "DistroWatch.com: Parabola GNU/Linux-libre"
+  },
+  "blackarch": {
+    "slug": "blackarch",
+    "status": 200,
+    "title": "BlackArch Linux",
+    "pageTitle": "DistroWatch.com: BlackArch Linux"
+  },
+  "archcraft": {
+    "slug": "archcraft",
+    "status": 200,
+    "title": "Archcraft",
+    "pageTitle": "DistroWatch.com: Archcraft"
+  },
+  "mabox": {
+    "slug": "mabox",
+    "status": 200,
+    "title": "Mabox Linux",
+    "pageTitle": "DistroWatch.com: Mabox Linux"
+  },
+  "fedora-kinoite": {
+    "slug": "fedora",
+    "status": 200,
+    "title": "Fedora",
+    "pageTitle": "DistroWatch.com: Fedora"
+  },
+  "rhel": {
+    "slug": "redhat",
+    "status": 200,
+    "title": "Red Hat Enterprise Linux",
+    "pageTitle": "DistroWatch.com: Red Hat Enterprise Linux"
+  },
+  "rocky-linux": {
+    "slug": "rocky",
+    "status": 200,
+    "title": "Rocky Linux",
+    "pageTitle": "DistroWatch.com: Rocky Linux"
+  },
+  "almalinux": {
+    "slug": "alma",
+    "status": 200,
+    "title": "AlmaLinux OS",
+    "pageTitle": "DistroWatch.com: AlmaLinux OS"
+  },
+  "ultramarine-linux": {
+    "slug": "ultramarine",
+    "status": 200,
+    "title": "Ultramarine Linux",
+    "pageTitle": "DistroWatch.com: Ultramarine Linux"
+  },
+  "bluefin": {
+    "slug": "bluefin",
+    "status": 200,
+    "title": "Bluefin",
+    "pageTitle": "DistroWatch.com: Bluefin"
+  },
+  "opensuse-leap": {
+    "slug": "opensuse",
+    "status": 200,
+    "title": "openSUSE",
+    "pageTitle": "DistroWatch.com: openSUSE"
+  },
+  "opensuse-aeon": {
+    "slug": "opensuse",
+    "status": 200,
+    "title": "openSUSE",
+    "pageTitle": "DistroWatch.com: openSUSE"
+  },
+  "redcore-linux": {
+    "slug": "redcore",
+    "status": 200,
+    "title": "Redcore Linux",
+    "pageTitle": "DistroWatch.com: Redcore Linux"
+  },
+  "salix": {
+    "slug": "salix",
+    "status": 200,
+    "title": "Salix",
+    "pageTitle": "DistroWatch.com: Salix"
+  },
+  "porteus": {
+    "slug": "porteus",
+    "status": 200,
+    "title": "Porteus",
+    "pageTitle": "DistroWatch.com: Porteus"
+  },
+  "clear-linux": {
+    "slug": "clear",
+    "status": 200,
+    "title": "Clear Linux",
+    "pageTitle": "DistroWatch.com: Clear Linux"
+  },
+  "kaos": {
+    "slug": "kaos",
+    "status": 200,
+    "title": "KaOS",
+    "pageTitle": "DistroWatch.com: KaOS"
+  },
+  "mageia": {
+    "slug": "mageia",
+    "status": 200,
+    "title": "Mageia",
+    "pageTitle": "DistroWatch.com: Mageia"
+  },
+  "openmandriva": {
+    "slug": "openmandriva",
+    "status": 200,
+    "title": "OpenMandriva Lx",
+    "pageTitle": "DistroWatch.com: OpenMandriva Lx"
+  },
+  "pclinuxos": {
+    "slug": "pclinuxos",
+    "status": 200,
+    "title": "PCLinuxOS",
+    "pageTitle": "DistroWatch.com: PCLinuxOS"
+  },
+  "easyos": {
+    "slug": "easyos",
+    "status": 200,
+    "title": "EasyOS",
+    "pageTitle": "DistroWatch.com: EasyOS"
+  },
+  "slitaz": {
+    "slug": "slitaz",
+    "status": 200,
+    "title": "SliTaz GNU/Linux",
+    "pageTitle": "DistroWatch.com: SliTaz GNU/Linux"
+  },
+  "fourm-linux": {
+    "slug": "4mlinux",
+    "status": 200,
+    "title": "4MLinux",
+    "pageTitle": "DistroWatch.com: 4MLinux"
+  },
+  "batocera": {
+    "slug": "batocera",
+    "status": 200,
+    "title": "Batocera.linux",
+    "pageTitle": "DistroWatch.com: Batocera.linux"
+  },
+  "libreelec": {
+    "slug": "libreelec",
+    "status": 200,
+    "title": "LibreELEC",
+    "pageTitle": "DistroWatch.com: LibreELEC"
+  },
+  "flatcar": {
+    "slug": "flatcar",
+    "status": 200,
+    "title": "Flatcar Container Linux",
+    "pageTitle": "DistroWatch.com: Flatcar Container Linux"
+  },
+  "truenas-scale": {
+    "slug": "truenas",
+    "status": 200,
+    "title": "TrueNAS",
+    "pageTitle": "DistroWatch.com: TrueNAS"
+  },
+  "postmarketos": {
+    "slug": "postmarketos",
+    "status": 200,
+    "title": "Nura",
+    "pageTitle": "DistroWatch.com: Nura"
+  },
+  "slax": {
+    "slug": "slax",
+    "status": 200,
+    "title": "Slax",
+    "pageTitle": "DistroWatch.com: Slax"
+  },
+  "feren-os": {
+    "slug": "ferenos",
+    "status": 200,
+    "title": "Feren OS",
+    "pageTitle": "DistroWatch.com: Feren OS"
+  },
+  "voyager-live": {
+    "slug": "voyager",
+    "status": 200,
+    "title": "Voyager Live",
+    "pageTitle": "DistroWatch.com: Voyager Live"
+  },
+  "regolith-linux": {
+    "slug": "regolith",
+    "status": 200,
+    "title": "Search Distributions",
+    "pageTitle": "DistroWatch.com: Put the fun back into computing. Use Linux, BSD."
+  },
+  "caine": {
+    "slug": "caine",
+    "status": 200,
+    "title": "CAINE",
+    "pageTitle": "DistroWatch.com: CAINE"
+  },
+  "kodachi": {
+    "slug": "kodachi",
+    "status": 200,
+    "title": "Kodachi OS",
+    "pageTitle": "DistroWatch.com: Kodachi OS"
+  },
+  "lakka": {
+    "slug": "lakka",
+    "status": 200,
+    "title": "Lakka",
+    "pageTitle": "DistroWatch.com: Lakka"
+  },
+  "dragonfly-bsd-linux-compat": {
+    "slug": "chimera",
+    "status": 200,
+    "title": "Chimera Linux",
+    "pageTitle": "DistroWatch.com: Chimera Linux"
+  },
+  "astra-linux": {
+    "slug": "astra",
+    "status": 200,
+    "title": "Astra Linux",
+    "pageTitle": "DistroWatch.com: Astra Linux"
+  },
+  "alt-linux": {
+    "slug": "alt",
+    "status": 200,
+    "title": "ALT Linux",
+    "pageTitle": "DistroWatch.com: ALT Linux"
+  },
+  "oracle-linux": {
+    "slug": "oracle",
+    "status": 200,
+    "title": "Oracle Linux",
+    "pageTitle": "DistroWatch.com: Oracle Linux"
+  },
+  "centos-stream": {
+    "slug": "centos",
+    "status": 200,
+    "title": "CentOS",
+    "pageTitle": "DistroWatch.com: CentOS"
+  },
+  "drauger-os": {
+    "slug": "drauger",
+    "status": 200,
+    "title": "Drauger OS",
+    "pageTitle": "DistroWatch.com: Drauger OS"
+  },
+  "regata-os": {
+    "slug": "regata",
+    "status": 200,
+    "title": "Regata OS",
+    "pageTitle": "DistroWatch.com: Regata OS"
+  },
+  "solydxk": {
+    "slug": "solydxk",
+    "status": 200,
+    "title": "SolydXK",
+    "pageTitle": "DistroWatch.com: SolydXK"
+  },
+  "wattos": {
+    "slug": "wattos",
+    "status": 200,
+    "title": "wattOS",
+    "pageTitle": "DistroWatch.com: wattOS"
+  },
+  "clonezilla": {
+    "slug": "clonezilla",
+    "status": 200,
+    "title": "Clonezilla Live",
+    "pageTitle": "DistroWatch.com: Clonezilla Live"
+  },
+  "gparted-live": {
+    "slug": "gparted",
+    "status": 200,
+    "title": "GParted Live",
+    "pageTitle": "DistroWatch.com: GParted Live"
+  },
+  "chromeos-flex": {
+    "slug": "chromeos",
+    "status": 200,
+    "title": "ChromeOS Flex",
+    "pageTitle": "DistroWatch.com: ChromeOS Flex"
+  },
+  "clearos": {
+    "slug": "clearos",
+    "status": 200,
+    "title": "ClearOS",
+    "pageTitle": "DistroWatch.com: ClearOS"
+  },
+  "mobian": {
+    "slug": "mobian",
+    "status": 200,
+    "title": "Mobian",
+    "pageTitle": "DistroWatch.com: Mobian"
+  },
+  "endeavouros": {
+    "slug": "endeavour",
+    "status": 200,
+    "title": "EndeavourOS",
+    "pageTitle": "DistroWatch.com: EndeavourOS"
+  },
+  "geckolinux": {
+    "slug": "gecko",
+    "status": 200,
+    "title": "GeckoLinux",
+    "pageTitle": "DistroWatch.com: GeckoLinux"
+  },
+  "chimera-linux": {
+    "slug": "chimera",
+    "status": 200,
+    "title": "Chimera Linux",
+    "pageTitle": "DistroWatch.com: Chimera Linux"
+  }
+}

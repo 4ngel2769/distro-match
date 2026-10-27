@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="350mm"
+   height="210mm"
+   viewBox="0 0 350 210"
+   version="1.1"
+   id="svg8"
+   inkscape:version="1.0.2 (e86c870879, 2021-01-15)"
+   sodipodi:docname="Peppermint OS Master Banner 1.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.74390018"
+     inkscape:cx="687.65616"
+     inkscape:cy="396.85039"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer4"
+     inkscape:document-rotation="0"
+     showgrid="false"
+     inkscape:window-width="1920"
+     inkscape:window-height="1028"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="126.95303,126.74554"
+       orientation="0,-1"
+       id="guide134" />
+    <sodipodi:guide
+       position="141.51922,101.2213"
+       orientation="-0.0057073147,-0.99998371"
+       id="guide136" />
+    <sodipodi:guide
+       position="202.32304,137.30269"
+       orientation="0,-1"
+       id="guide278" />
+    <sodipodi:guide
+       position="48.664436,122.97098"
+       orientation="0,-1"
+       id="guide1137" />
+    <sodipodi:guide
+       position="58.113841,122.97098"
+       orientation="1,0"
+       id="guide1139" />
+    <sodipodi:guide
+       position="-229.31726,88.125093"
+       orientation="0,-1"
+       id="guide57" />
+    <sodipodi:guide
+       position="164.63803,85.051494"
+       orientation="0,-1"
+       id="guide59" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer5"
+     inkscape:label="P 1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="P" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Text" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="t">
+    <g
+       id="g291"
+       transform="translate(15.875004)">
+      <g
+         id="g243">
+        <g
+           id="g215">
+          <rect
+             id="rect61-3"
+             width="3.7228434"
+             height="10.032022"
+             x="53.332661"
+             y="114.91649"
+             style="fill:#ff0000;stroke-width:0.261825" />
+          <g
+             id="g1147"
+             transform="translate(-0.91816346,0.05780899)">
+            <path
+               id="rect1133"
+               style="fill:#ff0000;stroke-width:0.999999"
+               d="m 249.89062,314.88086 a 44.34318,48.234781 0 0 0 -44.26171,47.85742 h -0.002 v 0.375 a 44.34318,48.234781 0 0 0 0,0.002 v 100.86524 h 14.01563 v -65.67774 a 44.34318,48.234781 0 0 0 30.32812,13.04688 44.34318,48.234781 0 0 0 44.34375,-48.23438 44.34318,48.234781 0 0 0 -44.34375,-48.23437 44.34318,48.234781 0 0 0 -0.0801,0 z m 0.25,14.04687 a 30.497481,34.66051 0 0 1 30.49805,34.66211 30.497481,34.66051 0 0 1 -30.49805,34.66016 30.497481,34.66051 0 0 1 -30.49804,-34.66016 30.497481,34.66051 0 0 1 30.49804,-34.66211 z"
+               transform="matrix(0.26458333,0,0,0.26458333,-0.14016989,-0.05780899)" />
+          </g>
+        </g>
+        <g
+           id="g220">
+          <rect
+             id="rect61"
+             width="3.7228434"
+             height="10.032022"
+             x="79.875465"
+             y="114.91648"
+             style="fill:#ff0000;stroke-width:0.261825" />
+          <g
+             id="g1147-5"
+             transform="translate(25.609782,0.05803518)">
+            <path
+               id="rect1133-2"
+               style="fill:#ff0000;stroke-width:0.999999"
+               d="m 249.89062,314.88086 a 44.34318,48.234781 0 0 0 -44.26171,47.85742 h -0.002 v 0.375 a 44.34318,48.234781 0 0 0 0,0.002 v 100.86524 h 14.01563 v -65.67774 a 44.34318,48.234781 0 0 0 30.32812,13.04688 44.34318,48.234781 0 0 0 44.34375,-48.23438 44.34318,48.234781 0 0 0 -44.34375,-48.23437 44.34318,48.234781 0 0 0 -0.0801,0 z m 0.25,14.04687 a 30.497481,34.66051 0 0 1 30.49805,34.66211 30.497481,34.66051 0 0 1 -30.49805,34.66016 30.497481,34.66051 0 0 1 -30.49804,-34.66016 30.497481,34.66051 0 0 1 30.49804,-34.66211 z"
+               transform="matrix(0.26458333,0,0,0.26458333,-0.14016989,-0.05780899)" />
+          </g>
+        </g>
+        <g
+           aria-label="e"
+           transform="scale(0.99729961,1.0027077)"
+           id="text126"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.8713px;line-height:1.25;font-family:Cantarell;-inkscape-font-specification:Cantarell;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264954">
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:45.8611px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:Cantarell;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0701024"
+             x="103.75916"
+             y="108.76145"
+             id="text1267-4"
+             transform="scale(1.0027077,0.99729961)"><tspan
+               sodipodi:role="line"
+               id="tspan1265-4"
+               x="103.75916"
+               y="108.76145"
+               style="font-size:45.8611px;fill:#ff0000;stroke-width:0.0701024">ermin</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:45.8611px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0701024"
+             x="23.712059"
+             y="109.04984"
+             id="text1267"
+             transform="scale(1.0027077,0.99729961)"><tspan
+               sodipodi:role="line"
+               id="tspan1265"
+               x="23.712059"
+               y="109.04984"
+               style="font-size:45.8611px;fill:#ff0000;stroke-width:0.0701024">e</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:45.8611px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:Cantarell;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0701024"
+             x="253.83759"
+             y="108.19173"
+             id="text1267-4-3"
+             transform="scale(1.0027077,0.99729961)"><tspan
+               sodipodi:role="line"
+               id="tspan1265-4-0"
+               x="253.83759"
+               y="108.19173"
+               style="font-size:45.8611px;fill:#ff0000;stroke-width:0.0701024">OS</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:16.9333px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.0701024"
+             x="121.60845"
+             y="125.12222"
+             id="text1323"
+             transform="scale(1.0027077,0.99729961)"><tspan
+               sodipodi:role="line"
+               id="tspan1321"
+               x="121.60845"
+               y="125.12222"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Cantarell;-inkscape-font-specification:Cantarell;fill:#ffffff;stroke-width:0.0701024">less is more</tspan></text>
+        </g>
+        <g
+           id="g210">
+          <g
+             id="g1147-54"
+             transform="translate(-54.590471,0.05803518)">
+            <path
+               id="rect1133-7"
+               style="fill:#ff0000;stroke-width:0.999999"
+               d="m 249.89062,314.88086 a 44.34318,48.234781 0 0 0 -44.26171,47.85742 h -0.002 v 0.375 a 44.34318,48.234781 0 0 0 0,0.002 v 100.86524 h 14.01563 v -65.67774 a 44.34318,48.234781 0 0 0 30.32812,13.04688 44.34318,48.234781 0 0 0 44.34375,-48.23438 44.34318,48.234781 0 0 0 -44.34375,-48.23437 44.34318,48.234781 0 0 0 -0.0801,0 z m 0.25,14.04687 a 30.497481,34.66051 0 0 1 30.49805,34.66211 30.497481,34.66051 0 0 1 -30.49805,34.66016 30.497481,34.66051 0 0 1 -30.49804,-34.66016 30.497481,34.66051 0 0 1 30.49804,-34.66211 z"
+               transform="matrix(0.26458333,0,0,0.26458333,-0.14016989,-0.05780899)" />
+          </g>
+          <rect
+             id="rect61-6"
+             width="3.7228434"
+             height="10.032022"
+             x="-0.33635685"
+             y="114.91649"
+             style="fill:#ff0000;stroke-width:0.261825" />
+        </g>
+      </g>
+      <path
+         id="rect242-6"
+         style="fill:#ff0000;stroke-width:0.986528"
+         d="m 909.35352,274.76172 v 41.90039 h -14.17579 v 13.44141 h 14.17579 v 79.63086 h 14.97265 v -79.63086 h 24.29492 v -13.44141 h -24.29492 v -41.90039 z"
+         transform="scale(0.26458333)" />
+    </g>
+  </g>
+</svg>

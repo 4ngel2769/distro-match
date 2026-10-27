@@ -1,0 +1,9 @@
+{
+  "devuan": "devuan",
+  "raspberry-pi-os": "raspberrypi",
+  "fedora-kinoite": "fedora",
+  "opensuse-aeon": "opensuse",
+  "truenas-scale": "truenas",
+  "centos-stream": "centos",
+  "openwrt": "openwrt"
+}
