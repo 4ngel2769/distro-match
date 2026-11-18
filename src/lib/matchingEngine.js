@@ -626,7 +626,8 @@ function steeringAdjustment(distro, steering) {
 }
 
 export const MatchingEngine = {
-  evaluate(userAnswers = {}, questionWeights = {}, steering = {}) {
+  evaluate(userAnswers = {}, questionWeights = {}, steering = {}, options = {}) {
+    const likes = Array.isArray(options.likes) ? options.likes : [];
     const asked = visibleQuestions(userAnswers, { expert: Boolean(steering.expertMode) });
     const askedIds = new Set(asked.map((q) => q.id));
     const answeredCount = asked.filter((q) => {
@@ -672,9 +673,10 @@ export const MatchingEngine = {
         weightSum += c.weight;
       }
       satisfaction = weightSum > 0 ? (satisfaction / weightSum) * 0.9 : 0.45;
+      const liked = likes.includes(distro.id);
       satisfaction = clamp01(
         satisfaction + steeringAdjustment(distro, steering) + tierPrior(distro) +
-          popularityPrior(distro, allowObscure)
+          popularityPrior(distro, allowObscure) + (liked ? 0.06 : 0)
       );
 
       const disqualified = hardFails.length > 0;
@@ -688,7 +690,11 @@ export const MatchingEngine = {
       const medium = criteria
         .filter((c) => c.value >= 0.75 && c.weight >= 2 && c.note)
         .sort((a, b) => b.weight - a.weight);
-      const matchReasons = [...new Set([...strong, ...medium].map((c) => c.note))].slice(0, 6);
+      const matchReasons = [...new Set([
+        ...(liked ? ['You liked this in the swipe deck'] : []),
+        ...strong.map((c) => c.note),
+        ...medium.map((c) => c.note)
+      ])].slice(0, 6);
 
       const tradeoffs = criteria
         .filter((c) => c.gap && c.value < 0.6 && c.weight >= 2)
