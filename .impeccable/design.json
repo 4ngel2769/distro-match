@@ -38,7 +38,7 @@
       "refersTo": "button-primary",
       "description": "The single main action on a surface.",
       "html": "<button class=\"ds-btn-primary\">Find my distro <span aria-hidden=\"true\">→</span></button>",
-      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; min-height:44px; border:0; background:#5B4BE0; color:#FFFFFF; font:650 0.92rem 'Public Sans',sans-serif; border-radius:16px; box-shadow:0 4px 12px rgba(91,75,224,0.10); transition:background 160ms cubic-bezier(0.22,1,0.36,1), transform 160ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background:#4938CF; transform:translateY(-2px); }"
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; min-height:44px; border:0; background:#5B4BE0; color:#FFFFFF; font:650 0.92rem 'Public Sans',sans-serif; border-radius:10px; box-shadow:0 4px 12px rgba(91,75,224,0.10); transition:background 160ms cubic-bezier(0.22,1,0.36,1), transform 160ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-primary:hover { background:#4938CF; transform:translateY(-2px); }"
     },
     {
       "name": "Secondary Button",
@@ -46,7 +46,7 @@
       "refersTo": "button-secondary",
       "description": "Quiet alternative actions.",
       "html": "<button class=\"ds-btn-secondary\">Browse all distributions</button>",
-      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; padding:12px 20px; min-height:44px; border:1px solid #E5E2DC; background:#FFFFFF; color:#22202A; font:650 0.92rem 'Public Sans',sans-serif; border-radius:16px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 4px 12px rgba(34,31,40,0.05); } .ds-btn-secondary:hover { background:#F4F2ED; transform:translateY(-2px); }"
+      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; padding:12px 20px; min-height:44px; border:1px solid #E5E2DC; background:#FFFFFF; color:#22202A; font:650 0.92rem 'Public Sans',sans-serif; border-radius:10px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 4px 12px rgba(34,31,40,0.05); } .ds-btn-secondary:hover { background:#F4F2ED; transform:translateY(-2px); }"
     },
     {
       "name": "Segment Control",
@@ -62,7 +62,7 @@
       "refersTo": "card",
       "description": "A soft raised panel holding one idea.",
       "html": "<section class=\"ds-card\"><h2>Start here</h2><p>A short questionnaire.</p></section>",
-      "css": ".ds-card { background:#FFFFFF; border:1px solid #E5E2DC; border-radius:24px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 12px 30px rgba(34,31,40,0.08); padding:24px; }"
+      "css": ".ds-card { background:#FFFFFF; border:1px solid #E5E2DC; border-radius:16px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 12px 30px rgba(34,31,40,0.08); padding:24px; }"
     },
     {
       "name": "Specimen Card",
@@ -70,7 +70,7 @@
       "refersTo": "specimen-card",
       "description": "A distro card with a full screenshot plate and a caption strip.",
       "html": "<a class=\"ds-specimen\"><img src=\"/assets/screenshots/linux-mint.jpg\" alt=\"Linux Mint desktop\" /><div class=\"ds-caption\"><strong>TRAITS</strong> fixed · systemd · Cinnamon</div></a>",
-      "css": ".ds-specimen { display:flex; flex-direction:column; background:#FFFFFF; border:1px solid #E5E2DC; border-radius:24px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 12px 30px rgba(34,31,40,0.08); overflow:hidden; transition:transform 260ms cubic-bezier(0.22,1,0.36,1); } .ds-specimen:hover { transform:translateY(-4px); } .ds-caption { padding:12px 16px; background:#EFEDE8; font:0.78rem 'Public Sans',sans-serif; color:#5E5B68; }"
+      "css": ".ds-specimen { display:flex; flex-direction:column; background:#FFFFFF; border:1px solid #E5E2DC; border-radius:16px; box-shadow:0 1px 2px rgba(34,31,40,0.04),0 12px 30px rgba(34,31,40,0.08); overflow:hidden; transition:transform 260ms cubic-bezier(0.22,1,0.36,1); } .ds-specimen:hover { transform:translateY(-4px); } .ds-caption { padding:12px 16px; background:#EFEDE8; font:0.78rem 'Public Sans',sans-serif; color:#5E5B68; }"
     }
   ],
   "narrative": {

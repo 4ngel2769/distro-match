@@ -196,7 +196,7 @@ function buildCriteria(distro, answers, questionWeights) {
     criteria.push({ id, label, value: clamp01(value), weight: 0, note: null, gap: null, neutral: true });
   };
 
-  // 1 — Experience
+  // 1. Experience
   const experience = answers.q_experience;
   if (experience && LEVEL_FIT[experience]) {
     const v = LEVEL_FIT[experience][distro.userLevel] ?? 0.3;
@@ -205,17 +205,17 @@ function buildCriteria(distro, answers, questionWeights) {
       'Experience fit',
       v,
       v >= 0.9 ? `Pitched at ${distro.userLevel} users like you` : null,
-      v < 0.5 ? `Assumes ${distro.userLevel} Linux skills — expect to read docs` : null
+      v < 0.5 ? `Assumes ${distro.userLevel} Linux skills, so expect to read docs` : null
     );
   }
 
-  // 2 — Primary goal (soft for everyday: most desktops can do it)
+  // 2. Primary goal (soft for everyday: most desktops can do it)
   const goal = answers.q_goal;
   if (goal && GOAL_MATCHERS[goal]) {
     const matched = GOAL_MATCHERS[goal](distro);
     const v = matched ? 1 : (goal === 'everyday' ? 0.7 : 0.15);
     if (!matched && goal !== 'everyday' && mustHave('q_goal')) {
-      hardFails.push(`Not built for ${prettyGoal(goal)} — wrong tool for the job`);
+      hardFails.push(`Not built for ${prettyGoal(goal)}, so it is the wrong tool for the job`);
     }
     add(
       'q_goal',
@@ -226,7 +226,7 @@ function buildCriteria(distro, answers, questionWeights) {
     );
   }
 
-  // 3 — Device
+  // 3. Device
   const device = answers.q_device;
   if (device === 'handheld') {
     const v = ['bazzite', 'steamos', 'chimeraos'].includes(distro.id) ||
@@ -247,7 +247,7 @@ function buildCriteria(distro, answers, questionWeights) {
       'high-end-workstation': 0.15
     }[distro.hardwareSpec] ?? 0.4;
     if (v < 0.5 && mustHave('q_device')) {
-      hardFails.push('Expects modern hardware — a poor fit for an old machine');
+      hardFails.push('Expects modern hardware, so it is a poor fit for an old machine');
     }
     add('q_device', 'Low-spec device fit', v,
       v >= 0.9 ? 'Designed for old and low-spec hardware' : null,
@@ -262,7 +262,7 @@ function buildCriteria(distro, answers, questionWeights) {
     addNeutral('q_device', 'Desktop form factor', 0.85);
   }
 
-  // 4 — Memory
+  // 4. Memory
   const memory = answers.q_memory;
   if (memory) {
     const fit = {
@@ -275,21 +275,21 @@ function buildCriteria(distro, answers, questionWeights) {
     const tooHeavy = (memory === 'under2' && ['modern-standard', 'high-end-workstation'].includes(distro.hardwareSpec)) ||
       (memory === 'low' && distro.hardwareSpec === 'high-end-workstation');
     if (tooHeavy && mustHave('q_memory')) {
-      hardFails.push(`Needs ${distro.recommendedRam} for comfort — above your memory budget`);
+      hardFails.push(`Needs ${distro.recommendedRam} for comfort, above your memory budget`);
     }
     add('q_memory', 'Memory footprint', v,
       v >= 0.95 ? `Fits your RAM budget (${distro.minRam} min)` : null,
-      v < 0.5 ? `Needs ${distro.recommendedRam} for comfort — above your RAM budget` : null);
+      v < 0.5 ? `Needs ${distro.recommendedRam} for comfort, above your RAM budget` : null);
   }
 
-  // 5 — Graphics hardware
+  // 5. Graphics hardware
   const graphics = answers.q_graphics;
   if (graphics === 'nvidia') {
     let v = distro.gpuSupport === 'excellent-nvidia' ? 1
       : distro.gpuSupport === 'standard-nvidia' ? 0.65 : 0.2;
     if (hasFeature(distro, 'nvidia')) v = Math.max(v, 0.9);
     if (distro.gpuSupport === 'mesa-only') {
-      hardFails.push('No proprietary NVIDIA driver support — your GPU will not accelerate');
+      hardFails.push('No proprietary NVIDIA driver support, so your GPU will not accelerate');
       v = 0;
     }
     add('q_graphics', 'NVIDIA driver support', v,
@@ -305,14 +305,14 @@ function buildCriteria(distro, answers, questionWeights) {
   } else if (graphics === 'intel-arc') {
     const v = ['rolling', 'semi-rolling'].includes(distro.releaseModel) ? 1 : 0.4;
     if (v < 0.5 && mustHave('q_graphics')) {
-      hardFails.push('Frozen kernel — Intel Arc needs a recent kernel and Mesa');
+      hardFails.push('Frozen kernel. Intel Arc needs a recent kernel and Mesa');
     }
     add('q_graphics', 'Fresh kernel for Intel Arc', v,
       v === 1 ? 'Rolling kernel keeps Arc drivers current' : null,
-      v < 0.5 ? 'Frozen kernel — Arc needs 6.8+ for stability' : null);
+      v < 0.5 ? 'Frozen kernel. Arc needs 6.8+ for stability' : null);
   } else if (graphics === 'arm') {
     const supported = (distro.architectures || []).includes('arm64');
-    if (!supported) hardFails.push('No ARM64 build — cannot run on your machine');
+    if (!supported) hardFails.push('No ARM64 build, so it cannot run on your machine');
     add('q_graphics', 'ARM64 availability', supported ? 1 : 0,
       supported ? 'Official ARM64 image' : null,
       supported ? null : 'x86_64 only');
@@ -323,7 +323,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'Heavy desktop stack for legacy graphics' : null);
   }
 
-  // 6 — NVIDIA delivery (only asked when relevant)
+  // 6. NVIDIA delivery (only asked when relevant)
   const nvidia = answers.q_nvidia;
   if (nvidia === 'turnkey-iso') {
     const v = distro.gpuSupport === 'excellent-nvidia' && hasFeature(distro, 'nvidia') ? 1
@@ -340,7 +340,7 @@ function buildCriteria(distro, answers, questionWeights) {
   } else if (nvidia === 'libre-only') {
     const v = distro.freeSoftwareStrictness === '100-libre-fsf' ? 1 : 0.3;
     if (v < 1 && mustHave('q_nvidia')) {
-      hardFails.push('Ships proprietary GPU firmware — conflicts with open-source-only drivers');
+      hardFails.push('Ships proprietary GPU firmware, which conflicts with open-source-only drivers');
     }
     add('q_nvidia', 'Open-source-only graphics', v,
       v === 1 ? 'Ships libre graphics stack only' : null,
@@ -349,7 +349,7 @@ function buildCriteria(distro, answers, questionWeights) {
     addNeutral('q_nvidia', 'NVIDIA driver installation', 0.9);
   }
 
-  // 7 — Update cadence
+  // 7. Update cadence
   const updates = answers.q_updates;
   if (updates && UPDATE_FIT[updates]) {
     const v = UPDATE_FIT[updates][distro.releaseModel] ?? 0.4;
@@ -358,7 +358,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? `Is ${prettyRelease(distro.releaseModel)}; you asked for ${prettyRelease(updates)}` : null);
   }
 
-  // 8 — Maintenance tolerance
+  // 8. Maintenance tolerance
   const maintenance = answers.q_maintenance;
   if (maintenance === 'set-and-forget') {
     const v = { beginner: 1, intermediate: 0.8, advanced: 0.35, expert: 0.15 }[distro.userLevel] ?? 0.5;
@@ -376,13 +376,13 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'Hides the internals; little to tinker with' : null);
   }
 
-  // 9 — Starting point
+  // 9. Starting point
   const startingPoint = answers.q_starting_point;
   if (startingPoint === 'complete') {
     const v = { beginner: 1, intermediate: 0.75, advanced: 0.4, expert: 0.25 }[distro.userLevel] ?? 0.5;
     add('q_starting_point', 'Batteries-included setup', v,
       v >= 0.9 ? 'Complete desktop out of the box' : null,
-      v < 0.5 ? 'Ships a fairly bare base — you assemble the rest' : null);
+      v < 0.5 ? 'Ships a fairly bare base, so you assemble the rest' : null);
   } else if (startingPoint === 'lean') {
     const v = { beginner: 0.3, intermediate: 0.55, advanced: 0.9, expert: 1 }[distro.userLevel] ?? 0.6;
     add('q_starting_point', 'Minimal base to build on', v,
@@ -390,7 +390,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'Comes pre-loaded with apps and defaults you may not want' : null);
   }
 
-  // 10 — Rollback
+  // 10. Rollback
   const rollback = answers.q_rollback;
   if (rollback === 'automatic') {
     const v = hasFeature(distro, 'snapshot', 'snapper', 'btrfs', 'rollback', 'timeshift', 'atomic') ? 1 : 0.45;
@@ -404,7 +404,7 @@ function buildCriteria(distro, answers, questionWeights) {
     addNeutral('q_rollback', 'Backup strategy', 0.85);
   }
 
-  // 10b — Gaming depth (only asked when gaming is actually relevant)
+  // 10b. Gaming depth (only asked when gaming is actually relevant)
   const gamingDepth = answers.q_gaming_depth;
   if (gamingDepth === 'competitive') {
     const v = GAMING_SPECIALISTS.has(distro.id) ? 1 : isGamingDistro(distro) ? 0.7 : 0.3;
@@ -416,7 +416,7 @@ function buildCriteria(distro, answers, questionWeights) {
     add('q_gaming_depth', 'Casual gaming readiness', v);
   }
 
-  // 10c — Server role (only asked for server/homelab paths)
+  // 10c. Server role (only asked for server/homelab paths)
   const serverRole = answers.q_server_role;
   if (serverRole === 'storage') {
     const v = (distro.primaryUseCases || []).includes('server-homelab') &&
@@ -437,11 +437,11 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'Desktop-first distribution' : null);
   }
 
-  // 11 — Software freedom
+  // 11. Software freedom
   const freedom = answers.q_freedom;
   if (freedom === 'libre-only') {
     const v = distro.freeSoftwareStrictness === '100-libre-fsf' ? 1 : 0;
-    if (v === 0) hardFails.push('Ships proprietary firmware/blobs — conflicts with your 100% libre requirement');
+    if (v === 0) hardFails.push('Ships proprietary firmware/blobs, which conflicts with your 100% libre requirement');
     add('q_freedom', 'FSF-libre purity', v,
       v === 1 ? 'FSF-endorsed, no proprietary blobs' : null,
       'Includes non-free blobs by default');
@@ -452,18 +452,18 @@ function buildCriteria(distro, answers, questionWeights) {
   } else if (freedom === 'pragmatic') {
     const v = { pragmatic: 1, 'free-with-opt-in': 0.8, '100-libre-fsf': 0.4 }[distro.freeSoftwareStrictness] ?? 0.7;
     if (v < 0.5 && mustHave('q_freedom')) {
-      hardFails.push('Strict libre stance — proprietary codecs and firmware are not included');
+      hardFails.push('Strict libre stance. Proprietary codecs and firmware are not included');
     }
     add('q_freedom', 'Pragmatic codecs & drivers', v,
       v === 1 ? 'Codecs and drivers work out of the box' : null,
-      v < 0.5 ? 'Strict libre stance — Wi-Fi/media may not work out of the box' : null);
+      v < 0.5 ? 'Strict libre stance. Wi-Fi and media may not work out of the box' : null);
   }
 
-  // 12 — Init system
+  // 12. Init system
   const init = answers.q_init;
   if (init === 'alternative') {
     const v = distro.initSystem === 'systemd' ? 0 : 1;
-    if (v === 0) hardFails.push('Uses systemd — you asked for a different init');
+    if (v === 0) hardFails.push('Uses systemd, but you asked for a different init');
     add('q_init', 'Non-systemd init', v,
       v === 1 ? `${distro.initSystem} init, as requested` : null,
       'systemd init');
@@ -477,7 +477,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? `Alternative init (${distro.initSystem})` : null);
   }
 
-  // 13 — Privacy baseline
+  // 13. Privacy baseline
   const privacy = answers.q_privacy;
   if (privacy === 'amnesic') {
     const amnesic = AMNESIC_SPECIALISTS.has(distro.id);
@@ -492,7 +492,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.7 ? 'Parent project collects some opt-out telemetry' : null);
   }
 
-  // 14 — Desktop workflow
+  // 14. Desktop workflow
   const desktops = answers.q_desktop || [];
   if (desktops.length) {
     const styles = desktopStylesOf(distro);
@@ -505,13 +505,13 @@ function buildCriteria(distro, answers, questionWeights) {
         : null);
   }
 
-  // 15 — Package tooling
+  // 15. Package tooling
   const packages = answers.q_packages;
   if (packages === 'aur') {
     const v = distro.family === 'Arch' ? 1 : 0.2;
     add('q_packages', 'AUR access', v,
       v === 1 ? 'AUR access via Arch lineage' : null,
-      v < 0.5 ? 'No AUR — different package ecosystem' : null);
+      v < 0.5 ? 'No AUR, so this uses a different package ecosystem' : null);
   } else if (packages === 'nix') {
     const v = ['nixos', 'guix-system'].includes(distro.id) ? 1 : 0.2;
     add('q_packages', 'Declarative packages', v,
@@ -523,7 +523,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v === 1 ? 'Flatpak-first with a graphical app store' : null);
   }
 
-  // 15b — Kernel policy (expert path)
+  // 15b. Kernel policy (expert path)
   const kernel = answers.q_kernel;
   if (kernel === 'mainline-lts') {
     const v = ['fixed', 'immutable-atomic'].includes(distro.releaseModel) ? 1 : 0.45;
@@ -534,7 +534,7 @@ function buildCriteria(distro, answers, questionWeights) {
     const v = distro.releaseModel === 'rolling' ? 1 : distro.releaseModel === 'semi-rolling' ? 0.7 : 0.35;
     add('q_kernel', 'Current upstream kernel', v,
       v === 1 ? 'Rolling kernel picks up new hardware first' : null,
-      v < 0.5 ? 'Frozen kernel — newer hardware may need backports' : null);
+      v < 0.5 ? 'Frozen kernel. Newer hardware may need backports' : null);
   } else if (kernel === 'custom') {
     const v = ['gentoo', 'arch-linux', 'slackware', 'nixos', 'void-linux'].includes(distro.id) ? 1 : 0.35;
     add('q_kernel', 'Custom kernel workflow', v,
@@ -542,7 +542,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'Prebuilt kernel workflow only' : null);
   }
 
-  // 15c — Mandatory access control (expert path)
+  // 15c. Mandatory access control (expert path)
   const security = answers.q_security;
   if (security === 'selinux') {
     const v = ['Fedora/RHEL'].includes(distro.family) ? 1 : 0.45;
@@ -556,7 +556,7 @@ function buildCriteria(distro, answers, questionWeights) {
       v < 0.5 ? 'No AppArmor policy by default' : null);
   }
 
-  // 16 — Highest priority
+  // 16. Highest priority
   const priority = answers.q_priority;
   if (priority) {
     const releasePriorityFit = {
@@ -658,14 +658,14 @@ export const MatchingEngine = {
       const liked = likes.includes(distro.id);
 
       if (steering.scope !== 'all' && distro.tier === 'niche' && !specialtyRequested && !expertish && !liked) {
-        hardFails.push('Niche project — outside the mainstream scope you selected');
+        hardFails.push('Niche project, outside the mainstream scope you selected');
       }
       const rank = distro.dwRank || 999;
       if (steering.scope !== 'all' && rank > 150 && !allowObscure && !liked) {
-        hardFails.push('Very small project — little community, documentation or hardware support');
+        hardFails.push('Very small project, with little community, documentation or hardware support');
       }
       if (LIVE_IMAGE_DISTROS.has(distro.id)) {
-        hardFails.push('Live/rescue image — not an installable desktop system');
+        hardFails.push('Live or rescue image, not an installable desktop system');
       }
 
       let satisfaction = 0;
@@ -785,7 +785,7 @@ export const MatchingEngine = {
       const gap = winner.matchPercentage - runnerUp.matchPercentage;
       lines.push(
         gap <= 2
-          ? `Practically tied with ${runnerUp.distro.name} — pick either; the difference is ${gap} point${gap === 1 ? '' : 's'}.`
+          ? `Practically tied with ${runnerUp.distro.name}. Pick either one, the difference is ${gap} point${gap === 1 ? '' : 's'}.`
           : `Outranks ${runnerUp.distro.name} by ${gap} points on the criteria you weighted highest.`
       );
     }
@@ -879,7 +879,7 @@ export const MatchingEngine = {
       return {
         title: 'The Developer Craftsperson',
         badge: 'ENGINEERING WORKBENCH',
-        quote: 'My OS is the foundation of my toolchain — it should never be the bottleneck.',
+        quote: 'My OS is the foundation of my toolchain. It should never be the bottleneck.',
         description: 'You need containers, compilers, IDEs and Git workflows to run seamlessly. A predictable terminal is your daily workbench.',
         keyTraits: ['Container Tooling', 'Polyglot Toolchains', 'Terminal Dexterity', 'Stable Baseline']
       };

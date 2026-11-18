@@ -1,12 +1,28 @@
 <script>
+  import { onMount } from 'svelte';
   import { LINUX_DISTROS } from '../data/distros.js';
   import { POPULARITY_YEARS } from '../data/distroFacts.js';
-  import { FAMILY_PAGES, USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
+  import { USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
   import DistroLogo from './DistroLogo.svelte';
   import DistroScreenshot from './DistroScreenshot.svelte';
   import Icon from './Icon.svelte';
+  import { loadSpecs } from '../lib/specState.js';
+  import { compatibilityFor } from '../lib/specMatching.js';
 
   let { onSelectForCompare, onOpenDistro } = $props();
+
+  let specs = $state(null);
+  let compatByDistro = $derived.by(() => {
+    const map = new Map();
+    if (specs) {
+      for (const distro of filteredDistros) map.set(distro.id, compatibilityFor(distro, specs));
+    }
+    return map;
+  });
+
+  onMount(() => {
+    specs = loadSpecs();
+  });
 
   let searchQuery = $state('');
   let selectedFamily = $state('all');
@@ -15,6 +31,13 @@
   let sortDir = $state('asc'); // used by age / updated
 
   const families = ['all', 'Ubuntu', 'Debian', 'Arch', 'Fedora/RHEL', 'openSUSE', 'Gentoo', 'Slackware', 'Independent'];
+
+  let hasFilters = $derived(Boolean(searchQuery.trim()) || selectedFamily !== 'all');
+
+  function resetFilters() {
+    searchQuery = '';
+    selectedFamily = 'all';
+  }
 
   function rankFor(distro, year = selectedYear) {
     if (year === 'current') return distro.dwRank ?? null;
@@ -35,15 +58,6 @@
     const rank = rankFor(distro);
     if (!rank) return 'Unranked';
     return selectedYear === 'current' ? `#${rank} DistroWatch` : `#${rank} in ${selectedYear}`;
-  }
-
-  function shortDate(value) {
-    if (!value) return null;
-    return value.length > 7 ? value.slice(0, 7) : value;
-  }
-
-  function targetLabel(distro) {
-    return distro.primaryUseCases?.[0] || distro.desktopEnvironments?.[0] || '—';
   }
 
   let filteredDistros = $derived.by(() => {
@@ -95,7 +109,7 @@
   function primaryPackageManager(value) {
     // Card specs are deliberately terse; the full, multi-part value lives in
     // the title attribute and on the detail page.
-    return (value || '').split('/')[0].trim() || '—';
+    return (value || '').split('/')[0].trim() || 'Not listed';
   }
 
   function handleClick(event, distro) {
@@ -108,134 +122,142 @@
 
 <div class="page-container">
   <section class="toolbar surface" aria-label="Directory controls">
-    <div class="toolbar-intro">
-      <h1 class="directory-title">Find your next Linux distro</h1>
-      <p class="directory-sub">
-        Browse {LINUX_DISTROS.length} distributions. Each one has a real screenshot and a full profile —
-        click any card to take a closer look.
-      </p>
+    <div class="toolbar-top">
+      <div class="toolbar-intro">
+        <h1 class="directory-title">Find your next Linux distro</h1>
+        <p class="directory-sub">
+          Browse {LINUX_DISTROS.length} distributions. Each one has a real screenshot and a full profile.
+          Click any card to take a closer look.
+        </p>
+      </div>
+      <div class="result-badge" aria-live="polite">
+        <strong>{filteredDistros.length}</strong>
+        <span>of {LINUX_DISTROS.length} shown</span>
+      </div>
     </div>
 
-    <div class="toolbar-main">
-      <div class="search-field">
-        <span class="search-icon" aria-hidden="true"><Icon name="search" size={16} /></span>
-        <input
-          type="text"
-          bind:value={searchQuery}
-          class="search-input"
-          placeholder="Search name, family, package manager, desktop, init system or feature…"
-          aria-label="Search distributions"
-        />
-        {#if searchQuery}
-          <button class="clear-btn" onclick={() => (searchQuery = '')} aria-label="Clear search">
-            <Icon name="close" size={14} />
-          </button>
-        {/if}
-      </div>
-
-      <div class="sort-controls">
-        <span class="field-label">Sort by</span>
-        <div class="sort-buttons" role="group" aria-label="Sort distributions">
-          <button
-            class="sort-btn"
-            class:active={sortBy === 'popularity'}
-            aria-pressed={sortBy === 'popularity'}
-            onclick={() => setSort('popularity')}
-          >
-            Popularity
-          </button>
-          <button
-            class="sort-btn"
-            class:active={sortBy === 'age'}
-            aria-pressed={sortBy === 'age'}
-            onclick={() => setSort('age')}
-          >
-            Age
-          </button>
-          <button
-            class="sort-btn"
-            class:active={sortBy === 'updated'}
-            aria-pressed={sortBy === 'updated'}
-            onclick={() => setSort('updated')}
-          >
-            Last update
-          </button>
-          <button
-            class="sort-btn"
-            class:active={sortBy === 'alphabetical'}
-            aria-pressed={sortBy === 'alphabetical'}
-            onclick={() => setSort('alphabetical')}
-          >
-            A–Z
-          </button>
+    <div class="toolbar-controls">
+      <div class="search-row">
+        <div class="search-group">
+          <label class="control-label" for="directory-search">Search the catalogue</label>
+          <div class="search-field">
+            <span class="search-icon" aria-hidden="true"><Icon name="search" size={17} /></span>
+            <input
+              id="directory-search"
+              type="text"
+              bind:value={searchQuery}
+              class="search-input"
+              placeholder="Name, family, desktop or feature"
+              aria-label="Search distributions"
+            />
+            {#if searchQuery}
+              <button class="clear-btn" onclick={() => (searchQuery = '')} aria-label="Clear search">
+                <Icon name="close" size={14} />
+              </button>
+            {/if}
+          </div>
         </div>
 
-        {#if sortBy === 'popularity'}
-          <label class="sort-year-label">
-            <span class="sr-only">Popularity year</span>
-            <select class="sort-select" bind:value={selectedYear} aria-label="Popularity year">
-              <option value="current">Current</option>
-              {#each [...POPULARITY_YEARS].reverse() as year}
-                <option value={year}>{year}</option>
-              {/each}
-            </select>
-          </label>
-        {:else if sortBy === 'age' || sortBy === 'updated'}
-          <button
-            class="sort-dir"
-            aria-label="Reverse sort direction"
-            onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}
-          >
-            <Icon name="swap" size={13} />
-            <span>{sortDir === 'asc' ? 'Oldest first' : 'Newest first'}</span>
-          </button>
-        {/if}
-      </div>
-    </div>
+        <div class="sort-group">
+          <span class="control-label">Sort by</span>
+          <div class="sort-row">
+            <div class="sort-buttons" role="group" aria-label="Sort distributions">
+              <button
+                class="sort-btn"
+                class:active={sortBy === 'popularity'}
+                aria-pressed={sortBy === 'popularity'}
+                onclick={() => setSort('popularity')}
+              >
+                Popularity
+              </button>
+              <button
+                class="sort-btn"
+                class:active={sortBy === 'age'}
+                aria-pressed={sortBy === 'age'}
+                onclick={() => setSort('age')}
+              >
+                Age
+              </button>
+              <button
+                class="sort-btn"
+                class:active={sortBy === 'updated'}
+                aria-pressed={sortBy === 'updated'}
+                onclick={() => setSort('updated')}
+              >
+                Updated
+              </button>
+              <button
+                class="sort-btn"
+                class:active={sortBy === 'alphabetical'}
+                aria-pressed={sortBy === 'alphabetical'}
+                onclick={() => setSort('alphabetical')}
+              >
+                A to Z
+              </button>
+            </div>
 
-    <div class="family-controls">
-      <span class="field-label">Family</span>
-      <div class="filter-pills" role="group" aria-label="Filter by family">
-        {#each families as fam}
-          <button
-            class="filter-pill"
-            class:active={selectedFamily === fam}
-            aria-pressed={selectedFamily === fam}
-            onclick={() => (selectedFamily = fam)}
-          >
-            {fam === 'all' ? 'All families' : fam}
-          </button>
-        {/each}
+            {#if sortBy === 'popularity'}
+              <label class="year-field">
+                <span>Year</span>
+                <select class="sort-select" bind:value={selectedYear} aria-label="Popularity year">
+                  <option value="current">Current</option>
+                  {#each [...POPULARITY_YEARS].reverse() as year}
+                    <option value={year}>{year}</option>
+                  {/each}
+                </select>
+              </label>
+            {:else if sortBy === 'age' || sortBy === 'updated'}
+              <button
+                class="sort-dir"
+                aria-label="Reverse sort direction"
+                onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}
+              >
+                <Icon name="swap" size={13} />
+                <span>{sortDir === 'asc' ? 'Oldest first' : 'Newest first'}</span>
+              </button>
+            {/if}
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <span class="control-label">Family</span>
+        <div class="filter-pills" role="group" aria-label="Filter by family">
+          {#each families as fam}
+            <button
+              class="filter-pill"
+              class:active={selectedFamily === fam}
+              aria-pressed={selectedFamily === fam}
+              onclick={() => (selectedFamily = fam)}
+            >
+              {fam === 'all' ? 'All families' : fam}
+            </button>
+          {/each}
+        </div>
+        {#if hasFilters}
+          <button class="clear-filters" onclick={resetFilters}>Clear filters</button>
+        {/if}
       </div>
     </div>
 
     <div class="toolbar-foot">
       <p class="result-count">
-        Showing <span class="field-value">{filteredDistros.length}</span> of {LINUX_DISTROS.length}
-        <span class="count-divider" aria-hidden="true"></span>
-        Sorted by {sortBy === 'popularity'
+        Showing {filteredDistros.length} of {LINUX_DISTROS.length}, sorted by {sortBy === 'popularity'
           ? `popularity (${yearLabel()})`
           : sortBy === 'age'
             ? `age (${sortDir === 'asc' ? 'oldest' : 'newest'} first)`
             : sortBy === 'updated'
               ? `last update (${sortDir === 'desc' ? 'newest' : 'oldest'} first)`
-              : 'name'}
+              : 'name'}.
       </p>
-
-      <div class="browse-hubs">
-        <div class="hub-row">
-          <span class="field-label">Browse by family</span>
-          {#each FAMILY_PAGES as family}
-            <a class="hub-link" href={landingPath('family', family.slug)}>{family.label}</a>
-          {/each}
-        </div>
-        <div class="hub-row">
-          <span class="field-label">Browse by use case</span>
+      <nav class="browse-hubs" aria-label="Use case guides">
+        <span class="browse-label">Browse by use case</span>
+        <div class="hub-links">
           {#each USE_CASE_PAGES as useCase}
             <a class="hub-link" href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
           {/each}
         </div>
-      </div>
+      </nav>
     </div>
   </section>
 
@@ -243,15 +265,7 @@
     <div class="empty-state">
       <h2>Nothing fits that filter</h2>
       <p>Try a broader search term or reset the family filter.</p>
-      <button
-        class="reset-btn"
-        onclick={() => {
-          searchQuery = '';
-          selectedFamily = 'all';
-        }}
-      >
-        Reset filters
-      </button>
+      <button class="reset-btn" onclick={resetFilters}>Reset filters</button>
     </div>
   {:else}
     <div class="directory-cards-grid stagger-in">
@@ -263,53 +277,38 @@
           aria-label={`Open the ${distro.name} profile`}
         >
           <div class="card-media">
-            <DistroScreenshot {distro} height={210} compact={true} fit="contain" showName={false} />
-            <span class="card-scrim" aria-hidden="true"></span>
+            <DistroScreenshot {distro} height={190} compact={true} fit="contain" showName={false} />
             <span class="tier-badge tier-{distro.tier} card-tier">{distro.tier}</span>
+          </div>
 
-            <div class="card-overlay">
-              <div class="card-title-row">
-                <DistroLogo {distro} size={30} decorative={true} />
-                <div class="card-title-text">
-                  <span class="card-distro-name">{distro.name}</span>
-                  <span class="card-subline">
-                    {distro.family} <span class="card-rank">· {rankLabel(distro)}</span>
-                  </span>
-                </div>
+          <div class="card-body">
+            <div class="card-title-row">
+              <DistroLogo {distro} size={34} decorative={true} />
+              <div class="card-title-text">
+                <strong class="card-distro-name">{distro.name}</strong>
+                <span class="card-subline">
+                  {distro.family} <span class="card-rank">· {rankLabel(distro)}</span>
+                </span>
               </div>
-              <p class="card-tagline">{distro.tagline}</p>
+              {#if compatByDistro.get(distro.id)}
+                {@const compat = compatByDistro.get(distro.id)}
+                <span
+                  class="card-compat"
+                  class:great={compat.tone === 'great'}
+                  class:good={compat.tone === 'good'}
+                  class:okay={compat.tone === 'okay'}
+                  class:poor={compat.tone === 'poor'}
+                  title="Compatibility with your saved specs"
+                >{compat.verdict}</span>
+              {/if}
+            </div>
+            <p class="card-tagline">{distro.tagline}</p>
+            <div class="card-facts">
+              <span><small>Packages</small><b>{primaryPackageManager(distro.packageManager)}</b></span>
+              <span><small>Release</small><b>{distro.releaseModel}</b></span>
+              <span><small>Memory</small><b>{distro.recommendedRam}</b></span>
             </div>
           </div>
-
-          <div class="caption-strip card-caption">
-            <strong>TRAITS</strong>
-            <span class="specimen specimen--accent">{distro.releaseModel}</span>
-            <span class="specimen">{distro.initSystem}</span>
-            {#each (distro.desktopEnvironments || []).slice(0, 1) as de}
-              <span class="specimen">{de}</span>
-            {/each}
-          </div>
-
-          <table class="spec-table card-specs">
-            <tbody>
-              <tr>
-                <th scope="row">Packages</th>
-                <td class="spec-value" title={distro.packageManager}>{primaryPackageManager(distro.packageManager)}</td>
-              </tr>
-              <tr>
-                <th scope="row">Target</th>
-                <td class="spec-value" title={targetLabel(distro)}>{targetLabel(distro)}</td>
-              </tr>
-              <tr>
-                <th scope="row">Since</th>
-                <td class="spec-value">{shortDate(distro.firstRelease) || '—'}</td>
-              </tr>
-              <tr>
-                <th scope="row">Updated</th>
-                <td class="spec-value">{shortDate(distro.latestRelease) || '—'}</td>
-              </tr>
-            </tbody>
-          </table>
 
           <div class="card-footer">
             <span>View profile</span>
@@ -332,33 +331,83 @@
     margin-bottom: var(--space-5);
   }
 
+  .toolbar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-5);
+  }
+
   .toolbar-intro {
-    padding-bottom: var(--space-4);
+    flex: 1;
+    min-width: 0;
   }
 
   .directory-title {
-    font-family: var(--font-sans);
     font-size: 1.8rem;
-    font-weight: 700;
+    font-weight: 750;
     letter-spacing: -0.02em;
     line-height: 1.15;
-    margin-top: 6px;
   }
 
   .directory-sub {
     color: var(--text-muted);
-    font-size: 0.9rem;
-    max-width: 70ch;
-    line-height: 1.5;
-    margin-top: 4px;
+    font-size: 0.94rem;
+    max-width: 68ch;
+    line-height: 1.6;
+    margin-top: 6px;
   }
 
-  .toolbar-main {
+  .result-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    min-width: 118px;
+    padding: 10px 16px;
+    background-color: var(--accent-soft);
+    border-radius: var(--radius-md);
+    color: var(--accent-ink);
+  }
+
+  .result-badge strong {
+    font-size: 1.5rem;
+    font-weight: 750;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .result-badge span {
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  .toolbar-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin-top: var(--space-6);
+  }
+
+  .search-row {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
     gap: var(--space-5);
     align-items: start;
-    padding: var(--space-4) 0;
+  }
+
+  .search-group,
+  .sort-group {
+    min-width: 0;
+  }
+
+  .control-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 8px;
   }
 
   .search-field {
@@ -420,15 +469,11 @@
     border-color: var(--border-color);
   }
 
-  .sort-controls {
+  .sort-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
-  }
-
-  .sort-controls > .field-label {
-    flex-basis: 100%;
   }
 
   .sort-buttons,
@@ -492,63 +537,75 @@
     color: var(--text-muted);
   }
 
-  .sort-year-label {
+  .year-field {
     display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
   }
 
-  .family-controls {
+  .filter-row {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
-    padding-bottom: var(--space-4);
-    border-bottom: 1px solid var(--border-color);
+  }
+
+  .filter-row .control-label {
+    margin-bottom: 0;
+  }
+
+  .clear-filters {
+    margin-left: auto;
+    border: 0;
+    background: transparent;
+    color: var(--accent-ink);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 6px 8px;
+    border-radius: var(--radius-sm);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .clear-filters:hover {
+    background-color: var(--accent-soft);
   }
 
   .toolbar-foot {
-    padding-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
   }
 
   .result-count {
-    font-family: var(--font-sans);
     font-size: 0.84rem;
     color: var(--text-muted);
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .result-count .field-value {
-    color: var(--text-main);
-    font-weight: 600;
-  }
-
-  .count-divider {
-    width: 18px;
-    height: 1px;
-    background-color: var(--border-color);
   }
 
   .browse-hubs {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: var(--space-4);
-    padding-top: var(--space-2);
-  }
-
-  .hub-row {
-    display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 2px 0;
+    gap: var(--space-2) var(--space-3);
   }
 
-  .hub-row .field-label {
-    margin-right: var(--space-3);
-    text-transform: none;
-    letter-spacing: 0.02em;
+  .browse-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .hub-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
   }
 
   .hub-link {
@@ -564,18 +621,6 @@
   .hub-link:hover {
     color: var(--accent-ink);
     background-color: var(--accent-soft);
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   /* ---------- Specimen grid ---------- */
@@ -620,45 +665,23 @@
 
   .card-media {
     position: relative;
-    aspect-ratio: 8 / 5;
+    aspect-ratio: 16 / 9;
     border-bottom: 1px solid var(--border-color);
     background-color: var(--image-void);
     overflow: hidden;
   }
 
-  /* The screenshot fills the media box exactly, so a 16:10 capture shows the
-     whole desktop with no crop and no letterbox bars. */
+  /* Flush media sits inside the card corners, so it inherits the outer radius. */
   .card-media :global(.screenshot-shell) {
     height: 100%;
-    border: none;
+    border: 0;
+    border-radius: 0;
   }
 
   .card-media :global(.screenshot-shell img) {
     height: 100%;
     object-fit: contain;
     object-position: center;
-  }
-
-  /* A stepped, bottom-up scrim built from the plate tokens — two solid bands
-     keep the identity block legible without hiding the full screenshot. */
-  .card-scrim {
-    position: absolute;
-    inset: auto 0 0 0;
-    height: 58%;
-    background-color: var(--scrim-plate);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .card-scrim::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 100%;
-    height: 26px;
-    background-color: var(--scrim-plate);
-    opacity: 0.5;
   }
 
   .card-tier {
@@ -668,15 +691,11 @@
     z-index: 2;
   }
 
-  .card-overlay {
-    position: absolute;
-    inset: auto 0 0 0;
-    z-index: 2;
-    padding: var(--space-3) var(--space-4);
+  .card-body {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    color: var(--scrim-text);
+    gap: 10px;
+    padding: var(--space-4);
   }
 
   .card-title-row {
@@ -690,11 +709,12 @@
     display: flex;
     flex-direction: column;
     min-width: 0;
+    flex: 1;
   }
 
   .card-distro-name {
-    font-size: 1.05rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 750;
     letter-spacing: -0.01em;
     line-height: 1.2;
     white-space: nowrap;
@@ -703,9 +723,8 @@
   }
 
   .card-subline {
-    font-family: var(--font-label);
     font-size: 0.72rem;
-    color: var(--scrim-text-muted);
+    color: var(--text-muted);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -717,73 +736,62 @@
     font-variant-numeric: tabular-nums;
   }
 
+  .card-compat {
+    flex: 0 0 auto;
+    font-size: 0.68rem;
+    font-weight: 750;
+    padding: 4px 8px;
+    border-radius: var(--radius-pill);
+  }
+
+  .card-compat.great { background-color: var(--tier-flagship-bg); color: var(--tier-flagship-text); }
+  .card-compat.good { background-color: var(--tier-specialist-bg); color: var(--tier-specialist-text); }
+  .card-compat.okay { background-color: var(--tag-neutral-bg); color: var(--tag-neutral-text); }
+  .card-compat.poor { background-color: rgba(200, 72, 78, 0.14); color: var(--accent-red); }
+
   .card-tagline {
-    font-family: var(--font-label);
     font-size: 0.82rem;
-    color: var(--scrim-text);
-    line-height: 1.45;
+    color: var(--text-muted);
+    line-height: 1.5;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
-  .card-caption {
-    min-height: 38px;
-    padding: 7px var(--space-4);
-    align-items: center;
+  .card-facts {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 14px;
+    padding-top: 2px;
   }
 
-  .specimen {
-    font-family: var(--font-sans);
+  .card-facts span {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .card-facts span + span {
+    padding-left: 14px;
+    border-left: 1px solid var(--border-color);
+  }
+
+  .card-facts small {
     font-size: 0.72rem;
     font-weight: 600;
-    line-height: 1.4;
-    padding: 3px 9px;
-    background-color: var(--tag-neutral-bg);
-    border: 1px solid var(--tag-neutral-border);
-    color: var(--tag-neutral-text);
-    border-radius: var(--radius-pill);
+    color: var(--text-subtle);
+  }
+
+  .card-facts b {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-main);
     white-space: nowrap;
-    max-width: 20ch;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .specimen--accent {
-    background-color: var(--tag-accent-bg);
-    border-color: var(--tag-accent-border);
-    color: var(--tag-accent-text);
-  }
-
-  .card-specs {
-    padding: var(--space-3) var(--space-4);
-    font-size: 0.72rem;
-    table-layout: fixed;
-  }
-
-  .card-specs tr + tr th,
-  .card-specs tr + tr td {
-    border-top: 1px solid var(--border-color);
-  }
-
-  .card-specs th {
-    width: 38%;
-    padding: 5px 0;
-    text-transform: none;
-    letter-spacing: 0;
-  }
-
-  .card-specs td {
-    padding: 5px 0;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .card-specs .spec-value {
-    font-variant-numeric: tabular-nums;
   }
 
   .card-footer {
@@ -849,7 +857,7 @@
   }
 
   @media (max-width: 860px) {
-    .toolbar-main {
+    .search-row {
       grid-template-columns: 1fr;
     }
   }
@@ -857,6 +865,16 @@
   @media (max-width: 560px) {
     .toolbar {
       padding: var(--space-4);
+    }
+
+    .toolbar-top {
+      flex-direction: column;
+    }
+
+    .result-badge {
+      flex-direction: row;
+      gap: 8px;
+      align-self: flex-start;
     }
 
     .directory-title {

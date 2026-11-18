@@ -188,7 +188,7 @@
             <DistroLogo distro={active} size={32} decorative={true} />
             <div>
               <h2>{active.name}</h2>
-              <p class="field-value">{active.family} · #{active.dwRank || '—'} DistroWatch</p>
+              <p class="field-value">{active.family} · #{active.dwRank || 'Unranked'} DistroWatch</p>
             </div>
           </div>
           <p class="tagline">{active.tagline}</p>
@@ -202,7 +202,7 @@
           <dl class="spec-table card-specs">
             <div><dt>Release</dt><dd>{active.releaseModel}</dd></div>
             <div><dt>Init</dt><dd>{active.initSystem}</dd></div>
-            <div><dt>Packages</dt><dd>{String(active.packageManager || '—').split('/')[0].trim()}</dd></div>
+            <div><dt>Packages</dt><dd>{String(active.packageManager || 'Unknown').split('/')[0].trim()}</dd></div>
           </dl>
         </div>
       </article>

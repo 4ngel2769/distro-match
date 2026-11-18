@@ -75,7 +75,7 @@ const KEYWORDS = [
 ].join(', ');
 
 const HOME_TITLE =
-  'LinuxMatch — Find the Best Linux Distribution for You (116+ Distros Compared)';
+  'LinuxMatch: Find the Best Linux Distribution for You (116+ Distros Compared)';
 const HOME_DESCRIPTION =
   'LinuxMatch is a free Linux distribution finder and comparison tool. Take the 23-question triangulation quiz or browse 116+ distributions (Ubuntu, Linux Mint, Arch, Fedora, openSUSE, Gentoo, NixOS) with package managers, init systems, desktop environments, pros, cons and official links.';
 
@@ -162,7 +162,7 @@ const FAQ = {
       name: 'Does LinuxMatch store my data?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. LinuxMatch runs entirely in your browser. There are no accounts, no analytics, no cookies and nothing is sent to a server — your answers never leave your device.'
+        text: 'No. LinuxMatch runs entirely in your browser. There are no accounts, no analytics and no tracking cookies. A single cookie remembers your light or dark theme choice if you make one, and nothing is sent to a server. Your answers never leave your device.'
       }
     }
   ]
@@ -182,8 +182,8 @@ function buildRoutes() {
     content: `
       <h1>Find your ideal Linux distribution</h1>
       <p>LinuxMatch is a free, private Linux distribution finder. Answer 23 technical
-      questions across four rounds — hardware, GPUs, init system, package format and
-      workflow — and get a ranked shortlist drawn from more than 116 Linux
+      questions across four rounds: hardware, GPUs, init system, package format and
+      workflow, and get a ranked shortlist drawn from more than 116 Linux
       distributions, each scored against your actual setup.</p>
       <h2>Search the complete Linux distribution directory</h2>
       <p>Browse every distribution we track: Ubuntu, Debian, Arch Linux, Fedora, openSUSE,
@@ -200,7 +200,7 @@ function buildRoutes() {
 
   routes.push({
     path: '/quiz',
-    title: 'Linux Distribution Finder Quiz — 23 Questions, 116+ Distros | LinuxMatch',
+    title: 'Linux Distribution Finder Quiz: 23 Questions, 116+ Distros | LinuxMatch',
     description:
       'Take the LinuxMatch finder quiz: 23 questions in 4 rounds about your hardware, GPU, init system, software philosophy and workflow. Get a personalised ranking of 116+ Linux distributions with match scores and reasons.',
     priority: '0.9',
@@ -222,7 +222,7 @@ function buildRoutes() {
       <h1>Linux distribution finder quiz</h1>
       <p>Twenty-three questions in four rounds: foundation and user profile, hardware
       topology, ecosystem and package philosophy, and workflow priorities. Every answer
-      is weighted — you can mark a question as normal, high priority or a dealbreaker —
+      is weighted. You can mark a question as normal, high priority or a dealbreaker. 
       and the matching engine re-ranks 116+ Linux distributions live.</p>
       <ul>
         <li><a href="/directory/">Browse all Linux distributions</a></li>
@@ -232,7 +232,7 @@ function buildRoutes() {
 
   routes.push({
     path: '/directory',
-    title: 'Linux Distribution Directory — All 116+ Linux Distros Compared | LinuxMatch',
+    title: 'Linux Distribution Directory: All 116+ Linux Distros Compared | LinuxMatch',
     description:
       'The complete Linux distribution directory: 116+ distros filtered by family, sorted by DistroWatch popularity, age or last update. Ubuntu, Debian, Arch, Fedora, openSUSE, Gentoo, NixOS and every niche release, with verified logos and screenshots.',
     priority: '0.9',
@@ -259,8 +259,8 @@ function buildRoutes() {
     ],
     content: `
       <h1>Linux distribution directory</h1>
-      <p>Every Linux distribution in the LinuxMatch catalogue — ${LINUX_DISTROS.length} in
-      total — with its family, base, release model, package manager, init system,
+      <p>Every Linux distribution in the LinuxMatch catalogue, ${LINUX_DISTROS.length} in
+      total, with its family, base, release model, package manager, init system,
       desktop environments, GPU support and hardware target. Filter by family, search by
       package manager or init system, and sort by DistroWatch popularity, age or last
       update.</p>
@@ -268,7 +268,7 @@ function buildRoutes() {
       <ul>
         ${LINUX_DISTROS.map(
           (d) =>
-            `<li><a href="/distro/${d.id}/">${escapeHtml(d.name)}</a> — ${escapeHtml(
+            `<li><a href="/distro/${d.id}/">${escapeHtml(d.name)}</a>: ${escapeHtml(
               d.family
             )} family, ${escapeHtml(d.initSystem)}, ${escapeHtml(
               d.packageManager.split('/')[0].trim()
@@ -315,14 +315,14 @@ function buildRoutes() {
     const useCases = (d.primaryUseCases || []).join(', ') || 'general purpose';
     routes.push({
       path: `/distro/${d.id}`,
-      title: `${d.name} — Linux Distribution Profile, Specs, Pros & Cons | LinuxMatch`,
+      title: `${d.name}: Linux Distribution Profile, Specs, Pros & Cons | LinuxMatch`,
       description: `${d.name} is a ${d.family}-based Linux distribution: ${d.tagline}. Package manager ${d.packageManager}, ${d.initSystem} init, ${desktops} desktop. Pros, cons, best uses and official downloads.`,
       priority: d.tier === 'flagship' ? '0.8' : d.tier === 'specialist' ? '0.7' : '0.6',
       changefreq: 'monthly',
       jsonLd: [
         {
           '@type': 'SoftwareApplication',
-          name: `${d.name} — Linux distribution`,
+          name: `${d.name}: Linux distribution`,
           alternateName: `${d.name} Linux`,
           applicationCategory: 'OperatingSystem',
           operatingSystem: `Linux (${(d.architectures || ['x86_64']).join(', ')})`,
@@ -346,7 +346,7 @@ function buildRoutes() {
         }
       ],
       content: `
-        <h1>${escapeHtml(d.name)} — Linux distribution profile</h1>
+        <h1>${escapeHtml(d.name)}: Linux distribution profile</h1>
         <p>${escapeHtml(d.name)} is a ${escapeHtml(d.family)}-family Linux distribution
         based on ${escapeHtml(d.base)}. ${escapeHtml(d.tagline)}.</p>
         <h2>${escapeHtml(d.name)} technical details</h2>
@@ -375,7 +375,7 @@ function buildRoutes() {
     items
       .map(
         (d) =>
-          `<li><a href="/distro/${d.id}/">${escapeHtml(d.name)}</a> — ${escapeHtml(
+          `<li><a href="/distro/${d.id}/">${escapeHtml(d.name)}</a>: ${escapeHtml(
             d.family
           )} family, ${escapeHtml(d.initSystem)}, ${escapeHtml(d.packageManager.split('/')[0].trim())}</li>`
       )
@@ -509,9 +509,9 @@ function buildRoutes() {
 
   routes.push({
     path: '/privacy',
-    title: 'Privacy & GDPR — No Tracking, No Accounts | LinuxMatch',
+    title: 'Privacy and GDPR: No Tracking, No Accounts | LinuxMatch',
     description:
-      'LinuxMatch privacy policy: the app runs entirely in your browser, collects no personal data, uses no analytics or advertising cookies and is GDPR compliant by design.',
+      'LinuxMatch privacy policy: the app runs entirely in your browser, collects no personal data, uses no analytics or advertising cookies, keeps only one theme preference cookie and is GDPR compliant by design.',
     priority: '0.3',
     changefreq: 'yearly',
     jsonLd: [],
@@ -519,12 +519,12 @@ function buildRoutes() {
       <h1>Privacy and GDPR</h1>
       <p>LinuxMatch runs 100% inside your browser. Answers, hardware details and match
       scores never leave your device. There are no analytics trackers, no advertising
-      cookies, no accounts and no server-side databases.</p>`
+      cookies and no server-side databases. One small cookie remembers your theme choice only if you change it.</p>`
   });
 
   routes.push({
     path: '/terms',
-    title: 'Terms of Service — LinuxMatch',
+    title: 'Terms of Service | LinuxMatch',
     description:
       'Terms of service for LinuxMatch, an open, educational decision-support tool for choosing a Linux distribution. Zero telemetry, zero data retention.',
     priority: '0.3',
@@ -587,7 +587,7 @@ function buildHead(route, originalHead = '') {
   <meta property="og:image" content="${ogImage}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="LinuxMatch — find the best Linux distribution for you">
+  <meta property="og:image:alt" content="LinuxMatch: find the best Linux distribution for you">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(route.title)}">
   <meta name="twitter:description" content="${escapeHtml(route.description)}">
@@ -598,11 +598,11 @@ function buildHead(route, originalHead = '') {
 }
 
 const FALLBACK_STYLE = `<style>
-      .seo-static{max-width:70ch;margin:0 auto;padding:48px 24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#10180A}
+      .seo-static{max-width:70ch;margin:0 auto;padding:48px 24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#22202A}
       .seo-static h1{font-size:2rem;margin:0 0 12px}
       .seo-static h2{font-size:1.15rem;margin:28px 0 8px}
       .seo-static ul{padding-left:20px}
-      .seo-static a{color:#3F6212}
+      .seo-static a{color:#4A3AC9}
     </style>`;
 
 function buildSitemap(routes) {

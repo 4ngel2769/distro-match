@@ -3,7 +3,8 @@
 
   function purgeData() {
     localStorage.clear();
-    alert('All local browser storage wiped successfully.');
+    document.cookie = 'distromatch_theme=; path=/; max-age=0; SameSite=Lax';
+    alert('Your saved specs and theme choice have been cleared. The theme will follow your browser again.');
   }
 </script>
 
@@ -35,7 +36,7 @@
         <li><strong>Zero Server-Side Logging:</strong> All survey calculations, matching algorithms, and matrix scoring occur locally on your machine via client-side JavaScript execution.</li>
         <li><strong>Zero Tracking Cookies:</strong> We do not deploy advertising cookies, fingerprinting scripts, third-party analytics, or behavioral profiling beacons.</li>
         <li><strong>Zero Data Retention:</strong> The moment you close or refresh this browser tab, all transient survey responses residing in volatile memory (RAM) are instantly destroyed.</li>
-        <li><strong>Local Settings:</strong> The only piece of data stored locally is your aesthetic theme preference (`light` or `dark`) inside your browser's standard `localStorage` container.</li>
+        <li><strong>Local Settings:</strong> Your theme choice is saved in a single cookie named `distromatch_theme`, and the hardware specs you enter in the spec finder are saved in your browser's `localStorage` so compatibility checks work on every profile. Neither is used for tracking, and neither is ever sent to a server. If you have not chosen a theme, we follow your browser's light or dark setting.</li>
       </ul>
 
       <h2>3. Your Rights Under GDPR and CCPA</h2>
@@ -45,7 +46,7 @@
 
       <div class="purge-row">
         <button class="btn-secondary" onclick={purgeData}>
-          Purge Local Browser Storage Now
+          Clear Saved Specs and Theme
         </button>
       </div>
 
@@ -116,7 +117,7 @@
   }
 
   .legal-content h2 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     margin: var(--space-6) 0 var(--space-3);
     padding-bottom: var(--space-2);

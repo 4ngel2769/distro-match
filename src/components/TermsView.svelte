@@ -30,6 +30,11 @@
       <p>
         IN NO EVENT SHALL THE CREATORS OR CONTRIBUTORS OF DISTROMATCH BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, LOSS OF DATA, SYSTEM DOWNTIME, OR HARDWARE MALFUNCTION) ARISING IN ANY WAY OUT OF THE USE OF OR INABILITY TO USE THIS SERVICE OR RECOMMENDED SOFTWARE.
       </p>
+
+      <h2>6. Saved Specs and Theme</h2>
+      <p>
+        If you use the spec finder, the hardware details you enter are stored only in your browser's local storage so compatibility checks can appear on distribution pages. Your theme choice is kept in a small cookie. Both stay on your device and are never uploaded. You can remove them at any time with the clear button on the Privacy page, or by clearing your browser's local storage and cookies.
+      </p>
     </div>
   </article>
 </div>
@@ -60,7 +65,7 @@
   }
 
   .legal-content h2 {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
     font-weight: 700;
     margin: var(--space-6) 0 var(--space-3);
     padding-bottom: var(--space-2);

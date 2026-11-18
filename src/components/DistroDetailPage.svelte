@@ -1,10 +1,20 @@
 <script>
+  import { onMount } from 'svelte';
   import Icon from './Icon.svelte';
   import { LINUX_DISTROS } from '../data/distros.js';
   import DistroLogo from './DistroLogo.svelte';
   import DistroGallery from './DistroGallery.svelte';
+  import CompatibilityCard from './CompatibilityCard.svelte';
+  import { loadSpecs } from '../lib/specState.js';
+  import { compatibilityFor } from '../lib/specMatching.js';
 
-  let { distro = null, onBack, onNavigateDistro, onCompareWith } = $props();
+  let { distro = null, onBack, onNavigateDistro, onCompareWith, onNavigate = () => {} } = $props();
+
+  let specs = $state(null);
+  onMount(() => {
+    specs = loadSpecs();
+  });
+  let compat = $derived(specs && distro ? compatibilityFor(distro, specs) : null);
 
   const USE_CASE_LABELS = {
     'daily-driver': 'Everyday desktop',
@@ -51,13 +61,13 @@
       'standard-apu': 'Standard APU support',
       '100-libre-fsf': '100% free software (FSF)',
       'free-with-opt-in': 'Free by default, opt-in firmware',
-      pragmatic: 'Pragmatic — includes proprietary bits'
+      pragmatic: 'Pragmatic, includes proprietary bits'
     };
     return map[value] || value;
   }
 
   function titleCase(value) {
-    if (!value) return '—';
+    if (!value) return 'Not listed';
     return value.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
   }
 </script>
@@ -66,7 +76,7 @@
   <div class="page-container">
     <div class="not-found">
       <div class="not-found-mark"><Icon name="alert" size={18} /></div>
-      <div class="eyebrow">404 — UNKNOWN DISTRIBUTION</div>
+      <div class="eyebrow">404: UNKNOWN DISTRIBUTION</div>
       <h1>This profile does not exist</h1>
       <p>The distribution may have been renamed or the link is incomplete.</p>
       <button class="btn-primary" onclick={onBack}>
@@ -92,6 +102,17 @@
           <div class="title-row">
             <h1>{distro.name}</h1>
             <span class="tier-badge tier-{distro.tier}">{distro.tier}</span>
+            {#if compat}
+              <span
+                class="header-compat"
+                class:great={compat.tone === 'great'}
+                class:good={compat.tone === 'good'}
+                class:okay={compat.tone === 'okay'}
+                class:poor={compat.tone === 'poor'}
+              >
+                <span class="compat-dot" aria-hidden="true"></span> Your PC: {compat.verdict}
+              </span>
+            {/if}
           </div>
           <p class="tagline">{distro.tagline}</p>
         </div>
@@ -182,6 +203,8 @@
 
       <!-- Sidebar -->
       <aside class="side-column">
+        <CompatibilityCard {distro} {onNavigate} />
+
         <section class="panel spec-panel">
           <h2 class="section-title">Technical sheet</h2>
           <dl class="spec-list">
@@ -214,7 +237,7 @@
             {#if distro.logoCredit?.url}
               <li>
                 <a href={distro.logoCredit.url} target="_blank" rel="noopener noreferrer">
-                  Logo source ({distro.logoCredit.label}{distro.logoCredit.artist ? ` — ${distro.logoCredit.artist}` : ''}) <Icon name="external" size={13} />
+                  Logo source ({distro.logoCredit.label}{distro.logoCredit.artist ? `, with ${distro.logoCredit.artist}` : ''}) <Icon name="external" size={13} />
                 </a>
               </li>
             {/if}
@@ -332,6 +355,28 @@
     line-height: 1.08;
     letter-spacing: -0.03em;
   }
+
+  .header-compat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.74rem;
+    font-weight: 750;
+    padding: 5px 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  .compat-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--radius-pill);
+    background-color: currentColor;
+  }
+
+  .header-compat.great { background-color: var(--tier-flagship-bg); color: var(--tier-flagship-text); }
+  .header-compat.good { background-color: var(--tier-specialist-bg); color: var(--tier-specialist-text); }
+  .header-compat.okay { background-color: var(--tag-neutral-bg); color: var(--tag-neutral-text); }
+  .header-compat.poor { background-color: rgba(200, 72, 78, 0.14); color: var(--accent-red); }
 
   .tagline {
     margin-top: var(--space-2);

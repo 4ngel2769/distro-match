@@ -10,7 +10,7 @@ export const FAMILY_PAGES = [
   {
     slug: 'ubuntu',
     label: 'Ubuntu',
-    title: 'Ubuntu Linux Distributions — Every Ubuntu-Based Distro Compared | LinuxMatch',
+    title: 'Ubuntu Linux Distributions: Every Ubuntu-Based Distro Compared | LinuxMatch',
     description:
       'Every Ubuntu and Ubuntu-derived Linux distribution in one place: Ubuntu itself, Linux Mint, Pop!_OS, Zorin OS, elementary OS, Kubuntu, Xubuntu, Lubuntu, Tails and more, with specs, pros and cons.',
     intro:
@@ -20,7 +20,7 @@ export const FAMILY_PAGES = [
   {
     slug: 'debian',
     label: 'Debian',
-    title: 'Debian-Based Linux Distributions — All Debian Derivatives | LinuxMatch',
+    title: 'Debian-Based Linux Distributions: All Debian Derivatives | LinuxMatch',
     description:
       'All Debian-based Linux distributions compared: Debian itself, Ubuntu, Linux Mint, MX Linux, Deepin, Kali Linux, Parrot OS, PureOS, Devuan, AntiX and more, with package manager, init system and pros and cons.',
     intro:
@@ -30,11 +30,11 @@ export const FAMILY_PAGES = [
   {
     slug: 'arch',
     label: 'Arch',
-    title: 'Arch-Based Linux Distributions — Rolling Releases Compared | LinuxMatch',
+    title: 'Arch-Based Linux Distributions: Rolling Releases Compared | LinuxMatch',
     description:
       'Every Arch-based Linux distribution compared: Arch Linux itself, Manjaro, EndeavourOS, CachyOS, Garuda, Artix, Manjaro-based gaming images and more, with pacman details and pros and cons.',
     intro:
-      'Arch-based distributions install with pacman and follow a rolling release. They suit users who want recent kernels and are willing to maintain their system — or who prefer a curated fork that does that work for them.',
+      'Arch-based distributions install with pacman and follow a rolling release. They suit users who want recent kernels and are willing to maintain their system, or who prefer a curated fork that does that work for them.',
     match: (d) => d.family === 'Arch'
   },
   {
@@ -42,7 +42,7 @@ export const FAMILY_PAGES = [
     label: 'Fedora / RHEL',
     title: 'Fedora and RHEL-Based Linux Distributions Compared | LinuxMatch',
     description:
-      'Fedora, Red Hat Enterprise Linux, CentOS Stream, Rocky Linux, AlmaLinux, Oracle Linux, Nobara and more — enterprise-grade Linux distributions compared by release model, init system and support.',
+      'Fedora, Red Hat Enterprise Linux, CentOS Stream, Rocky Linux, AlmaLinux, Oracle Linux, Nobara and more: enterprise-grade Linux distributions compared by release model, init system and support.',
     intro:
       'The Fedora and RHEL family is where enterprise Linux lives: predictable release models, long support windows and conservative, well-tested stacks.',
     match: (d) => d.family === 'Fedora/RHEL'
@@ -52,7 +52,7 @@ export const FAMILY_PAGES = [
     label: 'openSUSE',
     title: 'openSUSE and SUSE-Based Linux Distributions Compared | LinuxMatch',
     description:
-      'openSUSE Tumbleweed, Leap, MicroOS, SLED and SUSE Linux Enterprise compared — rolling and fixed release Linux distributions withzypper, Btrfs snapshots and YaST.',
+      'openSUSE Tumbleweed, Leap, MicroOS, SLED and SUSE Linux Enterprise compared: rolling and fixed release Linux distributions withzypper, Btrfs snapshots and YaST.',
     intro:
       'openSUSE is one of the few remaining independent Linux vendors, shipping both a rolling Tumbleweed release and a fixed Leap release with long enterprise support.',
     match: (d) => d.family === 'openSUSE'
@@ -72,7 +72,7 @@ export const FAMILY_PAGES = [
     label: 'Slackware',
     title: 'Slackware and Traditional Linux Distributions Compared | LinuxMatch',
     description:
-      'Slackware, Puppy Linux, Tiny Core, Salix, antiX, Puppy-derived and other traditional Linux distributions compared — simple, minimal systems with old-school administration.',
+      'Slackware, Puppy Linux, Tiny Core, Salix, antiX, Puppy-derived and other traditional Linux distributions compared: simple, minimal systems with old-school administration.',
     intro:
       'Traditional distributions keep the Unix philosophy close: small package sets, plain configuration files and no hidden magic.',
     match: (d) => d.family === 'Slackware'
@@ -80,7 +80,7 @@ export const FAMILY_PAGES = [
   {
     slug: 'independent',
     label: 'Independent',
-    title: 'Independent Linux Distributions — Built From Scratch | LinuxMatch',
+    title: 'Independent Linux Distributions: Built From Scratch | LinuxMatch',
     description:
       'Linux distributions built from scratch with no upstream parent: NixOS, Void Linux, Guix, Solus, Chimera, Serpent, BellSoft and more, each with a distinct philosophy.',
     intro:
@@ -93,7 +93,7 @@ export const USE_CASE_PAGES = [
   {
     slug: 'gaming',
     label: 'Gaming',
-    title: 'Best Linux Distributions for Gaming — Steam, Proton and NVIDIA | LinuxMatch',
+    title: 'Best Linux Distributions for Gaming: Steam, Proton and NVIDIA | LinuxMatch',
     description:
       'The best Linux distributions for gaming: Bazzite, Nobara, CachyOS, Pop!_OS, SteamOS, ChimeraOS and more, with Steam Deck, Proton and NVIDIA driver support compared.',
     intro:
@@ -103,7 +103,7 @@ export const USE_CASE_PAGES = [
   {
     slug: 'beginners',
     label: 'Beginners',
-    title: 'Best Linux Distributions for Beginners — Easy First Install | LinuxMatch',
+    title: 'Best Linux Distributions for Beginners: Easy First Install | LinuxMatch',
     description:
       'The best Linux distributions for beginners and Windows switchers: Linux Mint, Ubuntu, Zorin OS, elementary OS, MX Linux and more, with graphical installers and driver support.',
     intro:
@@ -123,7 +123,7 @@ export const USE_CASE_PAGES = [
   {
     slug: 'privacy',
     label: 'Privacy',
-    title: 'Privacy-Focused Linux Distributions — Free Software, No Tracking | LinuxMatch',
+    title: 'Privacy-Focused Linux Distributions: Free Software, No Tracking | LinuxMatch',
     description:
       'Privacy-focused Linux distributions compared: Tails, Whonix, Qubes OS, Parrot Security, PureOS, Fedora Silverblue and more, with 100% libre and hardened options.',
     intro:
@@ -153,7 +153,7 @@ export const USE_CASE_PAGES = [
   {
     slug: 'minimal',
     label: 'Minimalism',
-    title: 'Minimal and Tinkering Linux Distributions — Build Your Own | LinuxMatch',
+    title: 'Minimal and Tinkering Linux Distributions: Build Your Own | LinuxMatch',
     description:
       'Minimal, from-scratch and tinkering Linux distributions compared: Void Linux, NixOS, Guix, Tiny Core, Alpine, Slackware and more for users who want a small base.',
     intro:
@@ -167,7 +167,7 @@ export const USE_CASE_PAGES = [
     description:
       'Linux distributions for multimedia and creative work: Ubuntu Studio, Fedora, openSUSE, AV Linux, PureOS and more, with codecs, DAW and creative app availability compared.',
     intro:
-      'Creative work on Linux depends less on the distribution than on the codec, driver and plugin situation — and some distributions get that right out of the box.',
+      'Creative work on Linux depends less on the distribution than on the codec, driver and plugin situation, and some distributions get that right out of the box.',
     useCase: 'multimedia-creation'
   },
   {
@@ -187,7 +187,7 @@ export const USE_CASE_PAGES = [
     description:
       'Security and penetration-testing Linux distributions compared: Kali Linux, Parrot OS, BlackArch, Tails and more, with tooling, anonymity and hardware requirements.',
     intro:
-      'Security distributions pre-load an enormous toolbox. They are built for auditing and training — use them responsibly and legally.',
+      'Security distributions pre-load an enormous toolbox. They are built for auditing and training, so use them responsibly and legally.',
     useCase: 'cybersecurity-pentesting'
   },
   {
@@ -206,11 +206,11 @@ export const HUB_PAGE = {
   slug: '',
   kind: 'hub',
   label: 'All Linux distributions',
-  title: 'All Linux Distributions — Complete List, Specs and Comparisons | LinuxMatch',
+  title: 'All Linux Distributions: Complete List, Specs and Comparisons | LinuxMatch',
   description:
     'The complete list of Linux distributions: 116+ distros across every family, with package managers, init systems, desktop environments, hardware targets, pros and cons and official links.',
   intro:
-    'Linux is not one operating system. This is the complete LinuxMatch index — every distribution we track, grouped by family, with the technical details you need to compare them honestly.'
+    'Linux is not one operating system. This is the complete LinuxMatch index: every distribution we track, grouped by family, with the technical details you need to compare them honestly.'
 };
 
 /**

@@ -4,7 +4,7 @@
    *
    * Logos are served from the local verified asset library (`/assets/logos`).
    * If a file is missing or fails to load we render an initials tile instead of
-   * silently showing another distro's logo — the bug that put Debian's spiral
+   * silently showing another distro's logo. The bug that put Debian's spiral
    * on Parrot OS cards.
    */
   let { distro = null, size = 40, decorative = false } = $props();

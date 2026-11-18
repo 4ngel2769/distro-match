@@ -103,7 +103,7 @@
       <div>
         <h1 class="compare-title">Compare two distributions</h1>
         <p class="compare-intro">
-          Pick any two distributions to see them side by side — desktop, package manager,
+          Pick any two distributions to see them side by side, including desktop, package manager,
           release model, hardware needs and the trade-offs that matter.
         </p>
       </div>

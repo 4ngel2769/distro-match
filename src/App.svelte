@@ -83,23 +83,55 @@
     )
   );
 
-  onMount(() => {
-    const savedTheme = localStorage.getItem('distromatch_theme') || 'light';
-    setTheme(savedTheme);
+  const THEME_COOKIE = 'distromatch_theme';
+  let themeWasChosen = $state(false);
+  let systemThemeQuery = null;
 
-    applyLocation({ initial: true });
-    window.addEventListener('popstate', () => applyLocation({ initial: true }));
-  });
+  function savedTheme() {
+    const entry = document.cookie.split('; ').find((row) => row.startsWith(`${THEME_COOKIE}=`));
+    const fromCookie = entry?.split('=')[1];
+    if (fromCookie === 'light' || fromCookie === 'dark') return fromCookie;
+    const fromStorage = localStorage.getItem(THEME_COOKIE);
+    return fromStorage === 'light' || fromStorage === 'dark' ? fromStorage : null;
+  }
 
-  function setTheme(t) {
-    currentTheme = t;
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('distromatch_theme', t);
+  function prefersDark() {
+    return Boolean(window.matchMedia?.('(prefers-color-scheme: dark)').matches);
+  }
+
+  function setTheme(theme, { remember = true } = {}) {
+    currentTheme = theme;
+    document.documentElement.setAttribute('data-theme', theme);
+    if (remember) {
+      document.cookie = `${THEME_COOKIE}=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+      themeWasChosen = true;
+      localStorage.removeItem(THEME_COOKIE);
+    }
   }
 
   function toggleTheme() {
     setTheme(currentTheme === 'light' ? 'dark' : 'light');
   }
+
+  onMount(() => {
+    const remembered = savedTheme();
+    setTheme(remembered || (prefersDark() ? 'dark' : 'light'), { remember: Boolean(remembered) });
+
+    systemThemeQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
+    const followSystem = (event) => {
+      if (!themeWasChosen) setTheme(event.matches ? 'dark' : 'light', { remember: false });
+    };
+    systemThemeQuery?.addEventListener('change', followSystem);
+
+    applyLocation({ initial: true });
+    const onPopState = () => applyLocation({ initial: true });
+    window.addEventListener('popstate', onPopState);
+
+    return () => {
+      systemThemeQuery?.removeEventListener('change', followSystem);
+      window.removeEventListener('popstate', onPopState);
+    };
+  });
 
   // Trigger Snappy Thin Top Loading Bar
   function triggerTopLoader() {
@@ -123,7 +155,7 @@
   function applyLocation({ initial = false, preserveScroll = false } = {}) {
     const parsed = parseRoute(window.location.pathname);
 
-    // Never show a results page without answers — send people to the quiz.
+    // Never show a results page without answers. Send people to the quiz.
     if (parsed.view === 'results' && !hasAnswers) {
       const path = routePath('welcome');
       window.history.replaceState({}, '', path);
@@ -176,7 +208,7 @@
     intermissionOpen = false;
     document.title =
       parsed.view === 'compare'
-        ? `${distroFor(compareDistroA)?.name} vs ${distroFor(compareDistroB)?.name} — Linux Distribution Comparison | LinuxMatch`
+        ? `${distroFor(compareDistroA)?.name} vs ${distroFor(compareDistroB)?.name} : Linux Distribution Comparison | LinuxMatch`
         : parsed.view === 'landing'
           ? landingTitleFor(parsed)
           : routeTitle(parsed.view, distroFor(parsed.distroId));
@@ -422,7 +454,7 @@
 />
 
 <!-- Main Dynamic Content Wrapper -->
-<main class="main-wrapper">
+<main class="main-wrapper" class:main-connected={activeView === 'welcome'}>
   {#if activeView === 'welcome'}
     <WelcomeView
       onStartQuiz={handleStartQuiz}
@@ -498,6 +530,7 @@
       onBack={() => navigateTo('directory')}
       onNavigateDistro={openDistro}
       onCompareWith={handleSelectForCompare}
+      onNavigate={navigateTo}
     />
   {:else if activeView === 'compare'}
     <ComparisonView
@@ -514,7 +547,7 @@
   {:else}
     <div class="page-container">
       <div class="not-found-card">
-        <div class="eyebrow">404 — PAGE NOT FOUND</div>
+        <div class="eyebrow">404: PAGE NOT FOUND</div>
         <h1>Nothing lives at this address</h1>
         <p>The link may be outdated. Try the directory or retake the finder quiz.</p>
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
@@ -527,7 +560,11 @@
 </main>
 
 <!-- Footer -->
-<SiteFooter onNavigate={navigateTo} distroCount={LINUX_DISTROS.length} />
+<SiteFooter
+  onNavigate={navigateTo}
+  distroCount={LINUX_DISTROS.length}
+  connected={activeView === 'welcome'}
+/>
 
 <style>
   .not-found-card {

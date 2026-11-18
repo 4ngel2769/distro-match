@@ -19,7 +19,7 @@
     <span class="summary-icon"><Icon name="sliders" size={17} /></span>
     <span class="summary-text">
       <strong>Fine-tune your results</strong>
-      <small>Optional — tell us what matters to you</small>
+      <small>Optional. Tell us what matters to you</small>
     </span>
     <span class="chevron" class:open><Icon name="chevron-down" size={16} /></span>
   </summary>

@@ -36,7 +36,7 @@ export const QUIZ_STAGES = [
 ];
 
 export const QUESTIONS_DATA = [
-  // ─────────────────────────── STAGE 1 — YOUR SETUP ───────────────────────────
+  // ─────────────────────────── STAGE 1: YOUR SETUP ───────────────────────────
   {
     id: 'q_experience',
     stage: 1,
@@ -106,21 +106,21 @@ export const QUESTIONS_DATA = [
     why: 'NVIDIA needs proprietary drivers, ARM needs a specific build, and Intel Arc needs a recent kernel.',
     defaultWeight: 3,
     options: [
-      { id: 'nvidia', label: 'NVIDIA dedicated GPU', detail: 'RTX / GTX card — driver support decides which distros are viable.' },
+      { id: 'nvidia', label: 'NVIDIA dedicated GPU', detail: 'RTX / GTX card. Driver support decides which distros are viable.' },
       { id: 'amd', label: 'AMD Radeon or Ryzen APU', detail: 'Open-source AMDGPU and Mesa, excellent out of the box.' },
-      { id: 'intel', label: 'Intel integrated graphics', detail: 'HD, UHD or Iris Xe — solid Mesa support everywhere.' },
+      { id: 'intel', label: 'Intel integrated graphics', detail: 'HD, UHD or Iris Xe, with solid Mesa support everywhere.' },
       { id: 'intel-arc', label: 'Intel Arc dedicated GPU', detail: 'Needs a recent kernel and current Mesa for gaming.' },
       { id: 'arm', label: 'ARM64 / single-board / Apple Silicon', detail: 'Requires a distro that publishes an ARM64 image.' },
       { id: 'legacy', label: 'Old or legacy graphics', detail: 'Pre-2014 hardware that needs a light desktop stack.' }
     ]
   },
 
-  // ─────────────────────── STAGE 2 — SYSTEM BEHAVIOUR ───────────────────────
+  // ─────────────────────── STAGE 2: SYSTEM BEHAVIOUR ───────────────────────
   {
     id: 'q_updates',
     stage: 2,
     question: 'How should software updates arrive?',
-    hint: 'This is the distro’s core promise — it cannot be changed later.',
+    hint: 'This is the distro’s core promise, so it cannot be changed later.',
     why: 'Fixed releases freeze versions for years; rolling releases update daily; atomic systems roll back a bad update on reboot.',
     defaultWeight: 3,
     options: [
@@ -178,7 +178,7 @@ export const QUESTIONS_DATA = [
     id: 'q_maintenance',
     stage: 2,
     question: 'How much upkeep are you willing to do?',
-    hint: 'Be honest — this is about the boring months after installation.',
+    hint: 'Be honest. This is about the boring months after installation.',
     why: 'Rolling and source-based systems occasionally need manual intervention; fixed and atomic systems trade freshness for calm.',
     defaultWeight: 2,
     options: [
@@ -196,7 +196,7 @@ export const QUESTIONS_DATA = [
     defaultWeight: 2,
     options: [
       { id: 'complete', label: 'Ready to use', detail: 'Browser, media, office tools and drivers already installed.' },
-      { id: 'lean', label: 'A clean base I build on', detail: 'Only the essentials — I choose the rest.' },
+      { id: 'lean', label: 'A clean base I build on', detail: 'Only the essentials, and I choose the rest.' },
       { id: 'either', label: 'Either is fine', detail: 'I can install or remove software without a fuss.' }
     ]
   },
@@ -214,7 +214,7 @@ export const QUESTIONS_DATA = [
     ]
   },
 
-  // ────────────────────── STAGE 3 — PRINCIPLES & WORKFLOW ──────────────────────
+  // ────────────────────── STAGE 3: PRINCIPLES AND WORKFLOW ──────────────────────
   {
     id: 'q_freedom',
     stage: 3,
@@ -225,14 +225,14 @@ export const QUESTIONS_DATA = [
     options: [
       { id: 'libre-only', label: 'Strictly 100% free software', detail: 'No proprietary blobs, ever. FSF-endorsed systems only.' },
       { id: 'opt-in', label: 'Free by default, opt-in when needed', detail: 'Open by default, but firmware can be enabled if I need it.' },
-      { id: 'pragmatic', label: 'Pragmatic — make it work', detail: 'Include codecs and drivers so everything works immediately.' }
+      { id: 'pragmatic', label: 'Pragmatic: make it work', detail: 'Include codecs and drivers so everything works immediately.' }
     ]
   },
   {
     id: 'q_init',
     stage: 3,
     question: 'Does the init system matter to you?',
-    hint: 'Init is PID 1 — the first process that starts every service.',
+    hint: 'Init is PID 1, the first process that starts every service.',
     why: 'systemd has the widest software support; OpenRC, runit and dinit appeal to people who want a simpler, classic Unix stack.',
     defaultWeight: 3,
     options: [
@@ -258,7 +258,7 @@ export const QUESTIONS_DATA = [
     id: 'q_desktop',
     stage: 3,
     question: 'Which desktop feel do you want?',
-    hint: 'Select any that appeal — we will match distros that offer them.',
+    hint: 'Select any that appeal and we will match distros that offer them.',
     isMultiSelect: true,
     why: 'The desktop is the interface you touch every second, and swapping it later is not always simple.',
     defaultWeight: 3,
@@ -277,7 +277,7 @@ export const QUESTIONS_DATA = [
     stage: 3,
     question: 'How do you prefer to install applications?',
     hint: 'This affects the distro family as much as the app store.',
-    why: 'AUR, Nix and Flatpak are not interchangeable — they imply very different underlying systems.',
+    why: 'AUR, Nix and Flatpak are not interchangeable because they imply very different underlying systems.',
     defaultWeight: 2,
     options: [
       { id: 'app-store', label: 'A graphical app store', detail: 'Flatpak, Discover or a curated software centre.' },
@@ -292,7 +292,7 @@ export const QUESTIONS_DATA = [
     stage: 3,
     expertOnly: true,
     question: 'Which kernel policy do you want?',
-    hint: 'Expert path — this decides how often your hardware support changes.',
+    hint: 'Expert path: this decides how often your hardware support changes.',
     why: 'A frozen kernel is predictable but misses new hardware; a rolling or custom kernel buys enablement at the cost of upkeep.',
     defaultWeight: 2,
     options: [
@@ -306,7 +306,7 @@ export const QUESTIONS_DATA = [
     stage: 3,
     expertOnly: true,
     question: 'What mandatory-access model do you expect?',
-    hint: 'Expert path — skipped for newcomers.',
+    hint: 'Expert path: skipped for newcomers.',
     why: 'SELinux, AppArmor and permissive defaults are a real architectural difference between major families.',
     defaultWeight: 2,
     options: [

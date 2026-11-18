@@ -42,9 +42,12 @@
     }
     return [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
   });
+
+  let glyph = $derived(kind === 'hub' ? 'grid' : kind === 'family' ? 'layers' : 'tag');
+  let kindLabel = $derived(kind === 'hub' ? 'The full catalogue' : kind === 'family' ? 'Family guide' : 'Use case guide');
 </script>
 
-<div class="page-container">
+<div class="page-container landing-page">
   <nav class="landing-crumbs" aria-label="Breadcrumb">
     <a href="/">Home</a>
     <span>/</span>
@@ -54,31 +57,40 @@
   </nav>
 
   <header class="landing-header">
-    <span class="landing-eyebrow">{kind === 'hub' ? 'DIRECTORY' : kind === 'family' ? 'FAMILY' : 'USE CASE'}</span>
-    <h1>{page.title.replace(' | LinuxMatch', '')}</h1>
-    <p class="landing-intro">{page.intro}</p>
-    <p class="landing-count">
-      <strong>{distros.length}</strong>
-      {distros.length === 1 ? 'distribution' : 'distributions'} listed
-    </p>
+    <div class="landing-copy">
+      <span class="landing-kicker">{kindLabel}</span>
+      <h1>{page.label}</h1>
+      <p class="landing-intro">{page.intro}</p>
+      <div class="landing-meta">
+        <span class="count-pill"><strong>{distros.length}</strong> {distros.length === 1 ? 'distribution' : 'distributions'}</span>
+        <span class="meta-note">Grouped by family, with verified screenshots and full profiles</span>
+      </div>
+    </div>
+    <span class="landing-glyph" aria-hidden="true"><Icon name={glyph} size={34} /></span>
   </header>
+
+  <div class="landing-section-head">
+    <h2>Distributions in this collection</h2>
+    <p>Each row links to a full profile with hardware needs, package details and pros and cons.</p>
+  </div>
 
   <section class="landing-groups">
     {#each byFamily as [family, items]}
       <div class="landing-group">
-        <h2 class="landing-group-title">
-          {family}
-          <span class="landing-group-count">{items.length}</span>
-        </h2>
+        <div class="group-head">
+          <h3>{family}</h3>
+          <span class="group-count">{items.length}</span>
+        </div>
         <ul class="landing-list">
           {#each items as distro (distro.id)}
             <li>
               <a href={`/distro/${distro.id}/`}>
-                <span class="landing-item-name">{distro.name}</span>
-                <span class="landing-item-meta">
-                  {distro.initSystem} · {distro.packageManager.split('/')[0].trim()} · {distro.tagline}
+                <span class="item-dot" style="background-color: {distro.accentColor || 'var(--accent-fill)'}"></span>
+                <span class="item-body">
+                  <strong>{distro.name}</strong>
+                  <small>{distro.packageManager.split('/')[0].trim()} · {distro.releaseModel} · {distro.hardwareSpec?.replace(/-/g, ' ')}</small>
                 </span>
-                <span class="landing-item-arrow"><Icon name="arrow-right" size={14} /></span>
+                <span class="item-arrow"><Icon name="arrow-right" size={15} /></span>
               </a>
             </li>
           {/each}
@@ -88,44 +100,50 @@
   </section>
 
   <nav class="landing-links" aria-label="Related keyword pages">
-    <h2 class="landing-links-title">Browse by family</h2>
-    <div class="landing-links-row">
-      {#each FAMILY_PAGES as family}
-        <a href={landingPath('family', family.slug)}>{family.label}</a>
-      {/each}
+    <div class="link-column">
+      <h2>Browse by family</h2>
+      <div class="landing-links-row">
+        {#each FAMILY_PAGES as family}
+          <a href={landingPath('family', family.slug)}>{family.label}</a>
+        {/each}
+      </div>
     </div>
-
-    <h2 class="landing-links-title">Browse by use case</h2>
-    <div class="landing-links-row">
-      {#each USE_CASE_PAGES as useCase}
-        <a href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
-      {/each}
+    <div class="link-column">
+      <h2>Browse by use case</h2>
+      <div class="landing-links-row">
+        {#each USE_CASE_PAGES as useCase}
+          <a href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
+        {/each}
+      </div>
     </div>
 
     <div class="landing-actions">
-      <a class="btn-primary" href="/quiz/">Find my Linux distribution <Icon name="arrow-right" size={15} /></a>
+      <a class="btn-primary" href="/quiz/">Take the finder quiz <Icon name="arrow-right" size={15} /></a>
       <a class="btn-secondary" href="/directory/">Full directory <Icon name="arrow-right" size={15} /></a>
     </div>
   </nav>
 </div>
 
 <style>
+  .landing-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
   .landing-crumbs {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.8rem;
     color: var(--text-subtle);
     flex-wrap: wrap;
-    margin-bottom: var(--space-5);
   }
 
   .landing-crumbs a {
     color: var(--text-muted);
     text-decoration: underline;
     text-underline-offset: 3px;
-    transition: color var(--dur-1) var(--ease-out);
   }
 
   .landing-crumbs a:hover {
@@ -133,193 +151,263 @@
   }
 
   .landing-header {
-    border: 1px solid var(--hairline);
-    border-top: 2px solid var(--border-strong);
-    background-color: var(--card-bg);
-    padding: var(--space-7) var(--space-6);
-    margin-bottom: var(--space-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    border: 1px solid var(--tier-flagship-border);
+    background-color: var(--tier-flagship-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-7);
+    position: relative;
+    overflow: hidden;
   }
 
-  .landing-eyebrow {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent-color);
+  .landing-header::after {
+    content: '';
+    position: absolute;
+    right: -60px;
+    top: -80px;
+    width: 240px;
+    height: 240px;
+    border-radius: 999px;
+    background-color: var(--accent-wash);
+    pointer-events: none;
+  }
+
+  .landing-copy {
+    position: relative;
+    z-index: 1;
+    max-width: 72ch;
+  }
+
+  .landing-kicker {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 750;
+    color: var(--tier-flagship-text);
     margin-bottom: var(--space-3);
   }
 
   .landing-header h1 {
-    font-size: 2.1rem;
-    font-weight: 700;
+    font-size: 2.2rem;
+    font-weight: 750;
     line-height: 1.12;
     letter-spacing: -0.03em;
     margin-bottom: var(--space-3);
-    max-width: 22ch;
+    max-width: 24ch;
   }
 
   .landing-intro {
     color: var(--text-muted);
     font-size: 1rem;
-    line-height: 1.55;
-    max-width: 72ch;
+    line-height: 1.65;
   }
 
-  .landing-count {
+  .landing-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
     margin-top: var(--space-4);
-    font-family: var(--font-mono);
-    font-variant-numeric: tabular-nums;
-    font-size: 0.78rem;
-    color: var(--text-subtle);
   }
 
-  .landing-count strong {
-    color: var(--text-main);
+  .count-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background-color: var(--card-bg);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  .count-pill strong {
+    color: var(--accent-ink);
+    font-size: 0.95rem;
+  }
+
+  .meta-note {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+  }
+
+  .landing-glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 64px;
+    height: 64px;
+    border-radius: var(--radius-md);
+    background-color: var(--card-bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-subtle);
+    position: relative;
+    z-index: 1;
+  }
+
+  .landing-section-head h2 {
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .landing-section-head p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-top: 4px;
   }
 
   .landing-groups {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: var(--space-5);
-    margin-bottom: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: var(--space-4);
+    align-items: start;
   }
 
   .landing-group {
-    border: 1px solid var(--hairline);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-4);
+    overflow: hidden;
   }
 
-  .landing-group-title {
+  .group-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: var(--space-3);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-    border-bottom: 1px solid var(--hairline);
-    padding-bottom: var(--space-2);
-    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--border-color);
   }
 
-  .landing-group-count {
-    font-variant-numeric: tabular-nums;
+  .group-head h3 {
+    font-size: 0.95rem;
+    font-weight: 750;
+  }
+
+  .group-count {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
     color: var(--accent-ink);
+    background-color: var(--accent-soft);
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
   }
 
   .landing-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-  }
-
-  .landing-list li + li {
-    border-top: 1px solid var(--hairline);
+    gap: 4px;
+    padding-top: var(--space-2);
   }
 
   .landing-list a {
-    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: 2px;
-    text-decoration: none;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px;
+    border-radius: var(--radius-sm);
     color: inherit;
-    padding: var(--space-3) var(--space-6) var(--space-3) 0;
+    text-decoration: none;
     transition: background-color var(--dur-1) var(--ease-out);
   }
 
   .landing-list a:hover {
-    background-color: var(--surface-hover);
+    background-color: var(--accent-soft);
   }
 
-  .landing-item-name {
+  .item-dot {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-radius: var(--radius-pill);
+  }
+
+  .item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .item-body strong {
+    font-size: 0.9rem;
     font-weight: 700;
-    font-size: 0.96rem;
   }
 
-  .landing-item-meta {
-    font-family: var(--font-label);
-    font-size: 0.75rem;
-    color: var(--text-subtle);
+  .item-body small {
+    font-size: 0.74rem;
+    color: var(--text-muted);
     line-height: 1.4;
   }
 
-  .landing-item-arrow {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+  .item-arrow {
     display: inline-flex;
     color: var(--accent-color);
     opacity: 0;
     transition: opacity var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
   }
 
-  .landing-list a:hover .landing-item-arrow {
+  .landing-list a:hover .item-arrow {
     opacity: 1;
-    transform: translate(2px, -50%);
+    transform: translateX(2px);
   }
 
   .landing-links {
-    border: 1px solid var(--hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-5);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
     padding: var(--space-6);
   }
 
-  .landing-links-title {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-    margin: var(--space-4) 0 var(--space-2);
-  }
-
-  .landing-links-title:first-child {
-    margin-top: 0;
+  .link-column h2 {
+    font-size: 0.95rem;
+    font-weight: 750;
+    margin-bottom: var(--space-3);
   }
 
   .landing-links-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
+    gap: 6px;
   }
 
   .landing-links-row a {
-    font-family: var(--font-label);
     font-size: 0.8rem;
     font-weight: 600;
-    border: 1px solid var(--border-color);
-    padding: 5px 11px;
+    color: var(--text-muted);
     text-decoration: none;
-    color: var(--text-main);
-    background-color: var(--tag-neutral-bg);
-    transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+    padding: 5px 11px;
+    border-radius: var(--radius-pill);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
   }
 
   .landing-links-row a:hover {
-    border-color: var(--border-strong);
-    background-color: var(--bg-tertiary);
+    border-color: var(--accent-color);
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
   }
 
   .landing-actions {
+    grid-column: 1 / -1;
     display: flex;
     gap: var(--space-3);
     flex-wrap: wrap;
-    margin-top: var(--space-5);
     padding-top: var(--space-4);
-    border-top: 1px solid var(--hairline);
-  }
-
-  .landing-actions :global(svg) {
-    margin-left: var(--space-1);
+    border-top: 1px solid var(--border-color);
   }
 
   @media (max-width: 560px) {
@@ -329,6 +417,15 @@
 
     .landing-header h1 {
       font-size: 1.6rem;
+    }
+
+    .landing-glyph {
+      display: none;
+    }
+
+    .landing-links {
+      grid-template-columns: 1fr;
+      padding: var(--space-4);
     }
   }
 </style>

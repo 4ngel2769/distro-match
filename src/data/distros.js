@@ -121,7 +121,7 @@ const RAW_DISTROS = [
   {
     "id": "debian",
     "name": "Debian GNU/Linux",
-    "tagline": "The Universal Operating System — peer-reviewed, battle-tested standard of open-source stability",
+    "tagline": "The Universal Operating System: peer-reviewed, battle-tested standard of open-source stability",
     "family": "Debian",
     "base": "Independent",
     "userLevel": "intermediate",
@@ -226,7 +226,7 @@ const RAW_DISTROS = [
     "pros": [
       "Unmatched software selection through the Arch User Repository (AUR)",
       "Arch Wiki is the best Linux documentation on Earth",
-      "You assemble only the packages you need — zero unwanted bloat",
+      "You assemble only the packages you need, with zero unwanted bloat",
       "Always latest upstream kernel and Mesa graphics"
     ],
     "cons": [
@@ -242,7 +242,7 @@ const RAW_DISTROS = [
   {
     "id": "fedora-workstation",
     "name": "Fedora Workstation",
-    "tagline": "The premier developer innovation platform — pure upstream GNOME, bleeding-edge kernels, and Wayland leadership",
+    "tagline": "The premier developer innovation platform: pure upstream GNOME, bleeding-edge kernels, and Wayland leadership",
     "family": "Fedora/RHEL",
     "base": "Independent",
     "userLevel": "intermediate",
@@ -928,7 +928,7 @@ const RAW_DISTROS = [
   {
     "id": "nixos",
     "name": "NixOS",
-    "tagline": "The declarative, reproducible revolution — configure your entire operating system in a single text file",
+    "tagline": "The declarative, reproducible revolution: configure your entire operating system in a single text file",
     "family": "Independent",
     "base": "Independent",
     "userLevel": "advanced",
@@ -1158,7 +1158,7 @@ const RAW_DISTROS = [
   {
     "id": "tails",
     "name": "Tails",
-    "tagline": "The Amnesic Incognito Live System — leaves zero trace on your computer and routes all traffic through Tor",
+    "tagline": "The Amnesic Incognito Live System: leaves zero trace on your computer and routes all traffic through Tor",
     "family": "Debian",
     "base": "Debian Stable",
     "userLevel": "beginner",
@@ -1206,7 +1206,7 @@ const RAW_DISTROS = [
   {
     "id": "qubes-os",
     "name": "Qubes OS",
-    "tagline": "A reasonably secure operating system — compartmentalizing every program into isolated Xen virtual machines",
+    "tagline": "A reasonably secure operating system: compartmentalizing every program into isolated Xen virtual machines",
     "family": "Independent",
     "base": "Xen Hypervisor / Fedora & Debian AppVMs",
     "userLevel": "expert",
@@ -1418,7 +1418,7 @@ const RAW_DISTROS = [
   {
     "id": "artix-linux",
     "name": "Artix Linux",
-    "tagline": "Arch Linux untethered from systemd — featuring OpenRC, runit, s6, suite66, or dinit",
+    "tagline": "Arch Linux untethered from systemd, featuring OpenRC, runit, s6, suite66, or dinit",
     "family": "Arch",
     "base": "Arch Linux",
     "userLevel": "advanced",
@@ -1471,7 +1471,7 @@ const RAW_DISTROS = [
   {
     "id": "devuan",
     "name": "Devuan GNU+Linux",
-    "tagline": "Debian freedom without systemd — preserving init freedom (sysvinit, runit, OpenRC)",
+    "tagline": "Debian freedom without systemd, preserving init freedom (sysvinit, runit, OpenRC)",
     "family": "Debian",
     "base": "Debian",
     "userLevel": "advanced",
@@ -2122,7 +2122,7 @@ const RAW_DISTROS = [
   {
     "id": "slackware",
     "name": "Slackware Linux",
-    "tagline": "The oldest continuously maintained Linux distribution — uncompromising UNIX simplicity and stability",
+    "tagline": "The oldest continuously maintained Linux distribution: uncompromising UNIX simplicity and stability",
     "family": "Slackware",
     "base": "Independent",
     "userLevel": "expert",
@@ -2158,7 +2158,7 @@ const RAW_DISTROS = [
     "accentColor": "#1B2A4A",
     "bgPattern": "grid",
     "pros": [
-      "Zero systemd or complex abstractions — pure UNIX simplicity",
+      "Zero systemd or complex abstractions for pure UNIX simplicity",
       "Packages are untouched vanilla upstream code without distro patches",
       "Virtually indestructible if left untouched",
       "Legendary Patrick Volkerding curation"
@@ -2929,7 +2929,7 @@ const RAW_DISTROS = [
       "Built-in backup and ZFS snapshot clustering"
     ],
     "cons": [
-      "Headless server OS — not a desktop",
+      "Headless server OS, not a desktop",
       "Enterprise repository nag screen (can be disabled)"
     ],
     "tier": "niche",
@@ -2941,7 +2941,7 @@ const RAW_DISTROS = [
   {
     "id": "calculate-linux",
     "name": "Calculate Linux",
-    "tagline": "The gentler Gentoo — pre-compiled binary packages with Portage compatibility for rapid deployment",
+    "tagline": "The gentler Gentoo: pre-compiled binary packages with Portage compatibility for rapid deployment",
     "family": "Gentoo",
     "base": "Gentoo",
     "userLevel": "advanced",
@@ -3090,7 +3090,7 @@ const RAW_DISTROS = [
   {
     "id": "tiny-core",
     "name": "Tiny Core Linux",
-    "tagline": "The world's smallest graphical Linux distro — starting at 16MB and running purely in RAM",
+    "tagline": "The world's smallest graphical Linux distro: starting at 16MB and running purely in RAM",
     "family": "Independent",
     "base": "Independent",
     "userLevel": "expert",
@@ -3193,7 +3193,7 @@ const RAW_DISTROS = [
   {
     "id": "blackarch",
     "name": "BlackArch Linux",
-    "tagline": "The cyber-weapon encyclopedia — an Arch-based pentesting powerhouse with over 2,800 tools",
+    "tagline": "The cyber-weapon encyclopedia: an Arch-based pentesting powerhouse with over 2,800 tools",
     "family": "Arch",
     "base": "Arch Linux",
     "userLevel": "expert",
@@ -3554,7 +3554,7 @@ const RAW_DISTROS = [
   {
     "id": "ultramarine-linux",
     "name": "Ultramarine Linux",
-    "tagline": "Fedora made effortless — preconfigured RPM Fusion, codecs, hardware drivers, and multiple polished desktops",
+    "tagline": "Fedora made effortless: preconfigured RPM Fusion, codecs, hardware drivers, and multiple polished desktops",
     "family": "Fedora/RHEL",
     "base": "Fedora",
     "userLevel": "beginner",
@@ -3605,7 +3605,7 @@ const RAW_DISTROS = [
   {
     "id": "bedrock-linux",
     "name": "Bedrock Linux",
-    "tagline": "The meta-distribution — transparently blend packages and components from Arch, Debian, Fedora, and Gentoo into one OS",
+    "tagline": "The meta-distribution: transparently blend packages and components from Arch, Debian, Fedora, and Gentoo into one OS",
     "family": "Independent",
     "base": "Meta-distro / Multi-base",
     "userLevel": "expert",
@@ -3856,7 +3856,7 @@ const RAW_DISTROS = [
   {
     "id": "funtoo",
     "name": "Funtoo Linux",
-    "tagline": "Created by Gentoo founder Daniel Robbins — optimized Portage tree with automated subarch compilation",
+    "tagline": "Created by Gentoo founder Daniel Robbins: optimized Portage tree with automated subarch compilation",
     "family": "Gentoo",
     "base": "Gentoo",
     "userLevel": "expert",
@@ -3950,7 +3950,7 @@ const RAW_DISTROS = [
   {
     "id": "salix",
     "name": "Salix",
-    "tagline": "The bonsai OS — Slackware made practical with automatic dependency resolution and XFCE desktop",
+    "tagline": "The bonsai OS: Slackware made practical with automatic dependency resolution and XFCE desktop",
     "family": "Slackware",
     "base": "Slackware",
     "userLevel": "intermediate",
@@ -4300,7 +4300,7 @@ const RAW_DISTROS = [
   {
     "id": "easyos",
     "name": "EasyOS",
-    "tagline": "Created by Puppy Linux founder Barry Kauler — containerized applications and snapshot rollbacks",
+    "tagline": "Created by Puppy Linux founder Barry Kauler: containerized applications and snapshot rollbacks",
     "family": "Independent",
     "base": "Independent",
     "userLevel": "intermediate",
@@ -4428,7 +4428,7 @@ const RAW_DISTROS = [
     "accentColor": "#5D4037",
     "bgPattern": "dots",
     "pros": [
-      "Zero external repository dependence — completely self-contained",
+      "Zero external repository dependence, so it is completely self-contained",
       "Built-in disaster recovery tools and legacy media players",
       "Low hardware requirements"
     ],
@@ -4484,7 +4484,7 @@ const RAW_DISTROS = [
       "Built-in retro achievements integration"
     ],
     "cons": [
-      "Strictly an emulation appliance — cannot be used as an ordinary desktop"
+      "Strictly an emulation appliance and cannot be used as an ordinary desktop"
     ],
     "tier": "niche",
     "dwRank": 117,
@@ -4495,7 +4495,7 @@ const RAW_DISTROS = [
   {
     "id": "libreelec",
     "name": "LibreELEC",
-    "tagline": "Just enough OS for Kodi — a dedicated home theater media appliance booting directly into cinema",
+    "tagline": "Just enough OS for Kodi: a dedicated home theater media appliance booting directly into cinema",
     "family": "Independent",
     "base": "Independent",
     "userLevel": "beginner",
@@ -4579,7 +4579,7 @@ const RAW_DISTROS = [
     "pros": [
       "Community continuation of original CoreOS container host",
       "Dual-partition updates ensure nodes self-heal on failure",
-      "Zero package management overhead — all apps run in containers"
+      "Zero package management overhead because all apps run in containers"
     ],
     "cons": [
       "Headless cloud container host only"
@@ -4593,7 +4593,7 @@ const RAW_DISTROS = [
   {
     "id": "talos-linux",
     "name": "Talos Linux",
-    "tagline": "Modern, secure, and minimal OS designed specifically for Kubernetes — no SSH, no console, API-only",
+    "tagline": "Modern, secure, and minimal OS designed specifically for Kubernetes, with no SSH, no console, API-only",
     "family": "Independent",
     "base": "Independent",
     "userLevel": "expert",
@@ -4934,7 +4934,7 @@ const RAW_DISTROS = [
   {
     "id": "regolith-linux",
     "name": "Regolith Linux",
-    "tagline": "The modern tiling desktop — marrying the keyboard speed of i3/Sway with GNOME system management",
+    "tagline": "The modern tiling desktop: marrying the keyboard speed of i3/Sway with GNOME system management",
     "family": "Ubuntu",
     "base": "Ubuntu LTS or Debian",
     "userLevel": "intermediate",
@@ -4985,7 +4985,7 @@ const RAW_DISTROS = [
   {
     "id": "caine",
     "name": "CAINE",
-    "tagline": "Computer Aided Investigative Environment — leading Italian digital forensics and incident response OS",
+    "tagline": "Computer Aided Investigative Environment: leading Italian digital forensics and incident response OS",
     "family": "Debian",
     "base": "Ubuntu LTS",
     "userLevel": "advanced",
@@ -5610,7 +5610,7 @@ const RAW_DISTROS = [
       "Boots on any hardware"
     ],
     "cons": [
-      "Utility appliance only — not for daily computing"
+      "Utility appliance only, not for daily computing"
     ],
     "tier": "niche",
     "dwRank": 141,

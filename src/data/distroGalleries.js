@@ -142,9 +142,9 @@ export const DISTRO_GALLERIES = {
         "label": "Wikimedia Commons",
         "url": "https://commons.wikimedia.org/wiki/File:Fedora_Workstation_37_(November_2022)_%E2%80%94_default_desktop_environment.png",
         "license": "GPL",
-        "artist": "The GNOME Project — The Fedora Project"
+        "artist": "The GNOME Project and The Fedora Project"
       },
-      "title": "Fedora Workstation 37 (November 2022) — default desktop environment"
+      "title": "Fedora Workstation 37 (November 2022), default desktop environment"
     },
     {
       "url": "/assets/screenshots/gallery/fedora-workstation-3.jpg",

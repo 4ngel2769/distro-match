@@ -21,11 +21,11 @@
 
 ## Review Focus
 
-- **Swipe-only user has no questionnaire answers** — results must still rank liked distros and explain why. Test: Task 2 engine test with empty answers + likes; Task 5 browser QA.
-- **Invented trait claims** — labels must map to real fields, not cuisine-style guesses. Test: Task 1 `traitSignals` tests including an empty/unknown record.
-- **Endless cycling must not repeat swiped cards until reset** — otherwise duplicate cards erode trust. Test: Task 3 browser QA across more swipes than the filtered pool.
-- **Undo/reset and keyboard parity with drag** — gesture-only control would exclude keyboard users. Test: Task 3 browser QA with buttons and arrow keys.
-- **Reduced motion and both themes at 390px/1440px** — no fly-out, no overflow, no contrast regression. Test: Task 5 browser QA.
+- **Swipe-only user has no questionnaire answers**: results must still rank liked distros and explain why. Test: Task 2 engine test with empty answers + likes; Task 5 browser QA.
+- **Invented trait claims**: labels must map to real fields, not cuisine-style guesses. Test: Task 1 `traitSignals` tests including an empty/unknown record.
+- **Endless cycling must not repeat swiped cards until reset**: otherwise duplicate cards erode trust. Test: Task 3 browser QA across more swipes than the filtered pool.
+- **Undo/reset and keyboard parity with drag**: gesture-only control would exclude keyboard users. Test: Task 3 browser QA with buttons and arrow keys.
+- **Reduced motion and both themes at 390px/1440px**: no fly-out, no overflow, no contrast regression. Test: Task 5 browser QA.
 
 ---
 
@@ -53,7 +53,7 @@ Create `tests/swipeTraits.test.js` using `bun:test`. Assert:
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `bun test tests/swipeTraits.test.js`
-Expected: FAIL — module `src/lib/swipeTraits.js` not found.
+Expected: FAIL: module `src/lib/swipeTraits.js` not found.
 
 - [ ] **Step 3: Implement `traitSignals(distro)`**
 
@@ -76,7 +76,7 @@ git commit -m "feat: derive swipe trait signals from distro data"
 ### Task 2: Optional likes in the matching engine
 
 **Files:**
-- Modify: `src/lib/matchingEngine.js` — `evaluate` signature and scoring block
+- Modify: `src/lib/matchingEngine.js`: `evaluate` signature and scoring block
 - Test: `tests/matchingEngine.likes.test.js`
 
 **Interfaces:**
@@ -94,7 +94,7 @@ Create `tests/matchingEngine.likes.test.js` using `bun:test`. Assert:
 - [ ] **Step 2: Run tests to verify they fail**
 
 Run: `bun test tests/matchingEngine.likes.test.js`
-Expected: FAIL — fourth argument ignored.
+Expected: FAIL: fourth argument ignored.
 
 - [ ] **Step 3: Implement the `likes` option**
 
@@ -169,7 +169,7 @@ In `WelcomeView.svelte`, replace the current promise column with `SwipeDeck`, pa
 
 - [ ] **Step 3: Forward likes into results**
 
-In `ResultsView.svelte`, add `likes = []` prop, pass `{ likes }` as the fourth argument to `MatchingEngine.evaluate`, and show a one-line context note when `likes.length > 0` (for example "Ranked from your swipe picks — answer the questionnaire for a more precise fit."). Do not change the result layout otherwise.
+In `ResultsView.svelte`, add `likes = []` prop, pass `{ likes }` as the fourth argument to `MatchingEngine.evaluate`, and show a one-line context note when `likes.length > 0` (for example "Ranked from your swipe picks: answer the questionnaire for a more precise fit."). Do not change the result layout otherwise.
 
 - [ ] **Step 4: Verify the full flow**
 

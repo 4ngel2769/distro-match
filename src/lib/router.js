@@ -91,27 +91,27 @@ export function comparePath(a, b) {
 export function routeTitle(view, distro) {
   switch (view) {
     case 'welcome':
-      return 'LinuxMatch — Find the Best Linux Distribution for You (116+ Distros)';
+      return 'LinuxMatch: Find the Best Linux Distribution for You (116+ Distros)';
     case 'quiz':
-      return 'Linux Distribution Finder Quiz — 23 Questions | LinuxMatch';
+      return 'Linux Distribution Finder Quiz: 23 Questions | LinuxMatch';
     case 'results':
-      return 'Your Linux Distribution Matches — LinuxMatch';
+      return 'Your Linux Distribution Matches | LinuxMatch';
     case 'directory':
-      return 'Linux Distribution Directory — All 116+ Linux Distros | LinuxMatch';
+      return 'Linux Distribution Directory: All 116+ Linux Distros | LinuxMatch';
     case 'compare':
       return 'Compare Linux Distributions Side by Side | LinuxMatch';
     case 'privacy':
-      return 'Privacy & GDPR — No Tracking, No Accounts | LinuxMatch';
+      return 'Privacy and GDPR: No Tracking, No Accounts | LinuxMatch';
     case 'terms':
-      return 'Terms of Service — LinuxMatch';
+      return 'Terms of Service | LinuxMatch';
     case 'distro':
       return distro
-        ? `${distro.name} — Linux Distribution Profile, Specs & Pros/Cons | LinuxMatch`
-        : 'Distribution profile — LinuxMatch';
+        ? `${distro.name}: Linux Distribution Profile, Specs & Pros/Cons | LinuxMatch`
+        : 'Distribution profile | LinuxMatch';
     case 'landing':
-      return 'Linux Distributions — Lists, Families and Use Cases | LinuxMatch';
+      return 'Linux Distributions: Lists, Families and Use Cases | LinuxMatch';
     default:
-      return 'Page not found — LinuxMatch';
+      return 'Page not found | LinuxMatch';
   }
 }
 

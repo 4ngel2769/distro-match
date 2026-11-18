@@ -76,7 +76,7 @@
 
       <h1>No distro fits all of those</h1>
       <p>
-        That usually means two must-haves conflict — for example a strictly libre system with
+        That usually means two must-haves conflict, for example a strictly libre system with
         ready-to-go NVIDIA drivers. Loosen one and the shortlist comes straight back.
       </p>
       <div class="empty-actions">
@@ -94,7 +94,7 @@
 
       {#if closestDisqualified.length}
         <div class="close-section">
-          <span class="field-label">Almost a fit — one thing in the way</span>
+          <span class="field-label">Almost a fit, one thing in the way</span>
           <div class="close-grid stagger-in">
             {#each closestDisqualified as r}
               <div class="close-card">
@@ -132,7 +132,7 @@
 
         {#if likes.length}
           <p class="swipe-context">
-            Ranked from your {likes.length} swipe pick{likes.length === 1 ? '' : 's'} — answer the
+            Ranked from your {likes.length} swipe pick{likes.length === 1 ? '' : 's'}. Answer the
             questionnaire for a more precise fit.
           </p>
         {/if}
@@ -147,8 +147,8 @@
           <div class="confidence-warning">
             <Icon name="alert" size={15} />
             <span>
-              <strong>A quick note:</strong> you answered {winner.confidence.percent}% of the quiz. A few more answers —
-              especially about hardware and your top priority — will make this a stronger match.
+              <strong>A quick note:</strong> you answered {winner.confidence.percent}% of the quiz. A few more answers,
+              especially about hardware and your top priority, will make this a stronger match.
             </span>
           </div>
         {/if}

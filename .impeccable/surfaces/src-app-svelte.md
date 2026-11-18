@@ -11,7 +11,7 @@ Audience/job: newcomers and switchers need a low-regret distro choice; experienc
 
 ## Direction contract
 
-THESIS: A calm, friendly studio desk for choosing a Linux distro — the interface behaves like a working tool, but it welcomes you in plain language instead of cataloguing you. It refuses both the cold specimen-drawer look it replaces and the generic soft-card template with no point of view.
+THESIS: A calm, friendly studio desk for choosing a Linux distro. The interface behaves like a working tool, but it welcomes you in plain language instead of cataloguing you. It refuses both the cold specimen-drawer look it replaces and the generic soft-card template with no point of view.
 
 OWN-WORLD: Warm stone ground (#F7F6F3) and warm charcoal ground (#16151B) with white/soft-charcoal cards, 16–24px radii and two low, offset shadows. Indigo #5B4BE0 / #A394FF is the only accent and appears strictly on actions, active choices and focus. Public Sans carries every interface phrase; Geist Mono is reserved for ranks, counts and data. No gradients, glow, emoji icons or uppercase mono headings.
 

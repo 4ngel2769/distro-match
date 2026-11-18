@@ -2,10 +2,10 @@
   import Icon from './Icon.svelte';
   import { landingPath } from '../data/landingPages.js';
 
-  let { onNavigate, distroCount = 0 } = $props();
+  let { onNavigate, distroCount = 0, connected = false } = $props();
 </script>
 
-<footer class="site-footer">
+<footer class="site-footer" class:connected>
   <div class="footer-container">
     <div class="footer-brand">
       <span class="footer-brand-mark">LINUXMATCH</span>
@@ -37,7 +37,7 @@
   </div>
 
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} LinuxMatch — zero telemetry, nothing stored.</span>
+    <span>© {new Date().getFullYear()} LinuxMatch, with zero telemetry and nothing stored.</span>
     <div class="footer-legal">
       <button onclick={() => onNavigate('privacy')}>Privacy</button>
       <span aria-hidden="true">·</span>

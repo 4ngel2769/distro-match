@@ -1,8 +1,8 @@
-# LinuxMatch — The Definitive Linux Distribution Triangulator
+# LinuxMatch: The Definitive Linux Distribution Triangulator
 
 An encyclopedic, precision Linux distribution picker and triangulation engine covering **116+ Linux distributions** across every architectural family, init system, package manager, and hardware setup. Built as a high-performance **Svelte** application.
 
-The default first experience is the pinpoint questionnaire: 16 branching questions across three short stages, with an expert path and a transparent shortlist. A swipe-based discovery deck is implemented but currently parked — flip `ENABLE_SWIPE_DECK` in `src/components/WelcomeView.svelte` to restore it.
+The default first experience is the pinpoint questionnaire: 16 branching questions across three short stages, with an expert path and a transparent shortlist. A swipe-based discovery deck is implemented but currently parked. Flip `ENABLE_SWIPE_DECK` in `src/components/WelcomeView.svelte` to restore it.
 
 ---
 
@@ -13,7 +13,7 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
    - Snappy state management, reactive filtering, and zero-runtime bloat.
 
 2. **Revamped Triangulation & Real-Time Steering**:
-   - **16 pinpoint questions across 3 short stages** replace the old 23-question survey. Each option maps to a real catalogue field; conditional questions (NVIDIA drivers) are skipped when they do not apply. Importance is explicit: *nice to have*, *important*, or *must-have* — must-haves on factual constraints become hard filters.
+   - **16 pinpoint questions across 3 short stages** replace the old 23-question survey. Each option maps to a real catalogue field; conditional questions (NVIDIA drivers) are skipped when they do not apply. Importance is explicit: *nice to have*, *important*, or *must-have*. Must-haves on factual constraints become hard filters.
    - Fixed flawed legacy matching that previously over-promoted niche distros like Calculate Linux.
    - **Distro Popularity & Tier Classification**:
      - **Flagships (Tier 1)**: Linux Mint, Ubuntu, Debian, Fedora, Arch, Pop!_OS, openSUSE, Zorin, EndeavourOS.
@@ -28,7 +28,7 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
        - *Packaging Stance*: Avoid Snaps, prefer Flatpak/native.
 
 3. **Verified Local Logos & Screenshots**:
-   - Every logo and screenshot is downloaded into `public/assets/` and matched to a specific distro before it ships — no hotlinks, no 429s, and no borrowing another distro's branding.
+   - Every logo and screenshot is downloaded into `public/assets/` and matched to a specific distro before it ships, with no hotlinks, no 429s, and no borrowing another distro's branding.
    - Logos come from Wikimedia Commons (SVG where possible); screenshots come from the distro's own DistroWatch page or Commons, with attribution shown on the profile.
    - Missing or unverifiable images fall back to a monogram tile / labelled placeholder instead of showing a wrong distro's logo.
 
@@ -44,7 +44,7 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
    - Side-by-side comparison across 14 architectural and hardware dimensions.
 
 6. **Warm Studio Design System**:
-   - A warm, friendly language: stone grounds, soft white cards with gentle shadows, generous rounded corners, plain-language labels and a single indigo action colour (`#5B4BE0`, `#A394FF` in dark mode).
+   - A warm, friendly language: stone grounds, soft white cards with gentle shadows, restrained rounded corners, plain-language labels and a single indigo action colour (`#5B4BE0`, `#A394FF` in dark mode).
    - Public Sans for interface and reading, Geist Mono only for measurements, ranks and codes.
    - Proper light and dark themes with persisted preference, visible focus, reduced-motion support and one authored view entrance.
    - Thin top loading bar and a consistent 1.6px stroke SVG icon set; no gradients, glow, emoji icons or hard offset shadows.
@@ -57,6 +57,12 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
    - 100% client-side in-browser execution.
    - Zero tracking cookies, zero analytics, zero server logs.
    - 1-click local browser storage purge button on the Privacy page.
+
+### Spec-based finder and compatibility check
+
+The hero uses a ported Wayglim WebGL background, loaded as its own chunk only when the home page mounts. It pauses offscreen and respects reduced motion, with the page background as a fallback when WebGL2 is unavailable.
+
+The welcome page also includes a hardware-first finder. Pick what you will use the computer for (gaming, development, privacy, daily use and more), choose a platform, then select a CPU through a lazy-loaded brand / generation / model cascade and a searchable GPU list. Memory is a searchable list that also accepts a custom value such as `12 GB`. The finder ranks distributions with a plain-language "Runs great" to "Not a good fit" verdict and saves the specs locally. Saved specs then power the same compatibility breakdown on every distro profile. CPU families and the GPU catalog are loaded as separate chunks on demand, so the initial page stays small.
 
 ---
 
@@ -91,14 +97,14 @@ preview server does this automatically). For a plain static host, configure an
 SPA fallback to `index.html`.
 
 ### Routes
-- `/` — welcome screen and quiz start.
-- `/directory` — searchable directory of all distros.
-- `/quiz` — the recommendation quiz.
-- `/results` — quiz results and recommendation breakdown.
-- `/distro/<id>` — full profile page (for example `/distro/linux-mint`).
-- `/compare` — side-by-side comparison.
-- `/compare/<a>+<b>/` — shareable comparison link (canonical form).
-- Unknown paths — in-app 404 page.
+- `/`: welcome screen and quiz start.
+- `/directory`: searchable directory of all distros.
+- `/quiz`: the recommendation quiz.
+- `/results`: quiz results and recommendation breakdown.
+- `/distro/<id>`: full profile page (for example `/distro/linux-mint`).
+- `/compare`: side-by-side comparison.
+- `/compare/<a>+<b>/`: shareable comparison link (canonical form).
+- Unknown paths: in-app 404 page.
 
 ### Refreshing the image library
 ```bash

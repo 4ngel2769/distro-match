@@ -1,7 +1,7 @@
 # Design: Swipe-to-Match Discovery Mode
 
 Date: 2026-11-18
-Status: implemented, then parked at the user's request — the finder quiz is the default first experience. Swipe code remains behind `ENABLE_SWIPE_DECK` in `WelcomeView.svelte`.
+Status: implemented, then parked at the user's request: the finder quiz is the default first experience. Swipe code remains behind `ENABLE_SWIPE_DECK` in `WelcomeView.svelte`.
 
 ## Context and intent
 
@@ -28,16 +28,16 @@ References: `https://feralui.dev/` (playful, physics-driven elements) and `https
 
 ### New files
 
-- `src/components/SwipeDeck.svelte` — owns deck state, filters, drag/swipe gestures, card fan, undo/reset and the picks rail.
-- `src/lib/swipeTraits.js` — pure `traitSignals(distro)` mapper from catalogue fields to a short list of labels with a tone/role. No UI code, no hard-coded distro IDs where a field can be used.
+- `src/components/SwipeDeck.svelte`: owns deck state, filters, drag/swipe gestures, card fan, undo/reset and the picks rail.
+- `src/lib/swipeTraits.js`: pure `traitSignals(distro)` mapper from catalogue fields to a short list of labels with a tone/role. No UI code, no hard-coded distro IDs where a field can be used.
 
 ### Modified files
 
-- `src/components/WelcomeView.svelte` — hero becomes the swipe deck; questionnaire moves to a clearly visible alternative control; the existing field-sheet area becomes the live picks rail. Steering panel and methodology remain below.
-- `src/lib/matchingEngine.js` — `evaluate(userAnswers, questionWeights, steering, options = {})` accepts `options.likes = []`. A liked distro gets a transparent `+0.06` satisfaction adjustment and a “You liked this in the swipe deck” reason. Existing scoring, hard filters and diversification are unchanged when `likes` is empty.
-- `src/components/ResultsView.svelte` — optional `likes` prop forwarded to `MatchingEngine.evaluate`, plus a small “from your swipes” context line when likes exist. No layout rewrite.
-- `src/App.svelte` — owns `swipeLikes` state, passes it to `ResultsView`, and clears it when the questionnaire is started normally.
-- `src/data/questions.js` — no changes.
+- `src/components/WelcomeView.svelte`: hero becomes the swipe deck; questionnaire moves to a clearly visible alternative control; the existing field-sheet area becomes the live picks rail. Steering panel and methodology remain below.
+- `src/lib/matchingEngine.js`: `evaluate(userAnswers, questionWeights, steering, options = {})` accepts `options.likes = []`. A liked distro gets a transparent `+0.06` satisfaction adjustment and a “You liked this in the swipe deck” reason. Existing scoring, hard filters and diversification are unchanged when `likes` is empty.
+- `src/components/ResultsView.svelte`: optional `likes` prop forwarded to `MatchingEngine.evaluate`, plus a small “from your swipes” context line when likes exist. No layout rewrite.
+- `src/App.svelte`: owns `swipeLikes` state, passes it to `ResultsView`, and clears it when the questionnaire is started normally.
+- `src/data/questions.js`: no changes.
 
 ### Data flow
 

@@ -32,7 +32,7 @@
   <section class="report surface">
     <div class="report-head">
       <span class="field-label">Check-in {stage?.id} of 3</span>
-      <h1>{isFinal ? 'Your shortlist is ready' : `Nice — ${stage?.short.toLowerCase()} is done`}</h1>
+      <h1>{isFinal ? 'Your shortlist is ready' : `Nice work, ${stage?.short.toLowerCase()} is done`}</h1>
       <p>
         {isFinal
           ? 'That’s everything we need. Here are your three strongest matches before the final score.'
@@ -52,13 +52,13 @@
           <span class="row-score field-value">{result.matchPercentage}<small>%</small></span>
         </div>
       {:else}
-        <p class="no-matches">No distro passes every hard requirement yet. You can keep going — later answers may open the field up.</p>
+        <p class="no-matches">No distro passes every hard requirement yet. You can keep going, and later answers may open the field up.</p>
       {/each}
     </div>
 
     <p class="report-note">
       {#if nextStage}
-        Next up: <strong>{nextStage.title}</strong> — {nextStage.subtitle}
+        Next up: <strong>{nextStage.title}</strong>: {nextStage.subtitle}
       {:else}
         No more questions. We’ll show you the score breakdown so you can see why the winner came out on top.
       {/if}

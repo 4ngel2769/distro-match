@@ -1,11 +1,11 @@
 /* ==========================================================================
-   LinuxMatch — Warm Studio design system
+   LinuxMatch: Warm Studio design system
    A friendly, calm workspace: warm stone grounds, soft cards, plain language
    and one indigo action colour that appears only where something can be done.
    ========================================================================== */
 
 :root {
-  /* Surfaces — warm stone ground, clean white cards */
+  /* Surfaces: warm stone ground, clean white cards */
   --bg-primary: #F7F6F3;
   --bg-secondary: #EFEDE8;
   --bg-tertiary: #E7E4DD;
@@ -17,8 +17,8 @@
   --text-main: #22202A;
   --text-muted: #5E5B68;
   --text-subtle: #75717F;
-  --border-color: #E5E2DC;
-  --border-strong: #D0CCC4;
+  --border-color: #DAD5CD;
+  --border-strong: #C4BFB6;
   --hairline: #EAE7E1;
 
   /* One action colour: indigo, used only for real actions and active state */
@@ -27,10 +27,10 @@
   --accent-fill: #5B4BE0;
   --accent-contrast: #FFFFFF;
   --accent-ink: #4A3AC9;
-  --accent-soft: #EEEBFF;
+  --accent-soft: #E4DFFF;
   --accent-wash: rgba(91, 75, 224, 0.10);
 
-  /* Semantic states — friendly, legible, never decorative */
+  /* Semantic states: friendly, legible, never decorative */
   --accent-green: #1E8E63;
   --accent-red: #C8484E;
   --accent-amber: #A86A0B;
@@ -59,7 +59,7 @@
   --selected-bg: #EEEBFF;
   --selected-border: #5B4BE0;
 
-  /* Type — one warm humanist workhorse, a precise face for real data only */
+  /* Type: one warm humanist workhorse, a precise face for real data only */
   --font-sans: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-label: "Public Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "Cascadia Code", Consolas, "Courier New", monospace;
@@ -74,10 +74,10 @@
   --space-7: 44px;
   --space-8: 64px;
 
-  --radius: 14px;
-  --radius-sm: 9px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius: 9px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
   --radius-pill: 999px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -92,6 +92,12 @@
   --shadow-sharp: var(--shadow-card);
   --top-loader-color: var(--accent-fill);
   --transition-speed: 0.18s;
+  --hero-bg-opacity: 0.16;
+  --footer-bg: #E6E2D9;
+  --section-radius: 20px;
+  --glass-bg: rgba(255, 255, 255, 0.68);
+  --glass-border: rgba(255, 255, 255, 0.75);
+  --glass-highlight: rgba(255, 255, 255, 0.9);
 
   /* Media plates */
   --scrim-plate: rgba(18, 16, 24, 0.82);
@@ -104,27 +110,27 @@
 }
 
 [data-theme="dark"] {
-  --bg-primary: #16151B;
-  --bg-secondary: #1D1C24;
-  --bg-tertiary: #262530;
-  --card-bg: #1F1E27;
-  --surface-hover: #24232E;
-  --image-void: #100F15;
+  --bg-primary: #0D0C11;
+  --bg-secondary: #121118;
+  --bg-tertiary: #1A1922;
+  --card-bg: #15141B;
+  --surface-hover: #1C1B24;
+  --image-void: #08080C;
 
-  --text-main: #F6F4F8;
-  --text-muted: #BDB9C8;
-  --text-subtle: #9893A6;
-  --border-color: #302E3A;
-  --border-strong: #464153;
-  --hairline: #2B2934;
+  --text-main: #F4F2F7;
+  --text-muted: #ABA7B6;
+  --text-subtle: #8E8A9A;
+  --border-color: #272530;
+  --border-strong: #3C3949;
+  --hairline: #23212C;
 
-  --accent-color: #A394FF;
-  --accent-hover: #B7AAFF;
+  --accent-color: #B4A8FF;
+  --accent-hover: #C6BCFF;
   --accent-fill: #6C5CE7;
   --accent-contrast: #FFFFFF;
-  --accent-ink: #B5A8FF;
-  --accent-soft: rgba(163, 148, 255, 0.14);
-  --accent-wash: rgba(163, 148, 255, 0.12);
+  --accent-ink: #C2B6FF;
+  --accent-soft: rgba(163, 148, 255, 0.16);
+  --accent-wash: rgba(163, 148, 255, 0.13);
 
   --accent-green: #57C79A;
   --accent-red: #FF8A90;
@@ -153,11 +159,16 @@
   --selected-bg: rgba(163, 148, 255, 0.16);
   --selected-border: #A394FF;
 
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 44px rgba(0, 0, 0, 0.45);
-  --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.45), 0 24px 56px rgba(0, 0, 0, 0.55);
-  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.36), 0 6px 18px rgba(0, 0, 0, 0.34);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.26), 0 16px 40px rgba(0, 0, 0, 0.32);
+  --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.3), 0 22px 52px rgba(0, 0, 0, 0.4);
+  --shadow-subtle: 0 1px 2px rgba(0, 0, 0, 0.24), 0 6px 18px rgba(0, 0, 0, 0.24);
   --scrim-plate: rgba(8, 7, 12, 0.84);
   --scrim-plate-strong: rgba(8, 7, 12, 0.96);
+  --hero-bg-opacity: 0.24;
+  --footer-bg: #08070B;
+  --glass-bg: rgba(22, 21, 30, 0.62);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-highlight: rgba(255, 255, 255, 0.14);
   --brand-ink: #F6F4F8;
   --brand-ink-light: #16151B;
   color-scheme: dark;
@@ -172,7 +183,7 @@
   border-radius: var(--radius);
 }
 
-/* Table structure stays square — rounded cells leave gaps between headers. */
+/* Table structure stays square because rounded cells leave gaps between headers. */
 table,
 thead,
 tbody,
@@ -502,6 +513,10 @@ button:disabled {
   width: 100%;
 }
 
+.main-wrapper.main-connected {
+  padding-bottom: 0;
+}
+
 /* ---------- Motion: one authored entrance, used on view changes ---------- */
 
 .top-loading-bar {
@@ -691,10 +706,17 @@ button:disabled {
 
 .site-footer {
   border-top: 1px solid var(--border-color);
-  background-color: var(--bg-secondary);
+  background-color: var(--footer-bg);
   padding: var(--space-7) 24px var(--space-5);
   font-size: 0.9rem;
   color: var(--text-muted);
+}
+
+.site-footer.connected {
+  max-width: 1160px;
+  margin: 0 auto;
+  border-top: 1px solid var(--border-color);
+  border-radius: 0 0 var(--section-radius) var(--section-radius);
 }
 
 .footer-container {

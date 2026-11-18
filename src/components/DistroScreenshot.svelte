@@ -114,7 +114,7 @@
     background: var(--image-void);
   }
 
-  /* Show the whole capture — letterboxed rather than cropped. */
+  /* Show the whole capture, letterboxed rather than cropped. */
   .screenshot-shell img.shot-contain {
     object-fit: contain;
     object-position: center;

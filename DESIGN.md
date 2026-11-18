@@ -1,6 +1,6 @@
 ---
 name: LinuxMatch
-description: A warm, friendly distro finder — calm stone grounds, soft cards, plain language and one indigo action colour.
+description: A warm, friendly distro finder with calm stone grounds, soft cards, plain language and one indigo action colour.
 colors:
   paper: "#F7F6F3"
   paper-surface: "#FFFFFF"
@@ -215,9 +215,9 @@ typography:
     lineHeight: 1.4
     font-variant-numeric: "tabular-nums"
 rounded:
-  sm: "9px"
-  md: "16px"
-  lg: "24px"
+  sm: "6px"
+  md: "10px"
+  lg: "16px"
   pill: "999px"
 components:
   button-primary:
@@ -250,7 +250,7 @@ LinuxMatch feels like a calm, well-run studio desk: warm stone grounds, soft whi
 cards that float gently, generous type, and plain language that explains itself. The
 interface is built for people choosing something that matters to them, so it is
 approachable first and precise second. Meaning is carried by spacing, weight and a
-single indigo action colour — never by decoration.
+single indigo action colour, never by decoration.
 
 This system replaces the earlier "Modern Field Guide" language. The field guide's
 hairline rules, sharp 2px corners and lime annotation ink were technically disciplined
@@ -268,14 +268,14 @@ distance.
 
 ### The action colour
 - **Indigo** (`#5B4BE0` light, `#A394FF` dark): primary buttons, active tabs and pills,
-  focus rings. It appears where something can be done or has been chosen — never as a
+  focus rings. It appears where something can be done or has been chosen. It never acts as a
   background wash on static panels.
 
 ### Neutrals
 - Light: Paper `#F7F6F3`, surface white, secondary `#EFEDE8`, tertiary `#E7E4DD`.
-- Dark: Graphite `#16151B`, surface `#1F1E27`, secondary `#1D1C24`, tertiary `#262530`.
+- Dark: Graphite `#0D0C11`, surface `#15141B`, secondary `#121118`, tertiary `#1A1922`. Deeper black with softer shadows.
 - Ink: `#22202A` / `#5E5B68` / `#75717F` in light; `#F6F4F8` / `#BDB9C8` / `#9893A6` in dark.
-- Rules: `#E5E2DC` light, `#302E3A` dark — used sparingly to separate regions.
+- Rules: `#E5E2DC` light, `#302E3A` dark, used sparingly to separate regions.
 
 ### Semantic
 - Success green, warning amber and danger coral are muted and reserved for actual status.
@@ -284,7 +284,7 @@ distance.
 ## Typography
 
 One warm humanist workhorse, Public Sans, carries reading and actions. Geist Mono is
-reserved for ranks, counts, measurements and tabular values — never as a "technical
+reserved for ranks, counts, measurements and tabular values. It is never a "technical
 costume" for ordinary prose. Body copy is capped near 68–75ch; headings are balanced.
 
 Type sizes above 1rem step from 1.05 → 3rem; small text uses an 0.62–0.96rem scale.
@@ -305,31 +305,37 @@ in light mode; deeper and more diffuse in dark mode. No glow, no hard offset blo
 
 ## Shapes
 
-Corners are generous: 9px for small controls, 16px for buttons and inputs, 24px for
-cards and panels, 999px for pills. Table cells stay square so grids do not develop
+Corners are restrained: 6px for small controls, 10px for buttons and inputs, 16px for
+cards and panels, 999px reserved for chips and segmented controls. Table cells stay square so grids do not develop
 gaps. Icons are a consistent 1.6px stroke SVG set; no emoji as icons.
+
+**Radius nesting.** Inner radius equals outer radius minus the padding between them
+(the Hype4 radius nesting guide). With an eye for small values, a nested control inside
+a 16px card with 10px padding lands near 6px. Media that sits flush with a card edge
+has no radius of its own and is clipped by the card corners. This keeps padding visually
+even at every corner.
 
 ## Components
 
-- **Primary button** — indigo fill, white text, soft indigo shadow; lifts 2px on hover.
-- **Secondary button** — white surface, hairline border, soft shadow; tints on hover.
-- **Card** — white surface, 24px radius, soft shadow; one idea per card.
-- **Segment control** — tinted track, white active pill, 999px radius; used for mode and importance.
-- **Filter pill** — neutral fill, indigo fill when active; used for sorting and families.
-- **Option row** — generous padded row with a square marker; selected state uses an
+- **Primary button**: indigo fill, white text, soft indigo shadow; lifts 2px on hover.
+- **Secondary button**: white surface, hairline border, soft shadow; tints on hover.
+- **Card**: white surface, 16px radius, soft shadow; one idea per card.
+- **Segment control**: tinted track, white active pill, 999px radius; used for mode and importance.
+- **Filter pill**: neutral fill, indigo fill when active; used for sorting and families.
+- **Option row**: generous padded row with a square marker; selected state uses an
   indigo border, soft wash and a 2px focus halo.
-- **Fine-tune panel** — a collapsed `<details>` summary with a small icon; opens into a
+- **Fine-tune panel**: a collapsed `<details>` summary with a small icon; opens into a
   responsive grid of plain-language selects.
-- **Specimen card** — full screenshot plate, soft scrim, caption strip, compact spec
+- **Specimen card**: full screenshot plate, soft scrim, caption strip, compact spec
   table, a "View profile" footer and a gentle hover lift.
-- **Score sheet** — winner header with a tinted score block, plain-language reasons,
+- **Score sheet**: winner header with a tinted score block, plain-language reasons,
   "How we scored it" table and a diversified shortlist.
 
 ## Motion
 
 One authored view entrance (`viewIn`), 460ms exponential ease-out with a short blur and
 scale, staggered across immediate children. State changes are 160ms with a smooth
-exponential ease. Press feedback uses the same smooth family — no bounce or elastic
+exponential ease. Press feedback uses the same smooth family, with no bounce or elastic
 overshoot. Reduced motion suppresses all of it.
 
 ## Do's and Don'ts
