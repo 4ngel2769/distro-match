@@ -12,7 +12,7 @@
   import TermsView from './components/TermsView.svelte';
   import DistroDetailPage from './components/DistroDetailPage.svelte';
   import LandingView from './components/LandingView.svelte';
-  import { QUESTIONS_DATA } from './data/questions.js';
+  import { QUIZ_STAGES, visibleQuestions } from './data/questions.js';
   import { LINUX_DISTROS, DISTRO_MAP } from './data/distros.js';
   import { parseRoute, routePath, routeTitle, comparePath } from './lib/router.js';
   import { landingPageFor } from './data/landingPages.js';
@@ -29,7 +29,23 @@
   let userAnswers = $state({});
   let questionWeights = $state({});
   let questionHistory = $state([]);
-  let completedRound = $state(1);
+  let completedStage = $state(null);
+  let nextStage = $state(null);
+  let intermissionIsFinal = $state(false);
+
+  // Only questions relevant to the current answers are asked. The NVIDIA
+  // driver question, for example, disappears if another GPU is selected.
+  let quizQuestions = $derived(visibleQuestions(userAnswers));
+  let currentQuestion = $derived(quizQuestions[currentQuestionIndex] || null);
+  let currentStage = $derived(
+    currentQuestion ? QUIZ_STAGES.find((s) => s.id === currentQuestion.stage) || QUIZ_STAGES[0] : QUIZ_STAGES[0]
+  );
+  let answeredCount = $derived(
+    quizQuestions.filter((q) => {
+      const value = userAnswers[q.id];
+      return Array.isArray(value) ? value.length > 0 : value != null && value !== '';
+    }).length
+  );
 
   // Active Real-Time User Steering Controls
   let steering = $state({
@@ -233,23 +249,24 @@
     userAnswers = {};
     questionWeights = {};
     questionHistory = [];
-    completedRound = 1;
+    completedStage = null;
+    nextStage = null;
+    intermissionIsFinal = false;
     intermissionOpen = false;
     navigateTo('quiz');
   }
 
   function handleAnswer(questionId, value) {
-    userAnswers = {
-      ...userAnswers,
-      [questionId]: value
-    };
+    const nextAnswers = { ...userAnswers, [questionId]: value };
+    // Drop answers to questions that the new answer makes irrelevant.
+    for (const question of visibleQuestions(nextAnswers)) {
+      if (question.when && !question.when(nextAnswers)) delete nextAnswers[question.id];
+    }
+    userAnswers = nextAnswers;
   }
 
   function handleWeightChange(questionId, weight) {
-    questionWeights = {
-      ...questionWeights,
-      [questionId]: weight
-    };
+    questionWeights = { ...questionWeights, [questionId]: weight };
   }
 
   function handleSteeringChange(newSteering) {
@@ -261,41 +278,54 @@
     navigateTo('results');
   }
 
-  function handleNextQuestion() {
-    const currentQ = QUESTIONS_DATA[currentQuestionIndex];
-    const nextIdx = currentQuestionIndex + 1;
-
-    // Check if we reached the end of the survey
-    if (nextIdx >= QUESTIONS_DATA.length) {
-      finishQuiz();
-      return;
-    }
-
-    const nextQ = QUESTIONS_DATA[nextIdx];
-
-    // Check if crossing a round boundary
-    if (currentQ && nextQ && currentQ.round !== nextQ.round) {
-      completedRound = currentQ.round;
-      questionHistory = [...questionHistory, currentQuestionIndex];
-      currentQuestionIndex = nextIdx;
-      triggerTopLoader();
-      intermissionOpen = true;
-      window.scrollTo({ top: 0 });
-      return;
-    }
-
-    // Normal advance
-    questionHistory = [...questionHistory, currentQuestionIndex];
-    currentQuestionIndex = nextIdx;
+  function showStageBreak(final = false, stage = currentStage) {
+    completedStage = stage;
+    nextStage = final ? null : QUIZ_STAGES.find((s) => s.id === stage.id + 1) || null;
+    intermissionIsFinal = final;
+    triggerTopLoader();
+    intermissionOpen = true;
     window.scrollTo({ top: 0 });
   }
 
+  function handleNextQuestion() {
+    const currentQ = currentQuestion;
+    if (!currentQ) return;
+    const nextIdx = currentQuestionIndex + 1;
+
+    if (nextIdx >= quizQuestions.length) {
+      showStageBreak(true, currentStage);
+      return;
+    }
+
+    const nextQ = quizQuestions[nextIdx];
+    // Capture the stage before advancing: currentStage is derived from the
+    // question at currentQuestionIndex.
+    const completed = QUIZ_STAGES.find((s) => s.id === currentQ.stage) || currentStage;
+    questionHistory = [...questionHistory, currentQuestionIndex];
+    currentQuestionIndex = nextIdx;
+
+    if (nextQ.stage !== currentQ.stage) showStageBreak(false, completed);
+    else window.scrollTo({ top: 0 });
+  }
+
   function handlePrevQuestion() {
+    if (intermissionOpen) {
+      // A stage break sits *after* the last question of a stage, so stepping
+      // back lands on that question. The final break sits on the last question
+      // itself, so we stay put and let them change it.
+      intermissionOpen = false;
+      if (!intermissionIsFinal) {
+        currentQuestionIndex = Math.max(0, currentQuestionIndex - 1);
+        questionHistory = questionHistory.slice(0, -1);
+      }
+      if (route.view !== 'quiz') navigateTo('quiz');
+      else window.scrollTo({ top: 0 });
+      return;
+    }
     if (questionHistory.length > 0) {
       const prevIdx = questionHistory[questionHistory.length - 1];
       questionHistory = questionHistory.slice(0, -1);
       currentQuestionIndex = prevIdx;
-      intermissionOpen = false;
       if (route.view !== 'quiz') {
         navigateTo('quiz');
       } else {
@@ -305,15 +335,18 @@
   }
 
   function handleSkipQuestion() {
-    const currentQ = QUESTIONS_DATA[currentQuestionIndex];
-    // Remove answer if previously stored
+    if (!currentQuestion) return;
     const updated = { ...userAnswers };
-    delete updated[currentQ.id];
+    delete updated[currentQuestion.id];
     userAnswers = updated;
     handleNextQuestion();
   }
 
   function handleContinueFromIntermission() {
+    if (intermissionIsFinal) {
+      finishQuiz();
+      return;
+    }
     triggerTopLoader();
     intermissionOpen = false;
     window.scrollTo({ top: 0 });
@@ -354,27 +387,38 @@
   {:else if activeView === 'quiz'}
     {#if intermissionOpen}
       <IntermissionView
-        {completedRound}
+        stage={completedStage}
+        {nextStage}
+        isFinal={intermissionIsFinal}
         {userAnswers}
         {questionWeights}
         {steering}
-        onSteeringChange={handleSteeringChange}
         onContinue={handleContinueFromIntermission}
         onBack={handlePrevQuestion}
       />
-    {:else}
+    {:else if currentQuestion}
       <QuizView
-        currentIndex={currentQuestionIndex}
+        question={currentQuestion}
+        index={currentQuestionIndex}
+        total={quizQuestions.length}
+        answeredCount={answeredCount}
+        stage={currentStage}
         {userAnswers}
         {questionWeights}
-        {steering}
         onAnswer={handleAnswer}
         onWeightChange={handleWeightChange}
-        onSteeringChange={handleSteeringChange}
         onNext={handleNextQuestion}
         onPrev={handlePrevQuestion}
         onSkip={handleSkipQuestion}
       />
+    {:else}
+      <div class="page-container">
+        <div class="not-found-card">
+          <h1>No questions left to answer</h1>
+          <p>Restart the finder to build a fresh shortlist.</p>
+          <button class="btn-primary" onclick={handleStartQuiz}>Start again</button>
+        </div>
+      </div>
     {/if}
   {:else if activeView === 'results'}
     <ResultsView

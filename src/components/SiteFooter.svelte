@@ -1,5 +1,5 @@
 <script>
-  import { FAMILY_PAGES, USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
+  import { landingPath } from '../data/landingPages.js';
 
   let { onNavigate, distroCount = 0 } = $props();
 </script>
@@ -20,46 +20,25 @@
       <ul class="footer-list">
         <li><button onclick={() => onNavigate('welcome')}>Finder quiz</button></li>
         <li><button onclick={() => onNavigate('directory')}>Distro directory</button></li>
-        <li><button onclick={() => onNavigate('compare')}>Side-by-side comparison</button></li>
-        <li><a href={landingPath('hub', '')}>All Linux distributions</a></li>
-      </ul>
-    </div>
-
-    <div>
-      <h3 class="footer-heading">Families</h3>
-      <ul class="footer-list">
-        {#each FAMILY_PAGES as family}
-          <li><a href={landingPath('family', family.slug)}>{family.label}</a></li>
-        {/each}
-      </ul>
-    </div>
-
-    <div>
-      <h3 class="footer-heading">Use cases</h3>
-      <ul class="footer-list">
-        {#each USE_CASE_PAGES as useCase}
-          <li><a href={landingPath('use-case', useCase.slug)}>{useCase.label}</a></li>
-        {/each}
-      </ul>
-    </div>
-
-    <div>
-      <h3 class="footer-heading">Legal</h3>
-      <ul class="footer-list">
-        <li><button onclick={() => onNavigate('privacy')}>Privacy &amp; GDPR</button></li>
-        <li><button onclick={() => onNavigate('terms')}>Terms of service</button></li>
+        <li><button onclick={() => onNavigate('compare')}>Comparison tool</button></li>
+        <li><a href={landingPath('hub', '')}>All distributions</a></li>
       </ul>
     </div>
 
     <div class="footer-credit">
-      <h3 class="footer-heading">Build</h3>
+      <h3 class="footer-heading">Project</h3>
       <span>Built by <strong>angeldev0</strong></span>
-      <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">adev0.eu ↗</a>
+      <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">https://adev0.eu ↗</a>
+      <span class="footer-note">Open data · no trackers · no accounts</span>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} LinuxMatch — zero telemetry, no accounts, nothing stored.</span>
-    <span>Design &amp; code by angeldev0 · <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">adev0.eu</a></span>
+    <span>© {new Date().getFullYear()} LinuxMatch — zero telemetry, nothing stored.</span>
+    <div class="footer-legal">
+      <button onclick={() => onNavigate('privacy')}>Privacy</button>
+      <span aria-hidden="true">·</span>
+      <button onclick={() => onNavigate('terms')}>Terms</button>
+    </div>
   </div>
 </footer>

@@ -347,10 +347,10 @@
 
   .meta-grid dt {
     font-family: var(--font-label);
-    font-size: 0.66rem;
+    font-size: 0.68rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     color: var(--text-subtle);
   }
 
@@ -395,9 +395,9 @@
   }
 
   .shot-caption strong {
-    color: var(--text-subtle);
-    text-transform: uppercase;
-    font-size: 0.68rem;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 700;
     margin-right: 5px;
   }
 
@@ -415,18 +415,22 @@
     gap: 18px;
   }
 
+  /* Sections are separated by quiet dividers instead of stacked boxes. */
   .panel {
-    border: 1px solid var(--border-color);
-    background-color: var(--card-bg);
-    padding: 20px 22px;
+    padding: 4px 0;
+  }
+
+  .panel + .panel {
+    border-top: 1px solid var(--border-color);
+    padding-top: 18px;
   }
 
   .section-title {
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 800;
     font-family: var(--font-label);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
     color: var(--text-subtle);
     border-bottom: 1px solid var(--border-color);
     padding-bottom: 8px;
@@ -439,8 +443,8 @@
     display: flex;
     flex-direction: column;
     gap: 9px;
-    font-size: 0.93rem;
-    line-height: 1.45;
+    font-size: 0.94rem;
+    line-height: 1.5;
   }
 
   .pros-list li,
@@ -472,10 +476,11 @@
   .use-tag {
     font-family: var(--font-label);
     font-size: 0.76rem;
-    font-weight: 700;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-secondary);
-    padding: 4px 10px;
+    font-weight: 500;
+    border: 1px solid var(--tag-neutral-border);
+    background-color: var(--tag-neutral-bg);
+    color: var(--tag-neutral-text);
+    padding: 5px 10px;
   }
 
   .footnote {
@@ -495,9 +500,9 @@
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    padding: 7px 0;
-    border-bottom: 1px dashed var(--border-color);
-    font-size: 0.85rem;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.86rem;
   }
 
   .spec-list div:last-child {
@@ -506,8 +511,7 @@
 
   .spec-list dt {
     font-family: var(--font-label);
-    font-size: 0.72rem;
-    text-transform: uppercase;
+    font-size: 0.8rem;
     color: var(--text-subtle);
     flex-shrink: 0;
   }

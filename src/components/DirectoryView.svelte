@@ -266,23 +266,19 @@
             <div class="card-chip-row">
               <span class="chip chip--accent">{distro.releaseModel}</span>
               <span class="chip">{distro.initSystem}</span>
-              {#each (distro.desktopEnvironments || []).slice(0, 2) as de}
-                <span class="chip chip--outline">{de}</span>
+              {#each (distro.desktopEnvironments || []).slice(0, 1) as de}
+                <span class="chip">{de}</span>
               {/each}
             </div>
 
             <div class="card-specs-row">
-              <span title={distro.packageManager}>
-                <strong>Packages</strong> {primaryPackageManager(distro.packageManager)}
-              </span>
-              <span title={distro.userLevel}><strong>Target</strong> {distro.userLevel}</span>
-              <span><strong>Since</strong> {distro.firstRelease ? distro.firstRelease.slice(0, 4) : '—'}</span>
+              <span title={distro.packageManager}><strong>Packages</strong> {primaryPackageManager(distro.packageManager)}</span>
               <span><strong>Updated</strong> {shortDate(distro.latestRelease) || '—'}</span>
             </div>
           </div>
 
           <div class="card-footer">
-            <span>View full profile</span>
+            <span>View profile</span>
             <span class="card-arrow" aria-hidden="true">→</span>
           </div>
         </a>
@@ -328,7 +324,7 @@
     font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     color: var(--text-subtle);
   }
 
@@ -523,7 +519,7 @@
     position: relative;
     aspect-ratio: 8 / 5;
     border-bottom: 1px solid var(--border-color);
-    background-color: #08080a;
+    background-color: var(--image-void);
     overflow: hidden;
   }
 
@@ -540,18 +536,19 @@
     object-position: center;
   }
 
-  /* Soft upward gradient so the identity block stays legible on any screenshot. */
+  /* Soft upward scrim so the identity block stays legible without hiding the
+     full screenshot. Tied to the same neutral image plate as the other shots. */
   .card-scrim {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background: linear-gradient(
       to top,
-      rgba(6, 8, 4, 0.94) 0%,
-      rgba(6, 8, 4, 0.86) 22%,
-      rgba(6, 8, 4, 0.62) 42%,
-      rgba(6, 8, 4, 0.18) 68%,
-      rgba(6, 8, 4, 0) 100%
+      rgba(8, 10, 6, 0.92) 0%,
+      rgba(8, 10, 6, 0.8) 20%,
+      rgba(8, 10, 6, 0.5) 40%,
+      rgba(8, 10, 6, 0.12) 66%,
+      rgba(8, 10, 6, 0) 100%
     );
   }
 
@@ -560,7 +557,7 @@
     top: 8px;
     right: 8px;
     z-index: 2;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
   }
 
   .card-overlay {
@@ -569,8 +566,8 @@
     padding: 14px 16px 16px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    color: #FFFFFF;
+    gap: 7px;
+    color: var(--scrim-text);
   }
 
   .card-title-row {
@@ -600,7 +597,7 @@
     font-family: var(--font-label);
     font-size: 0.72rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.68);
+    color: var(--scrim-text-muted);
     margin-top: 2px;
     white-space: nowrap;
     overflow: hidden;
@@ -608,8 +605,9 @@
   }
 
   .card-tagline {
-    font-size: 0.87rem;
-    color: rgba(255, 255, 255, 0.82);
+    font-family: var(--font-label);
+    font-size: 0.84rem;
+    color: var(--scrim-text);
     line-height: 1.45;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -633,30 +631,24 @@
 
   .chip {
     font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: 0.7rem;
+    font-weight: 500;
     padding: 4px 8px;
     background-color: var(--tag-neutral-bg);
     border: 1px solid var(--tag-neutral-border);
     color: var(--tag-neutral-text);
     white-space: nowrap;
-    max-width: 16ch;
+    max-width: 18ch;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
+  /* One accent chip at most; everything else stays neutral. */
   .chip--accent {
     background-color: var(--tag-accent-bg);
     border-color: var(--tag-accent-border);
     color: var(--tag-accent-text);
     font-weight: 700;
-  }
-
-  .chip--outline {
-    background-color: transparent;
-    border-color: var(--border-color);
-    color: var(--text-muted);
   }
 
   .card-specs-row {
@@ -679,12 +671,10 @@
   }
 
   .card-specs-row strong {
-    color: var(--text-subtle);
-    text-transform: uppercase;
-    font-size: 0.64rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    margin-right: 5px;
+    color: var(--text-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-right: 4px;
   }
 
   .card-footer {

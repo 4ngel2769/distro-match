@@ -139,7 +139,7 @@
   .gallery-frame {
     position: relative;
     height: var(--gallery-height);
-    background-color: #08080a;
+    background-color: var(--image-void);
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -184,7 +184,7 @@
     flex-direction: column;
     align-items: center;
     gap: 6px;
-    color: #d7d2cc;
+    color: var(--scrim-text-muted);
     font-size: 0.88rem;
     text-align: center;
     padding: 20px;
@@ -201,9 +201,9 @@
     transform: translateY(-50%);
     width: 36px;
     height: 48px;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    background: rgba(10, 10, 12, 0.72);
-    color: #ffffff;
+    border: 1px solid var(--scrim-border);
+    background: var(--scrim-plate);
+    color: var(--scrim-text);
     font-size: 1.6rem;
     line-height: 1;
     cursor: pointer;
@@ -236,9 +236,9 @@
     font-size: 0.68rem;
     font-weight: 700;
     letter-spacing: 0.04em;
-    color: #ffffff;
-    background: rgba(10, 10, 12, 0.72);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: var(--scrim-text);
+    background: var(--scrim-plate);
+    border: 1px solid var(--scrim-border);
     padding: 3px 7px;
   }
 
@@ -284,7 +284,7 @@
     height: 34px;
     padding: 0;
     border: 2px solid var(--border-color);
-    background: #08080a;
+    background: var(--image-void);
     cursor: pointer;
     opacity: 0.62;
     transition: opacity 0.12s ease, border-color 0.12s ease;
@@ -294,7 +294,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background: #08080a;
+    background: var(--image-void);
     display: block;
   }
 

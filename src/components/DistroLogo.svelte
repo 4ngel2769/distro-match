@@ -12,7 +12,8 @@
   let failed = $state(false);
   let src = $derived(distro?.logoUrl || '');
   let name = $derived(distro?.name || '');
-  let accent = $derived(distro?.accentColor || '#475569');
+  // Brand colour when present; otherwise the app's lime accent (a CSS token).
+  let accent = $derived(distro?.accentColor || 'var(--accent-fill)');
 
   // Many distros only publish a wordmark. Give those a wider tile so the mark
   // stays legible instead of shrinking to a 20px-tall strip in a square box.
@@ -39,13 +40,14 @@
 
   // Pick black or white text for the accent tile so the monogram stays legible.
   let fallbackTextColor = $derived.by(() => {
-    const hex = (accent || '#475569').replace('#', '');
-    if (hex.length !== 6) return '#0F172A';
+    const hex = (accent || '').replace('#', '');
+    // A CSS token (e.g. the lime fallback) is dark-on-light, like a light brand tile.
+    if (hex.length !== 6) return 'var(--brand-ink)';
     const r = parseInt(hex.slice(0, 2), 16);
     const g = parseInt(hex.slice(2, 4), 16);
     const b = parseInt(hex.slice(4, 6), 16);
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.62 ? '#0F172A' : '#FFFFFF';
+    return luminance > 0.62 ? 'var(--brand-ink)' : 'var(--brand-ink-light)';
   });
 </script>
 

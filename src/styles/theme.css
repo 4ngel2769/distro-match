@@ -22,11 +22,23 @@
   --accent-contrast: #0C1405;
   --accent-wash: rgba(160, 240, 2, 0.14);
 
-  /* Semantic states (kept inside the same green family + minimal warm signal) */
-  --accent-green: #2E7D32;
-  --accent-red: #C62828;
-  --accent-amber: #B26A00;
+  /* Semantic states — muted so they sit alongside the lime without shouting.
+     Reserved for errors/warnings only; never used as decorative accents. */
+  --accent-green: #3E7A2E;
+  --accent-red: #B14A3C;
+  --accent-amber: #9A6B22;
   --accent-moss: #5C8A16;
+
+  /* Image surfaces — theme-independent plates layered over screenshots.
+     Lime stays the only saturated app accent; these are neutral dark glass. */
+  --image-void: #08080A;
+  --scrim-plate: rgba(8, 10, 6, 0.82);
+  --scrim-plate-strong: rgba(8, 10, 6, 0.94);
+  --scrim-border: rgba(245, 247, 240, 0.22);
+  --scrim-text: #F5F7F0;
+  --scrim-text-muted: rgba(245, 247, 240, 0.72);
+  --brand-ink: #10180A;
+  --brand-ink-light: #FFFFFF;
 
   --card-bg: #FFFFFF;
   --surface-hover: #F7F9F3;
@@ -85,9 +97,9 @@
   --accent-contrast: #0A0C08;
   --accent-wash: rgba(160, 240, 2, 0.16);
 
-  --accent-green: #86E06A;
-  --accent-red: #FF7A7A;
-  --accent-amber: #FFC44D;
+  --accent-green: #9BD97E;
+  --accent-red: #E68B78;
+  --accent-amber: #D9AE55;
   --accent-moss: #B6D98A;
 
   --card-bg: #0E110B;
@@ -428,9 +440,10 @@ button, input, select, textarea {
 .distro-real-screenshot {
   width: 100%;
   height: 220px;
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
   border: 1px solid var(--border-color);
-  background-color: #000000;
+  background-color: var(--image-void);
 }
 
 /* Tier Badge */
@@ -439,7 +452,7 @@ button, input, select, textarea {
   font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   padding: 3px 7px;
   display: inline-block;
   border: 1px solid transparent;
@@ -568,11 +581,11 @@ button, input, select, textarea {
 }
 
 .footer-container {
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) repeat(5, minmax(0, 1fr));
-  gap: 28px 32px;
+  grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr) minmax(0, 1.1fr);
+  gap: 30px 40px;
   align-items: start;
 }
 
@@ -580,7 +593,7 @@ button, input, select, textarea {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 42ch;
+  max-width: 46ch;
 }
 
 .footer-brand-mark {
@@ -601,7 +614,7 @@ button, input, select, textarea {
   font-family: var(--font-label);
   font-size: 0.7rem;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--text-subtle);
   margin-bottom: 10px;
@@ -660,10 +673,18 @@ button, input, select, textarea {
   background: none;
 }
 
+.footer-note {
+  margin-top: 6px;
+  font-family: var(--font-label);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-subtle);
+}
+
 .footer-bottom {
-  max-width: 1200px;
-  margin: 28px auto 0;
-  padding-top: 14px;
+  max-width: 1000px;
+  margin: 26px auto 0;
+  padding-top: 12px;
   border-top: 1px solid var(--border-color);
   display: flex;
   justify-content: space-between;
@@ -675,8 +696,32 @@ button, input, select, textarea {
   color: var(--text-subtle);
 }
 
-.footer-bottom span {
+.footer-bottom > span {
   white-space: nowrap;
+}
+
+/* Legal links live only in the quiet bottom bar, never in the main nav. */
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-legal button {
+  font-family: var(--font-label);
+  font-size: 0.74rem;
+  color: var(--text-subtle);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.footer-legal button:hover {
+  color: var(--text-main);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 @media (max-width: 720px) {

@@ -12,7 +12,7 @@
       Find Your Ideal Linux Distribution With Mathematical Precision.
     </h1>
     <p class="welcome-subtext">
-      Linux isn't one operating system — it's an expansive universe of hundreds of independent distributions tailored for specific hardware, philosophies, init systems, and workflows. Stop distro-hopping blindly. Let our 4-round triangulation survey steer you directly to your ideal match.
+      Linux isn't one operating system — it's a universe of distributions built for different hardware, philosophies and workflows. Stop distro-hopping blindly. A short, focused questionnaire narrows the field to the handful that actually fit.
     </p>
 
     <div class="stats-grid">
@@ -21,12 +21,12 @@
         <div class="stat-label">Distributions in Catalog</div>
       </div>
       <div class="stat-box">
-        <div class="stat-number">23</div>
-        <div class="stat-label">Precision Questions</div>
+        <div class="stat-number">16</div>
+        <div class="stat-label">Pinpoint Questions</div>
       </div>
       <div class="stat-box">
-        <div class="stat-number">4</div>
-        <div class="stat-label">Progressive Survey Rounds</div>
+        <div class="stat-number">3</div>
+        <div class="stat-label">Short Stages</div>
       </div>
       <div class="stat-box">
         <div class="stat-number">0%</div>
@@ -41,7 +41,7 @@
 
     <div class="hero-buttons">
       <button class="btn-primary" onclick={onStartQuiz}>
-        Launch Triangulation Survey ›
+        Find my distro ›
       </button>
       <button class="btn-secondary" onclick={() => onNavigate('directory')}>
         Browse All {LINUX_DISTROS.length}+ Distros
@@ -57,10 +57,10 @@
       How the Triangulation System Operates:
     </h3>
     <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; line-height: 1.6;">
-      Rather than asking superficial questions, LinuxMatch probes your hardware topology (dGPUs, AMD Ryzen APUs, hybrid graphics, low memory budgets), ideological constraints (100% Libre FSF compliance vs pragmatic drivers), init architecture (systemd vs OpenRC, runit, s6, sysvinit), and filesystem immutability.
+      Each question maps to a real field in the catalogue: GPU drivers, memory budget, update cadence, init system, software freedom, desktop style and package ecosystem. Skip what does not apply, and mark what matters as a must-have.
     </p>
     <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-      Between each round, you receive a live candidate report previewing top contenders. You can adjust the importance weight of any question, skip questions anytime, and actively steer the decision engine with live sliders.
+      After each short stage you get a quick look at the current front-runners. The result then shows the score breakdown, the trade-offs you accepted and a diversified shortlist — not just a single name.
     </p>
   </div>
 </div>

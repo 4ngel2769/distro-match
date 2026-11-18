@@ -11,13 +11,14 @@ An encyclopedic, precision Linux distribution picker and triangulation engine co
    - Snappy state management, reactive filtering, and zero-runtime bloat.
 
 2. **Revamped Triangulation & Real-Time Steering**:
+   - **16 pinpoint questions across 3 short stages** replace the old 23-question survey. Each option maps to a real catalogue field; conditional questions (NVIDIA drivers) are skipped when they do not apply. Importance is explicit: *nice to have*, *important*, or *must-have* — must-haves on factual constraints become hard filters.
    - Fixed flawed legacy matching that previously over-promoted niche distros like Calculate Linux.
    - **Distro Popularity & Tier Classification**:
      - **Flagships (Tier 1)**: Linux Mint, Ubuntu, Debian, Fedora, Arch, Pop!_OS, openSUSE, Zorin, EndeavourOS.
      - **Specialists (Tier 2)**: Bazzite, Nobara, CachyOS, SteamOS, Manjaro, KDE neon, NixOS, Void, Alpine, Tuxedo, Kali, Tails, Qubes, Proxmox, TrueNAS.
      - **Niche Systems (Tier 3)**: Calculate Linux, Gentoo, Slackware, Tiny Core, Devuan, Artix, Bedrock. Niche distros are now gated and will **never** be recommended to beginners or casual users unless explicitly unlocked.
    - **Interactive Real-Time Steering Dial**:
-     - Adjust levers at any point (during questions, in intermissions, or on the final results page):
+     - Adjust levers at any point (on the welcome screen or the final results page):
        - *Distro Scope*: Mainstream/Flagships vs Unrestricted (All).
        - *Family Bias*: Ubuntu, Debian, Arch, Fedora/RHEL, openSUSE, Independent.
        - *Gaming Boost*: Nobara, Bazzite, CachyOS, Pop!_OS.

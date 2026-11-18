@@ -27,7 +27,7 @@
 
 <div
   class="screenshot-shell"
-  style="--shot-height: {height}px; --shot-accent: {distro?.accentColor || '#0284C7'};"
+  style="--shot-height: {height}px; --shot-accent: {distro?.accentColor || 'var(--accent-fill)'};"
 >
   {#if src && !failed}
     <img
@@ -93,7 +93,7 @@
   .screenshot-shell {
     position: relative;
     border: 1px solid var(--border-color);
-    background-color: #000000;
+    background-color: var(--image-void);
     overflow: hidden;
   }
 
@@ -103,19 +103,19 @@
     height: var(--shot-height);
     object-fit: contain;
     object-position: center;
-    background: #08080a;
+    background: var(--image-void);
   }
 
   .screenshot-shell img.shot-letterbox {
     object-fit: contain;
-    background: #08080a;
+    background: var(--image-void);
   }
 
   /* Show the whole capture — letterboxed rather than cropped. */
   .screenshot-shell img.shot-contain {
     object-fit: contain;
     object-position: center;
-    background: #08080a;
+    background: var(--image-void);
   }
 
   .shot-placeholder {
@@ -198,8 +198,8 @@
     font-family: var(--font-label);
     font-size: 0.68rem;
     padding: 3px 8px;
-    background-color: rgba(15, 23, 42, 0.82);
-    color: #e2e8f0;
+    background-color: var(--scrim-plate);
+    color: var(--scrim-text);
     text-decoration: none;
     max-width: 100%;
     white-space: nowrap;
@@ -208,7 +208,7 @@
   }
 
   .screenshot-credit:hover {
-    background-color: rgba(15, 23, 42, 0.95);
-    color: #ffffff;
+    background-color: var(--scrim-plate-strong);
+    color: var(--scrim-text);
   }
 </style>
