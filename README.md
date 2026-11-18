@@ -209,6 +209,26 @@ export const SITE = {
 
 Then rebuild. Keyword landing pages are defined in `src/data/landingPages.js`, which both the app and the pre-render read.
 
+### Search engines and crawlers
+
+Every build generates a discovery set in `dist/`:
+
+| File | Purpose |
+| --- | --- |
+| `sitemap.xml` | All pre-rendered URLs with `lastmod`, `changefreq` and `priority`. |
+| `robots.txt` | Allows all crawlers except generated `/compare/*` permutations, and points at the sitemap. |
+| `llms.txt` | Short, curated index for AI assistants and LLM search. |
+| `llms-full.txt` | Complete index of every route. |
+| `site.webmanifest` | Installable web app metadata. |
+
+To verify the site in Google Search Console, choose the HTML tag method and set the token before building:
+
+```bash
+GOOGLE_SITE_VERIFICATION="your-token-here" bun run build
+```
+
+The meta tag is written to every pre-rendered page. Once the property is created, submit `https://linuxmatch.adev0.eu/sitemap.xml` under **Sitemaps**. Canonicals, JSON-LD and social tags all use the primary domain, so the `linuxmatch.pages.dev` mirror will not create duplicate-content conflicts.
+
 ---
 
 ## Credits

@@ -52,7 +52,7 @@ export const FAMILY_PAGES = [
     label: 'openSUSE',
     title: 'openSUSE and SUSE-Based Linux Distributions Compared | LinuxMatch',
     description:
-      'openSUSE Tumbleweed, Leap, MicroOS, SLED and SUSE Linux Enterprise compared: rolling and fixed release Linux distributions withzypper, Btrfs snapshots and YaST.',
+      'openSUSE Tumbleweed, Leap, MicroOS, SLED and SUSE Linux Enterprise compared: rolling and fixed release Linux distributions with zypper, Btrfs snapshots and YaST.',
     intro:
       'openSUSE is one of the few remaining independent Linux vendors, shipping both a rolling Tumbleweed release and a fixed Leap release with long enterprise support.',
     match: (d) => d.family === 'openSUSE'

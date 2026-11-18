@@ -4,7 +4,7 @@ import { buildSeo } from './scripts/seo-build.mjs';
 
 /**
  * Emits the SEO artefacts (per-route static HTML, sitemap.xml, robots.txt,
- * webmanifest, social image) right after the bundle is written.
+ * llms files, webmanifest, social image) right after the bundle is written.
  */
 function seoPlugin() {
   return {
@@ -13,7 +13,7 @@ function seoPlugin() {
     async closeBundle() {
       const result = await buildSeo({ distDir: 'dist' });
       this.info(
-        `SEO: ${result.routes} routes pre-rendered, sitemap.xml + robots.txt written`
+        `SEO: ${result.routes} routes pre-rendered, sitemap, robots and llms files written`
       );
     }
   };

@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { readSearchTerm, searchUrlFor } from '../lib/searchUrl.js';
   import { LINUX_DISTROS } from '../data/distros.js';
   import { POPULARITY_YEARS } from '../data/distroFacts.js';
   import { USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
@@ -24,7 +25,7 @@
     specs = loadSpecs();
   });
 
-  let searchQuery = $state('');
+  let searchQuery = $state(typeof window === 'undefined' ? '' : readSearchTerm(window.location.search));
   let selectedFamily = $state('all');
   let sortBy = $state('popularity'); // popularity | age | updated | alphabetical
   let selectedYear = $state('current'); // current | 2025 | ... | 2021
@@ -33,6 +34,14 @@
   const families = ['all', 'Ubuntu', 'Debian', 'Arch', 'Fedora/RHEL', 'openSUSE', 'Gentoo', 'Slackware', 'Independent'];
 
   let hasFilters = $derived(Boolean(searchQuery.trim()) || selectedFamily !== 'all');
+
+  // Keep the address bar in sync so a search is shareable and the WebSite
+  // SearchAction in the structured data resolves to a real filtered view.
+  $effect(() => {
+    const next = searchUrlFor(searchQuery, window.location.pathname, window.location.hash);
+    const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+    if (next !== current) history.replaceState(history.state, '', next);
+  });
 
   function resetFilters() {
     searchQuery = '';

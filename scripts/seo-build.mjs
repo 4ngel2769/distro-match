@@ -6,6 +6,7 @@
  *     content baked into the served markup (the SPA hydrates over it)
  *   - sitemap.xml covering every route and every distribution profile
  *   - robots.txt
+ *   - llms.txt and llms-full.txt for AI assistants and LLM search
  *   - site.webmanifest
  *   - a 1200x630 social share image
  *
@@ -561,6 +562,11 @@ function buildHead(route, originalHead = '') {
   const canonical = abs(route.path);
   const ogImage = `${SITE.primary}/og-image.png`;
   const blocks = route.jsonLd.map(jsonLd).join('\n  ');
+  // Set GOOGLE_SITE_VERIFICATION to the token Google Search Console gives you.
+  // The meta tag is emitted on every pre-rendered route, so any of them verifies.
+  const verification = process.env.GOOGLE_SITE_VERIFICATION
+    ? `<meta name="google-site-verification" content="${escapeHtml(process.env.GOOGLE_SITE_VERIFICATION)}">\n  `
+    : '';
 
   // Keep the tags Vite injected (stylesheet, module script, icon, fonts) and
   // drop only the ones this script owns. Script tags must be matched with
@@ -571,6 +577,8 @@ function buildHead(route, originalHead = '') {
     .filter(
       (tag) =>
         !/<title>/i.test(tag) &&
+        !/charset=/i.test(tag) &&
+        !/name="viewport"/i.test(tag) &&
         !/name="(description|keywords|robots|author|theme-color|color-scheme)"/i.test(tag) &&
         !/rel="(canonical|alternate)"/i.test(tag) &&
         !/property="og:/i.test(tag) &&
@@ -588,7 +596,7 @@ function buildHead(route, originalHead = '') {
   <meta name="theme-color" content="${SITE.themeColor}">
   <meta name="color-scheme" content="light dark">
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-  <link rel="canonical" href="${canonical}">
+  ${verification}<link rel="canonical" href="${canonical}">
   <link rel="alternate" hreflang="x-default" href="${canonical}">
   <link rel="alternate" hreflang="en" href="${canonical}">
   <link rel="alternate" type="application/manifest" href="/site.webmanifest">
@@ -648,6 +656,77 @@ Allow: /
 Disallow: /compare/*
 
 Sitemap: ${SITE.primary}/sitemap.xml
+`;
+}
+
+/** Concise, human-curated index for LLMs and AI search assistants. */
+function buildLlmsTxt(routes) {
+  const byPath = new Map(routes.map((route) => [route.path, route]));
+  const link = (path) => {
+    const route = byPath.get(path);
+    if (!route) return '';
+    const label = route.title.replace(/ \| LinuxMatch$/, '').split(':')[0];
+    return `- [${label}](${abs(path)}): ${route.description}`;
+  };
+  const group = (predicate) => routes.filter(predicate).map((route) => link(route.path));
+
+  const core = ['/', '/quiz', '/directory', '/compare', '/privacy', '/terms']
+    .map(link)
+    .filter(Boolean);
+  const profiles = routes
+    .filter((route) => route.path.startsWith('/distro/'))
+    .slice(0, 10)
+    .map((route) => link(route.path));
+
+  return `# ${SITE.name}
+
+> ${HOME_DESCRIPTION}
+
+Canonical URL: ${SITE.primary}/
+Sitemap: ${SITE.primary}/sitemap.xml
+Full index: ${SITE.primary}/llms-full.txt
+
+## Core pages
+
+${core.join('\n')}
+
+## Browse by family
+
+${group((route) => route.path.startsWith('/linux-distributions/') && route.path !== '/linux-distributions/').join('\n')}
+
+## Browse by use case
+
+${group((route) => route.path.startsWith('/linux-for-')).join('\n')}
+
+## Example distribution profiles
+
+${profiles.join('\n')}
+
+## Notes
+
+- Every page is pre-rendered as static HTML, then hydrates into a client-side Svelte app.
+- The directory accepts a search term in the URL: ${SITE.primary}/directory?q=ubuntu
+- No accounts, analytics or tracking cookies. One optional cookie stores the light or dark theme choice.
+- Distro names and logos are trademarks of their respective owners. Per-asset credits appear on each profile.
+`;
+}
+
+/** Complete route index for assistants that need every URL. */
+function buildLlmsFull(routes) {
+  const pages = routes.map(
+    (route) =>
+      `- [${route.title.replace(/ \| LinuxMatch$/, '')}](${abs(route.path)}): ${route.description}`
+  );
+
+  return `# ${SITE.name} - full content index
+
+> ${HOME_DESCRIPTION}
+
+Canonical URL: ${SITE.primary}/
+Sitemap: ${SITE.primary}/sitemap.xml
+Short index: ${SITE.primary}/llms.txt
+
+${pages.join('\n')}
 `;
 }
 
@@ -752,6 +831,8 @@ export async function buildSeo(options = {}) {
 
   writeFileSync(join(distDir, 'sitemap.xml'), buildSitemap(routes));
   writeFileSync(join(distDir, 'robots.txt'), buildRobots());
+  writeFileSync(join(distDir, 'llms.txt'), buildLlmsTxt(routes));
+  writeFileSync(join(distDir, 'llms-full.txt'), buildLlmsFull(routes));
   writeFileSync(join(distDir, 'site.webmanifest'), buildManifest());
   await writeOgImage(distDir);
 
@@ -765,7 +846,7 @@ if (invokedDirectly || process.argv[1]?.endsWith('seo-build.mjs')) {
   buildSeo()
     .then((result) => {
       console.log(
-        `[seo] ${result.routes} routes pre-rendered (${result.distros} distro profiles), sitemap.xml + robots.txt written.`
+        `[seo] ${result.routes} routes pre-rendered (${result.distros} distro profiles); sitemap.xml, robots.txt, llms.txt and llms-full.txt written.`
       );
     })
     .catch((error) => {
