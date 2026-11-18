@@ -40,3 +40,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 dev.log
 dev.err.log
 *.log
+
+# Internal product and agent working files, not part of the public repo
+PRODUCT.md
+.impeccable/
+.superpowers/
+docs/superpowers/
+state/

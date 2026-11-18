@@ -152,7 +152,6 @@ scripts/          SEO pre-render, asset discovery/verification, fact refreshes
 public/           Logo, favicons, verified images and host config
 tests/            Matching and swipe-deck tests
 DESIGN.md         Design system reference
-PRODUCT.md        Product definition and principles
 CONTRIBUTING.md   How to contribute
 ```
 
