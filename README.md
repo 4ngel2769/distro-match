@@ -20,17 +20,29 @@ A friendly, private Linux distro finder. Take a short adaptive quiz, or tell Lin
 
 ---
 
-## At a glance
+## Contents
 
-| 116+ | 198 | 101 | 0 |
-| :---: | :---: | :---: | :---: |
-| distributions catalogued | CPUs in the picker | GPUs in the picker | trackers, accounts or analytics |
+- [Why LinuxMatch?](#why-linuxmatch)
+- [Features](#features)
+- [Quick start](#quick-start)
+- [Routes](#routes)
+- [Project layout](#project-layout)
+- [Privacy](#privacy)
+- [Deployment](#deployment)
+- [Credits](#credits)
+- [Contributing](#contributing)
 
 ---
 
 ## Why LinuxMatch?
 
-Picking a Linux distribution usually means reading a dozen forum threads and guessing. LinuxMatch turns that into a clear, honest answer:
+Picking a Linux distribution usually means reading a dozen forum threads and guessing. LinuxMatch turns that into a clear, honest answer, built around four things that matter:
+
+| 116+ verified profiles | An adaptive quiz | Hardware-aware matching | Private by default |
+| :--- | :--- | :--- | :--- |
+| Real specs, screenshots, pros and cons for every distribution, not just a name in a list. | A short branching interview that skips questions which cannot change the answer. | Tell it your processor, graphics card and memory to see what fits and why. | No accounts, no analytics, no tracking cookies. Everything runs in your browser. |
+
+### What that means in practice
 
 - **It asks only what matters.** The questionnaire is a dialogue tree. Questions that cannot change the recommendation are skipped, and an optional expert path adds kernel and security detail without slowing newcomers down.
 - **It shows its work.** Every result comes with a match score, the reasons behind it, and a diversified shortlist rather than one unexplained winner.
@@ -49,7 +61,7 @@ Picking a Linux distribution usually means reading a dozen forum threads and gue
     </td>
     <td width="50%" valign="top">
       <strong>Hardware-first spec finder</strong><br />
-      Pick a platform and a use case, then choose a CPU from a lazy-loaded brand → generation → model cascade and a searchable GPU list. RAM accepts custom values.
+      Pick a platform and a use case, then add your processor, graphics card and memory. LinuxMatch checks architecture, driver support and RAM needs, then explains the verdict.
     </td>
   </tr>
   <tr>
@@ -75,7 +87,7 @@ Picking a Linux distribution usually means reading a dozen forum threads and gue
   <tr>
     <td width="50%" valign="top">
       <strong>Warm, accessible design</strong><br />
-      Light and dark themes, restrained radii, visible focus, reduced-motion support and a single indigo accent. A liquid-glass navbar and an animated hero that pauses offscreen.
+      Light and dark themes, restrained radii, visible focus, reduced-motion support and a single indigo accent, plus an animated hero that pauses offscreen.
     </td>
     <td width="50%" valign="top">
       <strong>Static-friendly SEO</strong><br />
@@ -154,19 +166,57 @@ LinuxMatch runs entirely in the browser. There are no accounts, no analytics and
 
 ## Deployment
 
-The default host is Cloudflare Pages. Set the build command to `bun run build` and the output directory to `dist`. `public/_headers` provides caching and baseline security headers, and `public/_redirects` keeps the SPA fallback.
+The default host is Cloudflare Pages. Use these build settings:
 
-`bun run build` runs `vite build`, then the `linuxmatch-seo` plugin emits pre-rendered HTML for every route plus `sitemap.xml`, `robots.txt`, `site.webmanifest` and a 1200×630 `og-image.png`. Structured data covers `WebSite`, `Organization`, `FAQPage`, `CollectionPage`, `ItemList`, `SoftwareApplication`, `WebApplication` and `BreadcrumbList`.
+```text
+Build command:     bun run build
+Output directory:  dist
+```
 
-The canonical domain is `https://linuxmatch.adev0.eu`, with a mirror at `https://linuxmatch.pages.dev`. To change domains, update `SITE` in `scripts/seo-build.mjs` and rebuild. Keyword landing pages are defined in `src/data/landingPages.js`, which both the app and the pre-render read.
+`public/_headers` provides caching and baseline security headers, and `public/_redirects` keeps the SPA fallback for paths with no pre-rendered file.
+
+### Build output
+
+```bash
+bun run build
+```
+
+This runs `vite build`, then the `linuxmatch-seo` plugin pre-renders every route and emits:
+
+```text
+dist/index.html
+dist/<route>/index.html     route-specific metadata and structured data
+dist/sitemap.xml
+dist/robots.txt
+dist/site.webmanifest
+dist/og-image.png           1200 × 630 social share card
+```
+
+Structured data covers `WebSite`, `Organization`, `FAQPage`, `CollectionPage`, `ItemList`, `SoftwareApplication`, `WebApplication` and `BreadcrumbList`.
+
+### Changing the domain
+
+The canonical domain is `https://linuxmatch.adev0.eu`, with a mirror at `https://linuxmatch.pages.dev`. To change them, edit `SITE` in `scripts/seo-build.mjs`:
+
+```js
+export const SITE = {
+  name: 'LinuxMatch',
+  primary: 'https://your-domain.example',
+  mirror: 'https://your-mirror.example',
+  // ...
+};
+```
+
+Then rebuild. Keyword landing pages are defined in `src/data/landingPages.js`, which both the app and the pre-render read.
 
 ---
 
 ## Credits
 
-Distro names and logos are trademarks of their respective projects and are used here only to identify each distribution. Logos and screenshots are stored locally with per-asset credits shown on each profile page. Sources include Wikimedia Commons (under the licence named on the asset), DistroWatch, Simple Icons (CC0) and official project sites. If you redistribute this project, check the licence of each credited asset and remove any image whose terms do not fit your use.
-
-Built by [angeldev0](https://adev0.eu/).
+- **Distro names and logos** are trademarks of their respective projects and are used here only to identify each distribution.
+- **Logos and screenshots** are stored locally, with per-asset credits shown on each profile page. Sources include Wikimedia Commons (under the licence named on the asset), DistroWatch, Simple Icons (CC0) and official project sites.
+- **If you redistribute this project**, check the licence of each credited asset and remove any image whose terms do not fit your use.
+- **Built by** [angeldev0](https://adev0.eu/).
 
 ---
 
