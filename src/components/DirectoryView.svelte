@@ -109,11 +109,10 @@
 <div class="page-container">
   <section class="toolbar surface" aria-label="Directory controls">
     <div class="toolbar-intro">
-      <span class="field-label">CATALOGUE / ALL DISTRIBUTIONS</span>
-      <h1 class="directory-title">Linux Distribution Directory</h1>
+      <h1 class="directory-title">Find your next Linux distro</h1>
       <p class="directory-sub">
-        {LINUX_DISTROS.length} distributions, each with a full profile, verified logo and desktop screenshot.
-        Click any card to open its page.
+        Browse {LINUX_DISTROS.length} distributions. Each one has a real screenshot and a full profile —
+        click any card to take a closer look.
       </p>
     </div>
 
@@ -135,7 +134,7 @@
       </div>
 
       <div class="sort-controls">
-        <span class="field-label">SORT</span>
+        <span class="field-label">Sort by</span>
         <div class="sort-buttons" role="group" aria-label="Sort distributions">
           <button
             class="sort-btn"
@@ -195,7 +194,7 @@
     </div>
 
     <div class="family-controls">
-      <span class="field-label">FAMILY</span>
+      <span class="field-label">Family</span>
       <div class="filter-pills" role="group" aria-label="Filter by family">
         {#each families as fam}
           <button
@@ -212,15 +211,15 @@
 
     <div class="toolbar-foot">
       <p class="result-count">
-        SHOWING <span class="field-value">{filteredDistros.length}</span> / {LINUX_DISTROS.length}
+        Showing <span class="field-value">{filteredDistros.length}</span> of {LINUX_DISTROS.length}
         <span class="count-divider" aria-hidden="true"></span>
-        SORTED BY {sortBy === 'popularity'
-          ? `POPULARITY (${yearLabel().toUpperCase()})`
+        Sorted by {sortBy === 'popularity'
+          ? `popularity (${yearLabel()})`
           : sortBy === 'age'
-            ? `AGE (${sortDir === 'asc' ? 'OLDEST' : 'NEWEST'} FIRST)`
+            ? `age (${sortDir === 'asc' ? 'oldest' : 'newest'} first)`
             : sortBy === 'updated'
-              ? `LAST UPDATE (${sortDir === 'desc' ? 'NEWEST' : 'OLDEST'} FIRST)`
-              : 'NAME'}
+              ? `last update (${sortDir === 'desc' ? 'newest' : 'oldest'} first)`
+              : 'name'}
       </p>
 
       <div class="browse-hubs">
@@ -242,7 +241,6 @@
 
   {#if filteredDistros.length === 0}
     <div class="empty-state">
-      <div class="eyebrow field-label"><Icon name="alert" size={13} /> NO MATCHES</div>
       <h2>Nothing fits that filter</h2>
       <p>Try a broader search term or reset the family filter.</p>
       <button
@@ -328,13 +326,14 @@
   .toolbar {
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-6);
     margin-bottom: var(--space-5);
   }
 
   .toolbar-intro {
     padding-bottom: var(--space-4);
-    border-bottom: 1px solid var(--border-color);
   }
 
   .directory-title {
@@ -368,12 +367,14 @@
     gap: var(--space-2);
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
-    padding: 0 var(--space-3);
-    transition: border-color var(--dur-1) var(--ease-out);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .search-field:focus-within {
     border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px var(--accent-wash);
   }
 
   .search-icon {
@@ -401,12 +402,17 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: 1px solid transparent;
+    width: 26px;
+    height: 26px;
+    border: 0;
+    border-radius: var(--radius-pill);
     background: transparent;
     color: var(--text-subtle);
-    transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+  }
+
+  .clear-btn:hover {
+    background-color: var(--bg-tertiary);
   }
 
   .clear-btn:hover {
@@ -434,15 +440,16 @@
 
   .sort-btn,
   .filter-pill {
-    font-family: var(--font-label);
-    font-size: 0.76rem;
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
     color: var(--text-muted);
-    background-color: transparent;
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
-    padding: 5px 10px;
+    border-radius: var(--radius-pill);
+    padding: 7px 14px;
     transition: background-color var(--dur-1) var(--ease-out),
-      border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+      border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-spring);
   }
 
   .sort-btn:hover,
@@ -454,21 +461,22 @@
 
   .sort-btn.active,
   .filter-pill.active {
-    background-color: var(--selected-bg);
-    border-color: var(--selected-border);
-    color: var(--accent-ink);
+    background-color: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-contrast);
   }
 
   .sort-select,
   .sort-dir {
-    height: 31px;
-    padding: 0 9px;
+    height: 36px;
+    padding: 0 12px;
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
     color: var(--text-main);
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    font-variant-numeric: tabular-nums;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
     transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
   }
 
@@ -502,10 +510,9 @@
   }
 
   .result-count {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.03em;
-    color: var(--text-subtle);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    color: var(--text-muted);
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -545,24 +552,18 @@
   }
 
   .hub-link {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
     color: var(--text-muted);
     text-decoration: none;
-    padding: 2px var(--space-3);
-    border-left: 1px solid var(--border-color);
-    border-bottom: 1px solid transparent;
-    transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
-  }
-
-  .hub-link:first-of-type {
-    border-left: none;
-    padding-left: 0;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
   }
 
   .hub-link:hover {
     color: var(--accent-ink);
-    border-bottom-color: var(--accent-color);
+    background-color: var(--accent-soft);
   }
 
   .sr-only {
@@ -581,7 +582,7 @@
   .directory-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1px;
+    gap: var(--space-4);
   }
 
   .distro-card {
@@ -590,16 +591,21 @@
     min-width: 0;
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     color: inherit;
     text-decoration: none;
+    overflow: hidden;
     transition: background-color var(--dur-2) var(--ease-out),
-      border-color var(--dur-2) var(--ease-out);
+      border-color var(--dur-2) var(--ease-out), transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out);
     position: relative;
   }
 
   .distro-card:hover {
-    background-color: var(--surface-hover);
-    border-color: var(--border-strong);
+    background-color: var(--card-bg);
+    border-color: var(--accent-color);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
   }
 
   .distro-card:focus-visible {
@@ -729,14 +735,15 @@
   }
 
   .specimen {
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
     line-height: 1.4;
-    padding: 2px 7px;
+    padding: 3px 9px;
     background-color: var(--tag-neutral-bg);
     border: 1px solid var(--tag-neutral-border);
     color: var(--tag-neutral-text);
+    border-radius: var(--radius-pill);
     white-space: nowrap;
     max-width: 20ch;
     overflow: hidden;
@@ -784,12 +791,12 @@
     align-items: center;
     justify-content: space-between;
     margin-top: auto;
-    padding: 10px var(--space-4);
+    padding: 12px var(--space-4);
     border-top: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
-    font-family: var(--font-label);
-    font-size: 0.76rem;
-    font-weight: 600;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 700;
     color: var(--text-main);
   }
 
@@ -803,14 +810,9 @@
   .empty-state {
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     padding: var(--space-7);
-  }
-
-  .empty-state .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: var(--accent-red);
   }
 
   .empty-state h2 {
@@ -826,14 +828,19 @@
   }
 
   .reset-btn {
-    font-family: var(--font-label);
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 9px 16px;
-    border: 1px solid var(--accent-fill);
+    font-family: var(--font-sans);
+    font-size: 0.86rem;
+    font-weight: 650;
+    padding: 11px 18px;
+    border: 0;
+    border-radius: var(--radius-md);
     background-color: var(--accent-fill);
     color: var(--accent-contrast);
-    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+    transition: background-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-spring);
+  }
+
+  .reset-btn:hover {
+    transform: translateY(-2px);
   }
 
   .reset-btn:hover {

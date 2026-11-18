@@ -33,7 +33,7 @@ export const SITE = {
   author: 'buyangeldev0',
   locale: 'en_US',
   twitter: '@adev0',
-  themeColor: '#a0f002'
+  themeColor: '#5B4BE0'
 };
 
 const KEYWORDS = [
@@ -644,7 +644,7 @@ function buildManifest() {
       description: HOME_DESCRIPTION,
       start_url: '/',
       display: 'standalone',
-      background_color: '#0A0C08',
+      background_color: '#16151B',
       theme_color: SITE.themeColor,
       lang: 'en',
       icons: [
@@ -664,22 +664,21 @@ function buildManifest() {
 const OG_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0A0C08"/>
-      <stop offset="100%" stop-color="#16210A"/>
+      <stop offset="0%" stop-color="#16151B"/>
+      <stop offset="100%" stop-color="#241F3A"/>
     </linearGradient>
     <linearGradient id="a" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#A0F002"/>
-      <stop offset="60%" stop-color="#86DC3C"/>
-      <stop offset="100%" stop-color="#4FC46A"/>
+      <stop offset="0%" stop-color="#A394FF"/>
+      <stop offset="100%" stop-color="#6C5CE7"/>
     </linearGradient>
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
   <rect x="0" y="0" width="1200" height="8" fill="url(#a)"/>
-  <text x="80" y="210" font-family="Helvetica,Arial,sans-serif" font-size="86" font-weight="800" fill="#F2F5EC">LINUXMATCH</text>
-  <text x="80" y="290" font-family="Helvetica,Arial,sans-serif" font-size="34" fill="#A0F002">Find the best Linux distribution for you.</text>
-  <text x="80" y="360" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#B7C1AA">116+ distributions compared &#183; package managers, init systems,</text>
-  <text x="80" y="398" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#B7C1AA">desktops, pros and cons &#183; 100% client-side, zero tracking.</text>
-  <text x="80" y="540" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#F2F5EC">linuxmatch.adev0.eu</text>
+  <text x="80" y="210" font-family="Helvetica,Arial,sans-serif" font-size="86" font-weight="800" fill="#F6F4F8">LINUXMATCH</text>
+  <text x="80" y="290" font-family="Helvetica,Arial,sans-serif" font-size="34" fill="#B5A8FF">Find the best Linux distribution for you.</text>
+  <text x="80" y="360" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#BDB9C8">116+ distributions compared &#183; package managers, init systems,</text>
+  <text x="80" y="398" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#BDB9C8">desktops, pros and cons &#183; 100% client-side, zero tracking.</text>
+  <text x="80" y="540" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#F6F4F8">linuxmatch.adev0.eu</text>
 </svg>`;
 
 async function writeOgImage(distDir) {

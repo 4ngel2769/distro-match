@@ -2,11 +2,12 @@
   import { LINUX_DISTROS } from '../data/distros.js';
   import SteeringPanel from './SteeringPanel.svelte';
   import SwipeDeck from './SwipeDeck.svelte';
+  import DistroLogo from './DistroLogo.svelte';
   import Icon from './Icon.svelte';
 
   // Swipe discovery is built but parked for now; the finder quiz is the default
   // first experience. Flip this to true to restore the swipe deck as the hero.
-  const ENABLE_SWIPE_DECK = false;
+  let ENABLE_SWIPE_DECK = $state(false);
 
   const FEATURED_IDS = ['linux-mint', 'fedora-workstation', 'arch-linux'];
   const featured = FEATURED_IDS
@@ -137,38 +138,51 @@
   </div>
   {:else}
   <header class="hero-head">
-    <div>
-      <h1>Find a Linux distro that actually fits.</h1>
+    <div class="hero-copy">
+      <h1>Find a Linux distro that feels like yours.</h1>
       <p>
-        A short, focused questionnaire maps your hardware, work and principles to a
-        verified catalogue of {LINUX_DISTROS.length} distributions — then shows the
-        shortlist and the reasoning behind it.
+        Answer a few quick questions about what you do and what you care about. We'll
+        match them to real distributions — and show you exactly why each one fits.
       </p>
+      <div class="hero-meta">
+        <span class="meta-chip"><Icon name="check" size={13} /> About 3 minutes</span>
+        <span class="meta-chip"><Icon name="check" size={13} /> No sign-up or tracking</span>
+        <span class="meta-chip"><Icon name="check" size={13} /> {LINUX_DISTROS.length} real distros</span>
+      </div>
     </div>
-    <button class="btn-secondary" onclick={() => onNavigate('compare')}>
-      Compare two distributions <Icon name="arrow-right" size={14} />
-    </button>
+    <div class="hero-actions">
+      <button class="btn-primary hero-cta" onclick={onStartQuiz}>
+        Find my distro <Icon name="arrow-right" size={16} />
+      </button>
+      <button class="btn-secondary" onclick={() => onNavigate('directory')}>
+        Browse all distributions
+      </button>
+    </div>
   </header>
 
   <div class="lead">
-    <section class="promise surface" aria-label="Finder questionnaire">
-      <span class="field-label">Finder questionnaire</span>
-      <p class="promise-copy">
-        Sixteen pinpoint questions across three short stages. The path branches around
-        questions that do not apply to you, and expert users can switch to a deeper track.
+    <section class="start-card surface" aria-label="Get started">
+      <h2>Start here</h2>
+      <p class="start-copy">
+        A short questionnaire maps your hardware, work and principles to the catalogue.
+        It skips anything that can't change the answer, so you only answer what matters.
       </p>
-
       <div class="actions">
         <button class="btn-primary" onclick={onStartQuiz}>
-          Find my distro <Icon name="arrow-right" size={14} />
+          Take the questionnaire <Icon name="arrow-right" size={15} />
         </button>
-        <button class="btn-secondary" onclick={() => onNavigate('directory')}>
-          Browse the catalogue <Icon name="chevron-right" size={14} />
+        <button class="btn-secondary" onclick={() => onNavigate('compare')}>
+          Compare two distros
         </button>
       </div>
 
       <div class="mode-block">
-        <span class="field-label">Questionnaire mode</span>
+        <div class="mode-copy">
+          <span class="mode-title">How deep should we go?</span>
+          <p class="mode-note">
+            Newcomer keeps things simple. Expert adds kernel, security and release-model questions.
+          </p>
+        </div>
         <div class="mode-switch" role="group" aria-label="Questionnaire mode">
           <button
             type="button"
@@ -183,70 +197,70 @@
             onclick={() => switchMode(true)}
           >Expert</button>
         </div>
-        <p class="mode-note">Expert adds kernel and security questions and skips beginner framing.</p>
       </div>
     </section>
 
-    <section class="field-sheet surface" aria-label="Reference specimens">
-      <div class="sheet-head">
-        <span class="field-label">Field sheet</span>
-        <span class="field-value sheet-code">03 / {LINUX_DISTROS.length}</span>
+    <section class="starter-card surface" aria-label="Good places to start">
+      <div class="starter-head">
+        <h2>Good places to start</h2>
+        <p>Three popular distributions from the catalogue.</p>
       </div>
-      <p class="sheet-intro">Three reference specimens drawn from the catalogue.</p>
-
-      <div class="spec-head" aria-hidden="true">
-        <span class="field-label">Specimen</span>
-        <span class="field-label">Family</span>
-        <span class="field-label">Release</span>
-        <span class="field-label rank-col">Rank</span>
-      </div>
-      <div class="spec-rows">
+      <div class="starter-list">
         {#each featured as distro}
-          <div class="spec-row">
-            <span class="spec-name">{distro.name}</span>
-            <span class="field-value spec-family">{distro.family}</span>
-            <span class="field-value spec-release">{prettyModel(distro.releaseModel)}</span>
-            <span class="field-value rank-col">#{distro.dwRank}</span>
-          </div>
+          <button class="starter-row" onclick={() => onNavigate('distro', distro.id)}>
+            <DistroLogo distro={distro} size={38} decorative={true} />
+            <span class="starter-text">
+              <strong>{distro.name}</strong>
+              <small>{distro.family} · {prettyModel(distro.releaseModel)} · #{distro.dwRank}</small>
+            </span>
+            <Icon name="chevron-right" size={15} />
+          </button>
         {/each}
       </div>
-      <div class="caption-strip">
-        <span><strong>Ranks</strong> DistroWatch, current</span>
-        <span><strong>Fields</strong> name · family · release · rank</span>
-      </div>
+      <p class="starter-foot">Every pick is a real, verified distribution — no invented suggestions.</p>
     </section>
   </div>
   {/if}
 
   <div class="refine">
-    <SteeringPanel {steering} {onSteeringChange} />
+    <SteeringPanel {steering} {onSteeringChange} startOpen={false} />
   </div>
 
-  <section class="method">
-    <h2>How the field is narrowed</h2>
-    {#if ENABLE_SWIPE_DECK}
-      <p>
-        Every card shows a real distribution with its traits drawn from the catalogue —
-        release model, init system, package tooling, hardware target and philosophy.
-        Your right-swipes are the specimens you want the engine to favour.
-      </p>
-      <p>
-        The result ranks your picks first, then shows the reasoning and trade-offs. If you
-        prefer a precise interview, the questionnaire asks only the questions that can
-        change the answer, with an expert path for experienced users.
-      </p>
-    {:else}
-      <p>
-        Each question maps to a real catalogue field — graphics support, memory budget,
-        update cadence, init system, software freedom, desktop style and package tooling.
-        Questions that cannot change the answer are skipped automatically.
-      </p>
-      <p>
-        After each short stage you get a report of the current front-runners. The final
-        result shows the score breakdown, the trade-offs you accepted and a diversified
-        shortlist — not a single asserted winner.
-      </p>
-    {/if}
+  <section class="method surface">
+    <h2>How it works</h2>
+    <div class="method-steps">
+      <div class="method-step">
+        <span class="step-num">1</span>
+        <div>
+          <h3>Answer a few questions</h3>
+          <p>
+            Each answer maps to a real detail in the catalogue — graphics support, memory,
+            update pace, desktop style and more. Questions that can't change the result
+            are skipped automatically.
+          </p>
+        </div>
+      </div>
+      <div class="method-step">
+        <span class="step-num">2</span>
+        <div>
+          <h3>See your shortlist</h3>
+          <p>
+            After each short stage you get a quick check-in with the current front-runners.
+            You can change any answer before you finish.
+          </p>
+        </div>
+      </div>
+      <div class="method-step">
+        <span class="step-num">3</span>
+        <div>
+          <h3>Understand the why</h3>
+          <p>
+            The final result shows the score breakdown, the trade-offs you accepted and
+            a few alternatives — not just one asserted winner.
+          </p>
+        </div>
+      </div>
+    </div>
   </section>
 </div>
 
@@ -259,104 +273,279 @@
   .hero-head {
     display: flex;
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
     flex-wrap: wrap;
-    gap: var(--space-5);
-    margin-bottom: var(--space-6);
+    gap: var(--space-6);
+    margin-bottom: var(--space-7);
+  }
+
+  .hero-copy {
+    flex: 1 1 520px;
   }
 
   .hero-head h1 {
-    font-size: clamp(1.8rem, 3.4vw, 2.5rem);
-    font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    max-width: 24ch;
-    margin-bottom: var(--space-3);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 750;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    max-width: 20ch;
+    margin-bottom: var(--space-4);
+    text-wrap: balance;
   }
 
   .hero-head p {
-    font-size: 1rem;
+    font-size: 1.05rem;
     color: var(--text-muted);
-    max-width: 64ch;
-    line-height: 1.6;
+    max-width: 60ch;
+    line-height: 1.65;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .meta-chip :global(svg) {
+    color: var(--accent-color);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    flex: 0 0 auto;
+  }
+
+  .hero-cta {
+    font-size: 1rem;
+    padding: 15px 24px;
+    min-height: 52px;
+    border-radius: var(--radius-lg);
   }
 
   .lead {
     display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.85fr);
-    gap: var(--space-6);
-    align-items: start;
-    margin-bottom: var(--space-7);
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+    gap: var(--space-5);
+    align-items: stretch;
+    margin-bottom: var(--space-5);
   }
 
-  .promise {
+  .start-card {
     display: flex;
     flex-direction: column;
     gap: var(--space-4);
     padding: var(--space-6);
   }
 
-  .promise-copy {
+  .start-card h2,
+  .starter-head h2 {
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+  }
+
+  .start-copy {
     font-size: 0.96rem;
     color: var(--text-muted);
     max-width: 62ch;
-    line-height: 1.6;
+    line-height: 1.65;
   }
 
   .actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
+    margin-top: auto;
   }
 
-  .field-sheet {
+  .mode-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--border-color);
+  }
+
+  .mode-copy {
+    flex: 1 1 260px;
+  }
+
+  .mode-title {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .mode-switch {
+    display: inline-flex;
+    gap: 3px;
+    padding: 4px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-pill);
+  }
+
+  .mode-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 650;
+    padding: 8px 16px;
+    border-radius: var(--radius-pill);
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+  }
+
+  .mode-switch button.active {
+    background-color: var(--card-bg);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-subtle);
+  }
+
+  .mode-note {
+    font-size: 0.82rem;
+    color: var(--text-subtle);
+    line-height: 1.5;
+  }
+
+  .starter-card {
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 80px;
+    padding: var(--space-6);
   }
 
-  .sheet-intro {
-    padding: var(--space-4) var(--space-5);
+  .starter-head p {
     font-size: 0.88rem;
     color: var(--text-muted);
-    max-width: 56ch;
+    margin-top: 4px;
   }
 
-  .spec-head,
-  .spec-row {
-    display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  .starter-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+
+  .starter-row {
+    display: flex;
+    align-items: center;
     gap: var(--space-3);
-    align-items: baseline;
-    padding: var(--space-3) var(--space-5);
+    width: 100%;
+    padding: var(--space-3);
+    text-align: left;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-subtle);
+    transition: border-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-spring), box-shadow var(--dur-1) var(--ease-out);
   }
 
-  .spec-head {
-    padding-top: var(--space-2);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--border-color);
+  .starter-row:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
   }
 
-  .spec-row {
-    border-bottom: 1px solid var(--hairline);
-    font-size: 0.88rem;
+  .starter-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
   }
 
-  .spec-name {
+  .starter-text strong {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+  }
+
+  .starter-text small {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .starter-foot {
+    margin-top: auto;
+    padding-top: var(--space-4);
+    font-size: 0.78rem;
+    color: var(--text-subtle);
+  }
+
+  .refine {
+    margin-bottom: var(--space-5);
+  }
+
+  .method {
+    padding: var(--space-6);
+  }
+
+  .method h2 {
+    font-size: 1.3rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-5);
+  }
+
+  .method-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+
+  .method-step {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 28px;
+    height: 28px;
+    border-radius: var(--radius-pill);
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
     font-weight: 600;
   }
 
-  .spec-family,
-  .spec-release {
-    font-size: 0.72rem;
+  .method-step h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+  }
+
+  .method-step p {
     color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
   }
 
-  .rank-col {
-    text-align: right;
-  }
-
+  /* Styles for the parked swipe deck */
   .picks {
     display: flex;
     flex-direction: column;
@@ -370,12 +559,12 @@
     justify-content: space-between;
     gap: var(--space-3);
     padding: var(--space-4) var(--space-5);
-    border-bottom: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   }
 
   .sheet-code {
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     color: var(--text-subtle);
   }
 
@@ -391,32 +580,18 @@
     align-items: baseline;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-5);
-    border-bottom: 1px solid var(--hairline);
+    border-top: 1px solid var(--hairline);
     font-size: 0.88rem;
   }
 
-  .pick-rank {
-    font-size: 0.7rem;
-    color: var(--text-subtle);
-  }
-
-  .pick-name {
-    font-weight: 600;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .pick-family {
-    font-size: 0.7rem;
-    color: var(--text-subtle);
-  }
+  .pick-rank { font-size: 0.72rem; color: var(--text-subtle); }
+  .pick-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pick-family { font-size: 0.72rem; color: var(--text-subtle); }
 
   .picks-empty {
     padding: var(--space-5);
     font-size: 0.88rem;
     color: var(--text-muted);
-    line-height: 1.55;
   }
 
   .picks-actions {
@@ -427,9 +602,7 @@
     padding: var(--space-4) var(--space-5);
   }
 
-  .picks-actions .btn-primary {
-    width: 100%;
-  }
+  .picks-actions .btn-primary { width: 100%; }
 
   .quiet-link {
     display: inline-flex;
@@ -439,90 +612,24 @@
     border: 0;
     background: transparent;
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 
-  .quiet-link:hover {
-    color: var(--text-main);
-  }
-
-  .mode-block {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    border-top: 1px solid var(--border-color);
-    padding: var(--space-4) var(--space-5);
-  }
-
-  .mode-switch {
-    display: inline-flex;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-secondary);
-  }
-
-  .mode-switch button {
-    border: 0;
-    background: transparent;
-    color: var(--text-muted);
-    font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 7px 14px;
-  }
-
-  .mode-switch button + button {
-    border-left: 1px solid var(--border-color);
-  }
-
-  .mode-switch button.active {
-    background-color: var(--card-bg);
-    color: var(--text-main);
-    box-shadow: inset 0 -2px 0 var(--accent-fill);
-  }
-
-  .mode-note {
-    font-size: 0.76rem;
-    color: var(--text-subtle);
-    line-height: 1.45;
-  }
-
-  .refine {
-    margin-bottom: var(--space-6);
-  }
-
-  .method {
-    border-top: 1px solid var(--border-color);
-    padding-top: var(--space-5);
-  }
-
-  .method h2 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: var(--space-3);
-  }
-
-  .method p {
-    color: var(--text-muted);
-    font-size: 0.94rem;
-    line-height: 1.6;
-    max-width: 72ch;
-    margin-bottom: var(--space-2);
-  }
+  .quiet-link:hover { color: var(--accent-ink); }
 
   @media (max-width: 900px) {
-    .lead {
+    .lead, .method-steps {
       grid-template-columns: 1fr;
     }
 
-    .picks,
-    .field-sheet {
-      position: static;
+    .method-steps {
+      gap: var(--space-4);
     }
 
-    .promise {
-      padding: var(--space-5);
+    .picks {
+      position: static;
     }
   }
 </style>

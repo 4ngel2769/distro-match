@@ -56,7 +56,7 @@
     <!-- Empty result: a calm, labelled sheet rather than an error panel. -->
     <section class="sheet empty-sheet">
       <div class="sheet-topline">
-        <span class="field-label"><Icon name="alert" size={13} /> NO SPECIMEN / HARD CONSTRAINTS</span>
+        <span class="field-label"><Icon name="alert" size={13} /> No exact match yet</span>
         <div class="head-tools">
           <button
             class="mode-switch"
@@ -69,16 +69,15 @@
           </button>
           <button class="act-btn act-quiet" onclick={() => (showSteering = !showSteering)} aria-expanded={showSteering}>
             <Icon name="sliders" size={14} />
-            <span>{showSteering ? 'Hide steering' : 'Steer results'}</span>
+            <span>{showSteering ? 'Hide options' : 'Fine-tune'}</span>
           </button>
         </div>
       </div>
 
-      <h1>Your constraints rule out every distribution</h1>
+      <h1>No distro fits all of those</h1>
       <p>
-        That usually means two hard requirements conflict — for example a strictly libre system with
-        turnkey NVIDIA drivers, or a non-systemd distro with an NVIDIA preinstall image. Relax one
-        requirement and the shortlist returns immediately.
+        That usually means two must-haves conflict — for example a strictly libre system with
+        ready-to-go NVIDIA drivers. Loosen one and the shortlist comes straight back.
       </p>
       <div class="empty-actions">
         <button class="act-btn act-primary" onclick={onRetake}>
@@ -95,7 +94,7 @@
 
       {#if closestDisqualified.length}
         <div class="close-section">
-          <span class="field-label">CLOSEST FITS / ONE BLOCKER EACH</span>
+          <span class="field-label">Almost a fit — one thing in the way</span>
           <div class="close-grid stagger-in">
             {#each closestDisqualified as r}
               <div class="close-card">
@@ -113,7 +112,7 @@
       <!-- Winner sheet -->
       <section class="sheet winner-sheet">
         <div class="sheet-topline">
-          <span class="field-label"><Icon name="star" size={13} /> FIELD SHEET / RECOMMENDATION</span>
+          <span class="field-label"><Icon name="star" size={13} /> Your best match</span>
           <div class="head-tools">
             <button
               class="mode-switch"
@@ -126,7 +125,7 @@
             </button>
             <button class="act-btn act-quiet" onclick={() => (showSteering = !showSteering)} aria-expanded={showSteering}>
               <Icon name="sliders" size={14} />
-              <span>{showSteering ? 'Hide steering' : 'Steer results'}</span>
+              <span>{showSteering ? 'Hide options' : 'Fine-tune'}</span>
             </button>
           </div>
         </div>
@@ -148,8 +147,8 @@
           <div class="confidence-warning">
             <Icon name="alert" size={15} />
             <span>
-              <strong>Thin data.</strong> You answered {winner.confidence.percent}% of the quiz. Answer a few more
-              questions (especially hardware and priority) to make this recommendation reliable.
+              <strong>A quick note:</strong> you answered {winner.confidence.percent}% of the quiz. A few more answers —
+              especially about hardware and your top priority — will make this a stronger match.
             </span>
           </div>
         {/if}
@@ -158,7 +157,7 @@
           <div class="winner-identity">
             <DistroLogo distro={winner.distro} size={72} />
             <div class="winner-text">
-              <span class="field-label best-label"><Icon name="star" size={12} /> BEST MATCH</span>
+              <span class="field-label best-label"><Icon name="star" size={12} /> Top match</span>
               <div class="winner-name-row">
                 <h1>{winner.distro.name}</h1>
                 <span class="tier-badge tier-{winner.distro.tier}">{winner.distro.tier}</span>
@@ -174,7 +173,7 @@
           </div>
 
           <div class="score-block">
-            <div class="field-label score-label">MATCH SCORE</div>
+            <div class="field-label score-label">Match score</div>
             <div class="score-number field-value">{winner.matchPercentage}<span>%</span></div>
             <div class="score-sub field-value">
               {winner.confidence.answered}/{winner.confidence.total} ANSWERS
@@ -219,7 +218,7 @@
         </section>
 
         <section class="breakdown-block">
-          <h2 class="block-title">Score anatomy</h2>
+          <h2 class="block-title">How we scored it</h2>
           <table class="anatomy-table">
             <thead>
               <tr>
@@ -261,7 +260,7 @@
             onclick={(event) => profileClick(event, winner.distro.id)}
           >
             <Icon name="arrow-right" size={14} />
-            <span>Open full profile</span>
+            <span>See the full profile</span>
           </a>
           <a class="act-btn act-quiet" href={winner.distro.website} target="_blank" rel="noopener noreferrer">
             <Icon name="external" size={14} />
@@ -281,7 +280,7 @@
       <!-- Persona field note -->
       <aside class="field-note">
         <div class="note-head">
-          <span class="field-label">FIELD NOTE / YOUR PROFILE</span>
+          <span class="field-label">A little about you</span>
           <span class="note-badge field-value">{persona.badge}</span>
         </div>
         <blockquote class="note-quote">“{persona.quote}”</blockquote>
@@ -297,9 +296,9 @@
       <!-- Alternatives -->
       <section class="alternatives sheet">
         <header class="alternatives-head">
-          <span class="field-label">SHORTLIST / ALTERNATIVES</span>
-          <h2>Runner-up contenders</h2>
-          <p>Diversified by family so these are real alternatives, not five versions of the same base.</p>
+          <span class="field-label">Other good fits</span>
+          <h2>Also worth a look</h2>
+          <p>Picked from different families, so these are genuine alternatives rather than near-copies.</p>
         </header>
 
         <div class="runner-list stagger-in">
@@ -348,7 +347,7 @@
 
         {#if alsoConsidered.length}
           <div class="also-considered">
-            <span class="field-label">JUST OUTSIDE THE SHORTLIST</span>
+            <span class="field-label">Also considered</span>
             <div class="also-row">
               {#each alsoConsidered as r}
                 <a
@@ -373,6 +372,8 @@
   .sheet {
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     padding: var(--space-6);
     margin-bottom: var(--space-5);
   }
@@ -408,17 +409,23 @@
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
-    padding: 9px 14px;
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 600;
+    padding: 10px 16px;
+    min-height: 40px;
+    font-family: var(--font-sans);
+    font-size: 0.85rem;
+    font-weight: 650;
     line-height: 1.2;
-    border: 1px solid var(--border-strong);
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
     background-color: transparent;
     color: var(--text-main);
     text-decoration: none;
     transition: background-color var(--dur-1) var(--ease-out),
-      color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+      color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-spring);
+  }
+
+  .act-btn:hover {
+    transform: translateY(-2px);
   }
 
   .act-btn:hover {
@@ -427,24 +434,24 @@
 
   .act-primary {
     background-color: var(--accent-fill);
-    border-color: var(--accent-fill);
     color: var(--accent-contrast);
+    box-shadow: 0 4px 12px var(--accent-wash);
   }
 
   .act-primary:hover {
     background-color: var(--accent-hover);
-    border-color: var(--accent-hover);
   }
 
   .act-quiet {
     border-color: var(--border-color);
     color: var(--text-muted);
+    background-color: var(--card-bg);
   }
 
   .act-quiet:hover {
-    border-color: var(--border-strong);
-    color: var(--text-main);
-    background-color: var(--surface-hover);
+    border-color: var(--accent-color);
+    color: var(--accent-ink);
+    background-color: var(--accent-soft);
   }
 
   .act-btn.compact {
@@ -455,33 +462,26 @@
   .mode-switch {
     display: inline-flex;
     align-items: center;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-primary);
-    padding: 2px;
-    transition: border-color var(--dur-1) var(--ease-out);
-  }
-
-  .mode-switch:hover {
-    border-color: var(--border-strong);
+    gap: 2px;
+    background-color: var(--bg-secondary);
+    padding: 4px;
+    border-radius: var(--radius-pill);
   }
 
   .mode-opt {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-    padding: 4px 9px;
-    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
-  }
-
-  .mode-opt + .mode-opt {
-    border-left: 1px solid var(--border-color);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 650;
+    color: var(--text-muted);
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .mode-opt.on {
-    background-color: var(--selected-bg);
+    background-color: var(--card-bg);
     color: var(--accent-ink);
+    box-shadow: var(--shadow-subtle);
   }
 
   .steering-slot {
@@ -516,7 +516,7 @@
   .close-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1px;
+    gap: var(--space-3);
     margin-top: var(--space-3);
   }
 
@@ -527,6 +527,7 @@
     align-items: start;
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-md);
     padding: var(--space-3) var(--space-4);
   }
 
@@ -550,11 +551,8 @@
 
   /* ---------- Winner header ---------- */
   .swipe-context {
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    color: var(--text-subtle);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: var(--space-3);
+    font-size: 0.82rem;
+    color: var(--text-muted);
     margin-bottom: var(--space-4);
   }
 
@@ -563,10 +561,10 @@
     align-items: flex-start;
     gap: 10px;
     border: 1px solid var(--accent-amber);
-    border-left-width: 1px;
     background-color: var(--bg-secondary);
-    padding: 10px 14px;
-    font-size: 0.86rem;
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    font-size: 0.88rem;
     line-height: 1.5;
     color: var(--text-main);
     margin-bottom: var(--space-5);
@@ -612,7 +610,7 @@
   }
 
   .winner-name-row h1 {
-    font-size: 2.1rem;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 1.05;
     letter-spacing: -0.03em;
@@ -642,9 +640,9 @@
   }
 
   .winner-meta dt {
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-size: 0.62rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-muted);
   }
 
   .winner-meta dd {
@@ -653,9 +651,10 @@
   }
 
   .score-block {
-    border: 1px solid var(--border-strong);
-    padding: var(--space-3) var(--space-5);
-    min-width: 152px;
+    background-color: var(--accent-soft);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+    min-width: 160px;
     text-align: right;
     flex-shrink: 0;
   }
@@ -698,18 +697,19 @@
     gap: var(--space-6);
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-6);
     margin-bottom: var(--space-5);
   }
 
   .block-title {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-    margin-bottom: var(--space-3);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
+    margin-bottom: var(--space-4);
   }
 
   .gaps-title {

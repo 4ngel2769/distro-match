@@ -1,8 +1,8 @@
 ---
-version: 1
+version: 2
 slug: "src-app-svelte"
 primary_target: "src/App.svelte"
-related_targets: ["src/components/DirectoryView.svelte","src/components/QuizView.svelte","src/components/ResultsView.svelte","src/components/DistroDetailPage.svelte","src/components/ComparisonView.svelte","src/components/WelcomeView.svelte","src/components/SiteFooter.svelte","src/components/Navbar.svelte"]
+related_targets: ["src/components/DirectoryView.svelte","src/components/QuizView.svelte","src/components/IntermissionView.svelte","src/components/ResultsView.svelte","src/components/DistroDetailPage.svelte","src/components/ComparisonView.svelte","src/components/WelcomeView.svelte","src/components/SteeringPanel.svelte","src/components/SiteFooter.svelte","src/components/Navbar.svelte"]
 ---
 
 Scope: the whole LinuxMatch web experience, keyed to src/App.svelte. Visitor mode: Operate (plus the welcome surface's first decision).
@@ -11,14 +11,14 @@ Audience/job: newcomers and switchers need a low-regret distro choice; experienc
 
 ## Direction contract
 
-THESIS: A modern field guide to Linux distributions — the interface behaves like a working tool, while the visual language is a precise specimen catalogue. It refuses the neon "terminal" aesthetic and the soft-rounded consumer-card template.
+THESIS: A calm, friendly studio desk for choosing a Linux distro — the interface behaves like a working tool, but it welcomes you in plain language instead of cataloguing you. It refuses both the cold specimen-drawer look it replaces and the generic soft-card template with no point of view.
 
-OWN-WORLD: Paper-like warm neutral grounds (light) and deep graphite grounds (dark); lime #A0F002 used only as annotation ink for selection, active state and the single primary action. Hairline rules, generous annotation margins, tabular metadata, full-bleed screenshot plates with caption strips. Type: Public Sans for UI/body, Geist Mono for measurements and codes. No decorative gradient, no glow, no emoji icons.
+OWN-WORLD: Warm stone ground (#F7F6F3) and warm charcoal ground (#16151B) with white/soft-charcoal cards, 16–24px radii and two low, offset shadows. Indigo #5B4BE0 / #A394FF is the only accent and appears strictly on actions, active choices and focus. Public Sans carries every interface phrase; Geist Mono is reserved for ranks, counts and data. No gradients, glow, emoji icons or uppercase mono headings.
 
-STORY: The visitor reads the interface like a well-labelled specimen drawer: find the family, inspect the plate, compare the measurements, understand the recommendation. Expert mode adds a denser layer of instrumentation without changing the vocabulary.
+STORY: The visitor understands what this is within seconds, answers a few questions that adapt to them, sees a shortlist with reasons, and can browse or compare real distributions. Expert depth is one pill-switch away. Advanced tuning hides behind a gentle "Fine-tune your results" disclosure until asked for.
 
-FIRST VIEWPORT: A sticky slim header with wordmark, three destinations and theme switch. Welcome: a two-column lead — a plain-language promise and primary action on the left, a live "field sheet" showing the three most-matched specimens on the right. Directory: heading and one-line purpose, a single filter bar, then a three-column specimen grid; each card is one screenshot plate with a caption strip and a compact spec table.
+FIRST VIEWPORT: A translucent sticky header with pill wordmark, pill navigation and round theme switch. Welcome: a large two-line promise with three small reassurance chips and the primary action on the right; below, "Start here" and "Good places to start" cards sit side by side, a collapsed fine-tune bar, then a three-beat "How it works" row. Directory: a friendly heading, one search field, sort pills and family pills, then a three-column grid of rounded screenshot cards with a soft scrim, caption strip and "View profile" footer. Quiz: stage pills, a thin progress bar and one generous question card with rounded option rows.
 
-FORM: Field Guide (user-pinned), seed key 9392dc29. Raise from centre-rail reference setting: hairline rules and exact one-pixel state marks. Raise from Crouwel specimen: visible grid discipline and aligned columns. Raise from orienteering legend: metadata as a ranked symbol table. Raise from warm consumer app: accent reserved strictly for actionable elements. Raise from emission rail: state carried by line weight and position, not hue.
+FORM: Warm Studio (user-pinned warm/friendly direction; beats the concept-seed's transit-map assignment because the brief pins warmth), seed key 2d54d959. Donation from the warm-consumer catalog world: an action-only accent and plain-language labels. Donation from the field guide it replaces: full, captioned screenshot plates and honest fallbacks.
 
 FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance.

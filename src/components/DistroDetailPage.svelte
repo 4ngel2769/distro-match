@@ -299,9 +299,10 @@
   }
 
   .profile-header {
-    border: 1px solid var(--hairline);
-    border-top: 2px solid var(--border-strong);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     padding: var(--space-6);
     display: flex;
     flex-direction: column;
@@ -358,12 +359,10 @@
   }
 
   .meta-table dt {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
   }
 
   .meta-table dd {
@@ -384,8 +383,11 @@
   }
 
   .shot-plate {
-    border: 1px solid var(--hairline);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
   }
 
   .shot-plate :global(.gallery) {
@@ -413,9 +415,7 @@
 
   .shot-caption strong {
     color: var(--text-subtle);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-weight: 700;
   }
 
   .profile-grid {
@@ -442,15 +442,12 @@
   }
 
   .section-title {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
-    padding-bottom: var(--space-2);
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    color: var(--text-main);
     margin-bottom: var(--space-4);
-    border-bottom: 1px solid var(--hairline);
   }
 
   .trade-list {
@@ -489,13 +486,14 @@
   }
 
   .use-tag {
-    font-family: var(--font-label);
-    font-size: 0.76rem;
-    font-weight: 500;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
     border: 1px solid var(--tag-neutral-border);
     background-color: var(--tag-neutral-bg);
     color: var(--tag-neutral-text);
-    padding: 5px 10px;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
   }
 
   .footnote {
@@ -615,15 +613,15 @@
   }
 
   .footer-hint {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--text-subtle);
+    font-size: 0.84rem;
+    color: var(--text-muted);
   }
 
   .not-found {
-    border: 1px solid var(--hairline);
-    border-top: 2px solid var(--accent-red);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     padding: var(--space-7);
     max-width: 60ch;
   }

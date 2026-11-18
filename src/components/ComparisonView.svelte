@@ -101,14 +101,15 @@
   <section class="compare-head">
     <div class="compare-head-top">
       <div>
-        <h1 class="compare-title">Technical Distro Comparison Tool</h1>
+        <h1 class="compare-title">Compare two distributions</h1>
         <p class="compare-intro">
-          Type to search any distribution below to inspect side-by-side architectural trade-offs, package systems, init daemons, and hardware requirements.
+          Pick any two distributions to see them side by side — desktop, package manager,
+          release model, hardware needs and the trade-offs that matter.
         </p>
       </div>
 
       <div class="compare-sort-row">
-        <span class="field-label">Sort suggestions</span>
+        <span class="field-label">Sort the list</span>
         <button
           class="compare-sort-btn"
           class:active-sort={sortBy === 'popularity'}
@@ -132,7 +133,7 @@
     <div class="compare-pickers">
       <!-- Search A -->
       <div class="picker">
-        <label class="field-label" for="search-a">Select distribution A</label>
+        <label class="field-label" for="search-a">First distribution</label>
         <div class="search-field">
           <Icon name="search" size={16} />
           <input
@@ -167,7 +168,7 @@
 
       <!-- Search B -->
       <div class="picker">
-        <label class="field-label" for="search-b">Select distribution B</label>
+        <label class="field-label" for="search-b">Second distribution</label>
         <div class="search-field">
           <Icon name="search" size={16} />
           <input
@@ -220,7 +221,7 @@
     <table class="compare-table">
       <thead>
         <tr>
-          <th class="aspect-col" scope="col">Specification / Aspect</th>
+          <th class="aspect-col" scope="col">What we're comparing</th>
           <th scope="col">
             <div class="table-identity">
               <DistroLogo distro={distroA} size={30} decorative={true} />
@@ -374,9 +375,10 @@
 
 <style>
   .compare-head {
-    border: 1px solid var(--hairline);
-    border-top: 2px solid var(--border-strong);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     padding: var(--space-6);
     margin-bottom: var(--space-6);
   }
@@ -418,13 +420,14 @@
   }
 
   .compare-sort-btn {
-    padding: 6px 12px;
+    padding: 7px 14px;
     border: 1px solid var(--border-color);
-    background-color: transparent;
+    background-color: var(--bg-primary);
     color: var(--text-muted);
-    font-family: var(--font-label);
-    font-size: 0.78rem;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
     font-weight: 600;
+    border-radius: var(--radius-pill);
     white-space: nowrap;
     transition: background-color var(--dur-1) var(--ease-out),
       color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
@@ -464,14 +467,14 @@
     gap: var(--space-2);
     border: 1px solid var(--border-color);
     background-color: var(--bg-primary);
-    padding: 0 var(--space-3);
-    transition: border-color var(--dur-1) var(--ease-out);
+    padding: 0 var(--space-4);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .search-field:focus-within {
     border-color: var(--accent-color);
-    outline: 2px solid var(--accent-color);
-    outline-offset: 1px;
+    box-shadow: 0 0 0 3px var(--accent-wash);
   }
 
   .search-field :global(svg) {
@@ -495,11 +498,14 @@
 
   .suggestions-dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 6px);
     left: 0;
     right: 0;
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lift);
+    padding: var(--space-1);
     z-index: 50;
     max-height: 280px;
     overflow-y: auto;
@@ -509,7 +515,7 @@
     width: 100%;
     padding: var(--space-2) var(--space-3);
     border: 0;
-    border-bottom: 1px solid var(--hairline);
+    border-radius: var(--radius-sm);
     background: transparent;
     display: flex;
     align-items: center;
@@ -522,7 +528,7 @@
   }
 
   .suggestion-item:hover {
-    background-color: var(--surface-hover);
+    background-color: var(--accent-soft);
   }
 
   .suggestion-name {
@@ -557,9 +563,8 @@
   }
 
   .share-note {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--text-subtle);
+    font-size: 0.82rem;
+    color: var(--text-muted);
   }
 
   .share-status {
@@ -570,8 +575,10 @@
   }
 
   .compare-table-wrap {
-    border: 1px solid var(--hairline);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     overflow-x: auto;
   }
 
@@ -595,12 +602,10 @@
   }
 
   .compare-table tbody th {
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-muted);
     width: 24%;
   }
 
@@ -614,12 +619,10 @@
   }
 
   .aspect-col {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-subtle);
+    font-family: var(--font-sans);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: var(--text-muted);
   }
 
   .table-identity {

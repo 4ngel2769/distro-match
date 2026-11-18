@@ -224,14 +224,14 @@
     align-items: center;
     flex-wrap: wrap;
     gap: var(--space-4);
-    padding-bottom: var(--space-4);
-    border-bottom: 1px solid var(--border-color);
     margin-bottom: var(--space-5);
   }
 
   .mode-switch {
     display: inline-flex;
-    border: 1px solid var(--border-color);
+    gap: 3px;
+    padding: 4px;
+    border-radius: var(--radius-pill);
     background-color: var(--bg-secondary);
   }
 
@@ -240,14 +240,11 @@
     background: transparent;
     color: var(--text-muted);
     font-family: var(--font-sans);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 7px 14px;
-    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
-  }
-
-  .mode-switch button + button {
-    border-left: 1px solid var(--border-color);
+    font-size: 0.82rem;
+    font-weight: 650;
+    padding: 8px 18px;
+    border-radius: var(--radius-pill);
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .mode-switch button:hover {
@@ -256,8 +253,8 @@
 
   .mode-switch button.active {
     background-color: var(--card-bg);
-    color: var(--text-main);
-    box-shadow: inset 0 -2px 0 var(--accent-fill);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-subtle);
   }
 
   .mode-note {
@@ -281,16 +278,19 @@
     align-items: center;
     gap: var(--space-2);
     padding: var(--space-2) var(--space-3);
-    border: 1px solid var(--border-color);
+    border: 1px solid transparent;
     background-color: var(--bg-secondary);
     color: var(--text-subtle);
-    font-size: 0.78rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: var(--radius-md);
   }
 
   .stage-step.current {
     background-color: var(--card-bg);
-    color: var(--text-main);
-    box-shadow: inset 0 -2px 0 var(--accent-fill);
+    border-color: var(--border-color);
+    color: var(--accent-ink);
+    box-shadow: var(--shadow-subtle);
   }
 
   .stage-step.done {
@@ -298,15 +298,20 @@
   }
 
   .stage-index {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    border: 1px solid currentColor;
+    border-radius: var(--radius-pill);
+    background-color: var(--card-bg);
     font-family: var(--font-mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
+  }
+
+  .stage-step.done .stage-index {
+    background-color: var(--accent-soft);
   }
 
   .stage-step.done .stage-index {
@@ -322,14 +327,17 @@
 
   .progress-track {
     flex: 1;
-    height: 3px;
+    height: 8px;
     background-color: var(--bg-tertiary);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
   }
 
   .progress-fill {
     width: 100%;
     height: 100%;
     background-color: var(--accent-fill);
+    border-radius: var(--radius-pill);
     transform-origin: left center;
     transition: transform var(--dur-2) var(--ease-out);
   }
@@ -350,7 +358,6 @@
     justify-content: space-between;
     gap: var(--space-3);
     padding-bottom: var(--space-4);
-    border-bottom: 1px solid var(--border-color);
   }
 
   .select-mode {
@@ -364,7 +371,7 @@
   }
 
   .question-heading h1 {
-    font-size: clamp(1.5rem, 3vw, 1.95rem);
+    font-size: clamp(1.5rem, 3vw, 2rem);
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: -0.015em;
@@ -391,39 +398,47 @@
     align-items: flex-start;
     gap: var(--space-3);
     text-align: left;
-    padding: var(--space-4);
+    padding: var(--space-4) var(--space-5);
     background-color: var(--card-bg);
     border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
     color: var(--text-main);
+    box-shadow: var(--shadow-subtle);
     transition: background-color var(--dur-1) var(--ease-out),
-      border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
+      border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-spring);
   }
 
   .option:hover {
-    border-color: var(--border-strong);
+    border-color: var(--accent-color);
     background-color: var(--surface-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card);
   }
 
   .option.selected {
     border-color: var(--accent-color);
-    background-color: var(--accent-wash);
-    box-shadow: inset 3px 0 0 var(--accent-fill);
+    background-color: var(--accent-soft);
+    box-shadow: 0 0 0 2px var(--accent-wash);
   }
 
   .marker {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     flex-shrink: 0;
-    border: 1px solid var(--border-color);
+    border: 1.5px solid var(--border-strong);
+    border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     color: var(--accent-color);
-    margin-top: 2px;
+    margin-top: 1px;
+    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
   }
 
   .option.selected .marker {
-    border-color: var(--accent-color);
+    background-color: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-contrast);
   }
 
   .option-text {
@@ -448,10 +463,11 @@
   }
 
   .option-key {
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     color: var(--text-subtle);
-    border: 1px solid var(--border-color);
-    padding: 1px 6px;
+    background-color: var(--bg-secondary);
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
     flex-shrink: 0;
   }
 
@@ -460,10 +476,10 @@
     align-items: baseline;
     gap: var(--space-2);
     margin-top: var(--space-5);
-    padding: var(--space-3) var(--space-4);
-    background-color: var(--bg-secondary);
-    border-top: 1px solid var(--border-color);
-    font-size: 0.86rem;
+    padding: var(--space-4) var(--space-5);
+    background-color: var(--accent-soft);
+    border-radius: var(--radius-md);
+    font-size: 0.88rem;
     color: var(--text-muted);
     line-height: 1.55;
   }
@@ -480,9 +496,8 @@
 
   .importance {
     border: 0;
-    border-top: 1px solid var(--border-color);
     margin: var(--space-5) 0 0;
-    padding: var(--space-5) 0 0;
+    padding: 0;
     min-width: 0;
   }
 
@@ -494,7 +509,10 @@
   .importance-options {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    border: 1px solid var(--border-color);
+    gap: 4px;
+    padding: 4px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-pill);
   }
 
   .importance-choice {
@@ -503,23 +521,20 @@
     align-items: center;
     justify-content: center;
     padding: 10px 12px;
-    background-color: var(--card-bg);
+    background-color: transparent;
+    border-radius: var(--radius-pill);
     cursor: pointer;
     text-align: center;
-    transition: background-color var(--dur-1) var(--ease-out);
-  }
-
-  .importance-choice + .importance-choice {
-    border-left: 1px solid var(--border-color);
+    transition: background-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .importance-choice:hover {
-    background-color: var(--surface-hover);
+    background-color: var(--card-bg);
   }
 
   .importance-choice.active {
-    background-color: var(--accent-wash);
-    box-shadow: inset 0 -2px 0 var(--accent-fill);
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-subtle);
   }
 
   .importance-choice:focus-within {
@@ -555,9 +570,7 @@
     align-items: center;
     gap: var(--space-3);
     flex-wrap: wrap;
-    border-top: 1px solid var(--border-color);
-    margin-top: var(--space-5);
-    padding-top: var(--space-5);
+    margin-top: var(--space-6);
   }
 
   .left-actions,
@@ -620,11 +633,7 @@
 
     .importance-options {
       grid-template-columns: 1fr;
-    }
-
-    .importance-choice + .importance-choice {
-      border-left: 0;
-      border-top: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
     }
 
     .option-key {

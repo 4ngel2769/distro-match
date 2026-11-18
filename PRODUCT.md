@@ -32,7 +32,7 @@ Web app used in a browser. Three main jobs: take the finder questionnaire, brows
 
 ## Brand Commitments
 
-Name: LinuxMatch. Author credit: angeldev0 / https://adev0.eu. The user explicitly wants a clean, user-friendly interface with a real design language, proper dark/light modes, intentional animations and coherent typography. Lime `#A0F002` is the incumbent accent but is not pinned as a permanent brand constraint for this redesign.
+Name: LinuxMatch. Author credit: angeldev0 / https://adev0.eu. The user wants a clean, friendly, easy-to-understand interface with a real design language, proper dark/light modes, intentional animations and coherent typography. In this redesign the user chose a warm, approachable visual world inspired by Chanh Dai and left the accent to the designer. The shipped accent is indigo `#5B4BE0` (light) / `#A394FF` (dark); it is not pinned as a permanent brand constraint. The "Modern Field Guide" look it replaced is retained only as history.
 
 ## Evidence on Hand
 

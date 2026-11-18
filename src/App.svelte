@@ -531,18 +531,18 @@
 
 <style>
   .not-found-card {
-    border: 2px solid var(--border-strong);
-    box-shadow: var(--shadow-sharp);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
     background-color: var(--card-bg);
-    padding: 40px;
+    padding: var(--space-7);
   }
 
   .eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 800;
+    font-size: 0.84rem;
+    font-weight: 700;
     color: var(--accent-red);
-    margin-bottom: 8px;
+    margin-bottom: var(--space-2);
   }
 
   .not-found-card h1 {

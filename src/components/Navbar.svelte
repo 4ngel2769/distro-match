@@ -8,7 +8,7 @@
   <div class="header-container">
     <button class="site-logo-btn" onclick={() => onNavigate('welcome')} aria-label="Go to home">
       <span class="logo-badge">LINUXMATCH</span>
-      <span class="brand-tagline">The Linux Triangulator</span>
+      <span class="brand-tagline">Find your Linux distro</span>
     </button>
 
     <nav aria-label="Main Navigation">
@@ -26,7 +26,7 @@
             class="nav-btn {activeView === 'directory' ? 'active' : ''}"
             onclick={() => onNavigate('directory')}
           >
-            Directory (116+)
+            Directory
           </button>
         </li>
         <li>
@@ -34,7 +34,7 @@
             class="nav-btn {activeView === 'compare' ? 'active' : ''}"
             onclick={() => onNavigate('compare')}
           >
-            Comparison Tool
+            Compare
           </button>
         </li>
         <li>

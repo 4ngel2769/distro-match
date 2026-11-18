@@ -31,12 +31,12 @@
 <div class="page-container">
   <section class="report surface">
     <div class="report-head">
-      <span class="field-label">Field report · Stage {stage?.id}</span>
-      <h1>{isFinal ? 'Your shortlist is ready' : `${stage?.title} — done`}</h1>
+      <span class="field-label">Check-in {stage?.id} of 3</span>
+      <h1>{isFinal ? 'Your shortlist is ready' : `Nice — ${stage?.short.toLowerCase()} is done`}</h1>
       <p>
         {isFinal
-          ? 'We have everything we need. Here are the three strongest matches before the final calculation.'
-          : `With ${stage?.short.toLowerCase()} out of the way, these are the current front-runners. You can still change any answer.`}
+          ? 'That’s everything we need. Here are your three strongest matches before the final score.'
+          : `Here’s who’s leading so far. You can still go back and change any answer.`}
       </p>
     </div>
 
@@ -60,7 +60,7 @@
       {#if nextStage}
         Next up: <strong>{nextStage.title}</strong> — {nextStage.subtitle}
       {:else}
-        No more questions. The final result explains why the winner beat the runners-up.
+        No more questions. We’ll show you the score breakdown so you can see why the winner came out on top.
       {/if}
     </p>
 
@@ -84,8 +84,6 @@
   }
 
   .report-head {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: var(--space-5);
     margin-bottom: var(--space-5);
   }
 
@@ -105,7 +103,9 @@
   }
 
   .report-rows {
-    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
     margin-bottom: var(--space-5);
   }
 
@@ -113,12 +113,14 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-    padding: var(--space-3) var(--space-2);
-    border-bottom: 1px solid var(--hairline);
+    padding: var(--space-3) var(--space-4);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
   }
 
   .row-rank {
-    font-size: 0.76rem;
+    font-size: 0.78rem;
     color: var(--text-subtle);
     width: 20px;
     flex-shrink: 0;
@@ -181,8 +183,6 @@
     align-items: center;
     gap: var(--space-3);
     flex-wrap: wrap;
-    border-top: 1px solid var(--border-color);
-    padding-top: var(--space-5);
   }
 
   @media (max-width: 600px) {

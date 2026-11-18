@@ -43,11 +43,11 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
    - Shareable comparison URLs in the form `/compare/<distro-id>+<distro-id>/`, with canonical redirects and duplicate handling.
    - Side-by-side comparison across 14 architectural and hardware dimensions.
 
-6. **Field Guide Design System**:
-   - A modern specimen-catalogue language: paper-like grounds, hairline rules, labelled screenshot plates, tabular metadata and a single lime annotation ink (`#A0F002`).
-   - Public Sans for interface and reading, Geist Mono for measurements, ranks and codes.
+6. **Warm Studio Design System**:
+   - A warm, friendly language: stone grounds, soft white cards with gentle shadows, generous rounded corners, plain-language labels and a single indigo action colour (`#5B4BE0`, `#A394FF` in dark mode).
+   - Public Sans for interface and reading, Geist Mono only for measurements, ranks and codes.
    - Proper light and dark themes with persisted preference, visible focus, reduced-motion support and one authored view entrance.
-   - Thin top loading bar and SVG icon set; no gradients, glow, emoji icons or hard offset shadows.
+   - Thin top loading bar and a consistent 1.6px stroke SVG icon set; no gradients, glow, emoji icons or hard offset shadows.
 
 7. **Branching Questionnaire and Expert Path**:
    - Questions form a dialogue tree: NVIDIA driver handling is skipped for non-NVIDIA GPUs, gaming-depth questions only appear for gaming/handheld paths, and server-role questions only appear for servers.

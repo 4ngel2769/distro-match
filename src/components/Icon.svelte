@@ -25,6 +25,8 @@
     <path d="M9 5l7 7-7 7" />
   {:else if name === 'chevron-left'}
     <path d="M15 5l-7 7 7 7" />
+  {:else if name === 'chevron-down'}
+    <path d="M5 9l7 7 7-7" />
   {:else if name === 'external'}
     <path d="M13 4h7v7M20 4l-9 9" />
     <path d="M19 14v5H5V5h5" />

@@ -58,9 +58,8 @@
   }
 
   .footer-note {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--text-subtle);
+    font-size: 0.82rem;
+    color: var(--text-muted);
     margin-top: var(--space-1);
   }
 
