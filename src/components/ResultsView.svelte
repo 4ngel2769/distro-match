@@ -9,6 +9,7 @@
     userAnswers = {},
     questionWeights = {},
     steering = {},
+    likes = [],
     onSteeringChange,
     onRetake,
     onCompareWith,
@@ -18,7 +19,7 @@
   let showSteering = $state(false);
 
   let evaluatedResults = $derived(
-    MatchingEngine.evaluate(userAnswers, questionWeights, steering)
+    MatchingEngine.evaluate(userAnswers, questionWeights, steering, { likes })
   );
   let recommendation = $derived(MatchingEngine.recommend(evaluatedResults, 5));
   let winner = $derived(recommendation.winner);
@@ -129,6 +130,13 @@
             </button>
           </div>
         </div>
+
+        {#if likes.length}
+          <p class="swipe-context">
+            Ranked from your {likes.length} swipe pick{likes.length === 1 ? '' : 's'} — answer the
+            questionnaire for a more precise fit.
+          </p>
+        {/if}
 
         {#if showSteering}
           <div class="steering-slot">
@@ -541,6 +549,15 @@
   }
 
   /* ---------- Winner header ---------- */
+  .swipe-context {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--text-subtle);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
   .confidence-warning {
     display: flex;
     align-items: flex-start;

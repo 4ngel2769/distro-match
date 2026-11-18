@@ -36,6 +36,7 @@
       class:shot-letterbox={letterbox}
       class:shot-contain={fit === 'contain'}
       alt="{distro?.name} desktop screenshot"
+      draggable={false}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
       onerror={() => { failed = true; }}

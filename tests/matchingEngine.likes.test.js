@@ -43,6 +43,22 @@ test('a hard filter still disqualifies a liked distro', () => {
   expect(ubuntu.disqualified).toBe(true);
 });
 
+test('liked eligible distros rank ahead of unliked ones', () => {
+  const result = MatchingEngine.evaluate(answers, {}, {}, { likes: ['linux-mint'] });
+  const eligible = result.filter((r) => !r.disqualified);
+  const firstLiked = eligible.findIndex((r) => r.liked);
+  const firstUnliked = eligible.findIndex((r) => !r.liked);
+  expect(firstLiked).toBeGreaterThanOrEqual(0);
+  expect(firstLiked).toBeLessThan(firstUnliked);
+  expect(MatchingEngine.recommend(result, 5).winner.distro.id).toBe('linux-mint');
+});
+
+test('liking a niche distro lifts the mainstream scope gate for it', () => {
+  const result = MatchingEngine.evaluate({}, {}, {}, { likes: ['ubuntu-budgie'] });
+  const budgie = result.find((r) => r.distro.id === 'ubuntu-budgie');
+  expect(budgie.disqualified).toBe(false);
+});
+
 test('recommend still caps families at two with likes present', () => {
   const result = MatchingEngine.evaluate(answers, {}, {}, { likes: ['linux-mint', 'arch-linux'] });
   const picks = MatchingEngine.recommend(result, 5).picks;

@@ -653,12 +653,15 @@ export const MatchingEngine = {
         Object.entries(userAnswers).filter(([key]) => askedIds.has(key))
       );
       const { criteria, hardFails } = buildCriteria(distro, relevantAnswers, questionWeights);
+      // Explicitly liking a distro is the same signal as asking for an obscure
+      // or niche project in the questionnaire: the scope gate must step aside.
+      const liked = likes.includes(distro.id);
 
-      if (steering.scope !== 'all' && distro.tier === 'niche' && !specialtyRequested && !expertish) {
+      if (steering.scope !== 'all' && distro.tier === 'niche' && !specialtyRequested && !expertish && !liked) {
         hardFails.push('Niche project — outside the mainstream scope you selected');
       }
       const rank = distro.dwRank || 999;
-      if (steering.scope !== 'all' && rank > 150 && !allowObscure) {
+      if (steering.scope !== 'all' && rank > 150 && !allowObscure && !liked) {
         hardFails.push('Very small project — little community, documentation or hardware support');
       }
       if (LIVE_IMAGE_DISTROS.has(distro.id)) {
@@ -673,7 +676,6 @@ export const MatchingEngine = {
         weightSum += c.weight;
       }
       satisfaction = weightSum > 0 ? (satisfaction / weightSum) * 0.9 : 0.45;
-      const liked = likes.includes(distro.id);
       satisfaction = clamp01(
         satisfaction + steeringAdjustment(distro, steering) + tierPrior(distro) +
           popularityPrior(distro, allowObscure) + (liked ? 0.06 : 0)
@@ -719,6 +721,7 @@ export const MatchingEngine = {
         score: weightSum > 0 ? satisfaction * weightSum : 0,
         satisfaction,
         matchPercentage,
+        liked,
         disqualified,
         disqualifiers: [...new Set(hardFails)],
         matchReasons,
@@ -730,6 +733,9 @@ export const MatchingEngine = {
 
     results.sort((a, b) => {
       if (a.disqualified !== b.disqualified) return a.disqualified ? 1 : -1;
+      // In swipe mode the shortlist is the user's picks: liked specimens lead
+      // the eligible field, then the normal score ordering applies.
+      if (a.liked !== b.liked) return a.liked ? -1 : 1;
       if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
       if (b.satisfaction !== a.satisfaction) return b.satisfaction - a.satisfaction;
       return (a.distro.dwRank || 999) - (b.distro.dwRank || 999);
@@ -757,6 +763,7 @@ export const MatchingEngine = {
       if (!picks.includes(r)) picks.push(r);
     }
     picks.sort((a, b) => {
+      if (a.liked !== b.liked) return a.liked ? -1 : 1;
       if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
       return (a.distro.dwRank || 999) - (b.distro.dwRank || 999);
     });

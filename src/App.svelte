@@ -29,6 +29,9 @@
   let userAnswers = $state({});
   let questionWeights = $state({});
   let questionHistory = $state([]);
+  let swipeLikes = $state([]);
+  let swipePasses = $state([]);
+  let swipeHistory = $state([]);
   let completedStage = $state(null);
   let nextStage = $state(null);
   let intermissionIsFinal = $state(false);
@@ -74,6 +77,7 @@
         : route.view
   );
   let hasAnswers = $derived(
+    swipeLikes.length > 0 ||
     Object.values(userAnswers).some((value) =>
       Array.isArray(value) ? value.length > 0 : value != null && value !== ''
     )
@@ -250,11 +254,40 @@
     userAnswers = {};
     questionWeights = {};
     questionHistory = [];
+    swipeLikes = [];
+    swipePasses = [];
+    swipeHistory = [];
     completedStage = null;
     nextStage = null;
     intermissionIsFinal = false;
     intermissionOpen = false;
     navigateTo('quiz');
+  }
+
+  function handleSwipeLike(distroId) {
+    swipeLikes = [...new Set([...swipeLikes, distroId])];
+    swipePasses = swipePasses.filter((id) => id !== distroId);
+    swipeHistory = [...swipeHistory, { id: distroId, action: 'like' }];
+  }
+
+  function handleSwipePass(distroId) {
+    swipePasses = [...new Set([...swipePasses, distroId])];
+    swipeLikes = swipeLikes.filter((id) => id !== distroId);
+    swipeHistory = [...swipeHistory, { id: distroId, action: 'pass' }];
+  }
+
+  function handleSwipeUndo() {
+    const last = swipeHistory[swipeHistory.length - 1];
+    if (!last) return;
+    swipeHistory = swipeHistory.slice(0, -1);
+    if (last.action === 'like') swipeLikes = swipeLikes.filter((id) => id !== last.id);
+    else swipePasses = swipePasses.filter((id) => id !== last.id);
+  }
+
+  function handleSwipeReset() {
+    swipeLikes = [];
+    swipePasses = [];
+    swipeHistory = [];
   }
 
   function handleAnswer(questionId, value) {
@@ -398,6 +431,12 @@
       expertMode={Boolean(steering.expertMode)}
       onExpertModeChange={handleExpertModeChange}
       onSteeringChange={handleSteeringChange}
+      likes={swipeLikes}
+      passes={swipePasses}
+      onSwipeLike={handleSwipeLike}
+      onSwipePass={handleSwipePass}
+      onSwipeUndo={handleSwipeUndo}
+      onSwipeReset={handleSwipeReset}
     />
   {:else if activeView === 'quiz'}
     {#if intermissionOpen}
@@ -442,6 +481,7 @@
       {userAnswers}
       {questionWeights}
       {steering}
+      likes={swipeLikes}
       onSteeringChange={handleSteeringChange}
       onRetake={handleStartQuiz}
       onCompareWith={handleSelectForCompare}
