@@ -4,6 +4,15 @@
   import SwipeDeck from './SwipeDeck.svelte';
   import Icon from './Icon.svelte';
 
+  // Swipe discovery is built but parked for now; the finder quiz is the default
+  // first experience. Flip this to true to restore the swipe deck as the hero.
+  const ENABLE_SWIPE_DECK = false;
+
+  const FEATURED_IDS = ['linux-mint', 'fedora-workstation', 'arch-linux'];
+  const featured = FEATURED_IDS
+    .map((id) => LINUX_DISTROS.find((distro) => distro.id === id))
+    .filter(Boolean);
+
   let {
     onStartQuiz,
     onNavigate,
@@ -25,6 +34,14 @@
       .filter(Boolean)
   );
 
+  function prettyModel(model) {
+    if (!model) return '—';
+    return String(model)
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('-');
+  }
+
   function switchMode(next) {
     if (next !== expertMode && typeof onExpertModeChange === 'function') {
       onExpertModeChange();
@@ -33,6 +50,7 @@
 </script>
 
 <div class="page-container welcome">
+  {#if ENABLE_SWIPE_DECK}
   <header class="hero-head">
     <div>
       <h1>Find your match, one distro at a time.</h1>
@@ -117,6 +135,88 @@
       </div>
     </aside>
   </div>
+  {:else}
+  <header class="hero-head">
+    <div>
+      <h1>Find a Linux distro that actually fits.</h1>
+      <p>
+        A short, focused questionnaire maps your hardware, work and principles to a
+        verified catalogue of {LINUX_DISTROS.length} distributions — then shows the
+        shortlist and the reasoning behind it.
+      </p>
+    </div>
+    <button class="btn-secondary" onclick={() => onNavigate('compare')}>
+      Compare two distributions <Icon name="arrow-right" size={14} />
+    </button>
+  </header>
+
+  <div class="lead">
+    <section class="promise surface" aria-label="Finder questionnaire">
+      <span class="field-label">Finder questionnaire</span>
+      <p class="promise-copy">
+        Sixteen pinpoint questions across three short stages. The path branches around
+        questions that do not apply to you, and expert users can switch to a deeper track.
+      </p>
+
+      <div class="actions">
+        <button class="btn-primary" onclick={onStartQuiz}>
+          Find my distro <Icon name="arrow-right" size={14} />
+        </button>
+        <button class="btn-secondary" onclick={() => onNavigate('directory')}>
+          Browse the catalogue <Icon name="chevron-right" size={14} />
+        </button>
+      </div>
+
+      <div class="mode-block">
+        <span class="field-label">Questionnaire mode</span>
+        <div class="mode-switch" role="group" aria-label="Questionnaire mode">
+          <button
+            type="button"
+            class:active={!expertMode}
+            aria-pressed={!expertMode}
+            onclick={() => switchMode(false)}
+          >Newcomer</button>
+          <button
+            type="button"
+            class:active={expertMode}
+            aria-pressed={expertMode}
+            onclick={() => switchMode(true)}
+          >Expert</button>
+        </div>
+        <p class="mode-note">Expert adds kernel and security questions and skips beginner framing.</p>
+      </div>
+    </section>
+
+    <section class="field-sheet surface" aria-label="Reference specimens">
+      <div class="sheet-head">
+        <span class="field-label">Field sheet</span>
+        <span class="field-value sheet-code">03 / {LINUX_DISTROS.length}</span>
+      </div>
+      <p class="sheet-intro">Three reference specimens drawn from the catalogue.</p>
+
+      <div class="spec-head" aria-hidden="true">
+        <span class="field-label">Specimen</span>
+        <span class="field-label">Family</span>
+        <span class="field-label">Release</span>
+        <span class="field-label rank-col">Rank</span>
+      </div>
+      <div class="spec-rows">
+        {#each featured as distro}
+          <div class="spec-row">
+            <span class="spec-name">{distro.name}</span>
+            <span class="field-value spec-family">{distro.family}</span>
+            <span class="field-value spec-release">{prettyModel(distro.releaseModel)}</span>
+            <span class="field-value rank-col">#{distro.dwRank}</span>
+          </div>
+        {/each}
+      </div>
+      <div class="caption-strip">
+        <span><strong>Ranks</strong> DistroWatch, current</span>
+        <span><strong>Fields</strong> name · family · release · rank</span>
+      </div>
+    </section>
+  </div>
+  {/if}
 
   <div class="refine">
     <SteeringPanel {steering} {onSteeringChange} />
@@ -124,16 +224,29 @@
 
   <section class="method">
     <h2>How the field is narrowed</h2>
-    <p>
-      Every card shows a real distribution with its traits drawn from the catalogue —
-      release model, init system, package tooling, hardware target and philosophy.
-      Your right-swipes are the specimens you want the engine to favour.
-    </p>
-    <p>
-      The result ranks your picks first, then shows the reasoning and trade-offs. If you
-      prefer a precise interview, the questionnaire asks only the questions that can
-      change the answer, with an expert path for experienced users.
-    </p>
+    {#if ENABLE_SWIPE_DECK}
+      <p>
+        Every card shows a real distribution with its traits drawn from the catalogue —
+        release model, init system, package tooling, hardware target and philosophy.
+        Your right-swipes are the specimens you want the engine to favour.
+      </p>
+      <p>
+        The result ranks your picks first, then shows the reasoning and trade-offs. If you
+        prefer a precise interview, the questionnaire asks only the questions that can
+        change the answer, with an expert path for experienced users.
+      </p>
+    {:else}
+      <p>
+        Each question maps to a real catalogue field — graphics support, memory budget,
+        update cadence, init system, software freedom, desktop style and package tooling.
+        Questions that cannot change the answer are skipped automatically.
+      </p>
+      <p>
+        After each short stage you get a report of the current front-runners. The final
+        result shows the score breakdown, the trade-offs you accepted and a diversified
+        shortlist — not a single asserted winner.
+      </p>
+    {/if}
   </section>
 </div>
 
@@ -174,6 +287,74 @@
     gap: var(--space-6);
     align-items: start;
     margin-bottom: var(--space-7);
+  }
+
+  .promise {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+  }
+
+  .promise-copy {
+    font-size: 0.96rem;
+    color: var(--text-muted);
+    max-width: 62ch;
+    line-height: 1.6;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .field-sheet {
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 80px;
+  }
+
+  .sheet-intro {
+    padding: var(--space-4) var(--space-5);
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: 56ch;
+  }
+
+  .spec-head,
+  .spec-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .spec-head {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .spec-row {
+    border-bottom: 1px solid var(--hairline);
+    font-size: 0.88rem;
+  }
+
+  .spec-name {
+    font-weight: 600;
+  }
+
+  .spec-family,
+  .spec-release {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .rank-col {
+    text-align: right;
   }
 
   .picks {
@@ -335,8 +516,13 @@
       grid-template-columns: 1fr;
     }
 
-    .picks {
+    .picks,
+    .field-sheet {
       position: static;
+    }
+
+    .promise {
+      padding: var(--space-5);
     }
   }
 </style>

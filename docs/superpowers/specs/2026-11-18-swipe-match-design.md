@@ -1,7 +1,7 @@
 # Design: Swipe-to-Match Discovery Mode
 
 Date: 2026-11-18
-Status: awaiting spec review
+Status: implemented, then parked at the user's request — the finder quiz is the default first experience. Swipe code remains behind `ENABLE_SWIPE_DECK` in `WelcomeView.svelte`.
 
 ## Context and intent
 
