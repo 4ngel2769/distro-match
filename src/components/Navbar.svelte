@@ -13,7 +13,7 @@
 <header class="site-header">
   <div class="header-container">
     <button class="brand" onclick={() => onNavigate('welcome')} aria-label="LinuxMatch home">
-      <img src="/logo-256.png" alt="" width="32" height="32" />
+      <img src="/logo-256.png" alt="" width="44" height="44" />
     </button>
 
     <nav aria-label="Main navigation">
@@ -55,8 +55,8 @@
 
   .brand img {
     display: block;
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
   }
 

@@ -24,5 +24,9 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true
+  },
+  build: {
+    // The single app chunk includes the Svelte runtime and the icon set.
+    chunkSizeWarningLimit: 550
   }
 });

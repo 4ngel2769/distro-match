@@ -270,6 +270,8 @@ distance.
 - **Indigo** (`#5B4BE0` light, `#A394FF` dark): primary buttons, active tabs and pills,
   focus rings. It appears where something can be done or has been chosen. It never acts as a
   background wash on static panels.
+- **Amber** (`#B26A12` light, `#F2B45E` dark): the complementary tertiary, used only for
+  quiet privacy and reassurance accents such as the footer's "No trackers" badge.
 
 ### Neutrals
 - Light: Paper `#F7F6F3`, surface white, secondary `#EFEDE8`, tertiary `#E7E4DD`.
@@ -307,7 +309,8 @@ in light mode; deeper and more diffuse in dark mode. No glow, no hard offset blo
 
 Corners are restrained: 6px for small controls, 10px for buttons and inputs, 16px for
 cards and panels, 999px reserved for chips and segmented controls. Table cells stay square so grids do not develop
-gaps. Icons are a consistent 1.6px stroke SVG set; no emoji as icons.
+gaps. Icons come from Lucide at a consistent 1.8px stroke and are placed bare where
+they carry meaning, never inside decorative coloured containers. No emoji as icons.
 
 **Radius nesting.** Inner radius equals outer radius minus the padding between them
 (the Hype4 radius nesting guide). With an eye for small values, a nested control inside

@@ -29,6 +29,8 @@
   --accent-ink: #4A3AC9;
   --accent-soft: #E4DFFF;
   --accent-wash: rgba(91, 75, 224, 0.10);
+  --accent-tertiary: #B26A12;
+  --accent-tertiary-soft: #FBEBD4;
 
   /* Semantic states: friendly, legible, never decorative */
   --accent-green: #1E8E63;
@@ -131,6 +133,8 @@
   --accent-ink: #C2B6FF;
   --accent-soft: rgba(163, 148, 255, 0.16);
   --accent-wash: rgba(163, 148, 255, 0.13);
+  --accent-tertiary: #F2B45E;
+  --accent-tertiary-soft: rgba(242, 180, 94, 0.13);
 
   --accent-green: #57C79A;
   --accent-red: #FF8A90;
@@ -679,13 +683,13 @@ button:disabled {
   max-width: 1160px;
   margin: 0 auto;
   border: 1px solid var(--border-color);
-  border-top: 1px solid var(--border-color);
-  border-radius: 0 0 var(--section-radius) var(--section-radius);
+  border-top: 0;
+  border-radius: 0;
   padding-top: var(--space-6);
 }
 
 .main-connected .welcome {
-  border-radius: var(--section-radius) var(--section-radius) 0 0;
+  border-radius: 0;
   border-bottom: 0;
 }
 
@@ -774,13 +778,10 @@ button:disabled {
   margin: var(--space-6) auto 0;
   padding-top: var(--space-4);
   border-top: 1px solid var(--border-color);
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
-  font-size: 0.8rem;
-  color: var(--text-subtle);
+  gap: var(--space-3);
 }
 
 .footer-bottom button {
@@ -825,5 +826,16 @@ button:disabled {
 
   .footer-brand {
     grid-column: 1 / -1;
+  }
+
+  .footer-bottom {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+    gap: var(--space-2);
+  }
+
+  .footer-legal {
+    justify-self: center;
   }
 }

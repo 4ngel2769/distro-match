@@ -18,7 +18,6 @@
         A private, client-side finder for the Linux distribution that fits your hardware,
         your work and your values. {distroCount ? `${distroCount} distributions catalogued.` : ''}
       </p>
-      <span class="privacy-pill"><Icon name="shield" size={13} /> No trackers, no accounts</span>
     </div>
 
     <div class="footer-column">
@@ -55,7 +54,10 @@
   </div>
 
   <div class="footer-bottom">
-    <span>© {new Date().getFullYear()} LinuxMatch. Made for people choosing Linux.</span>
+    <span class="privacy-badge"><Icon name="shield" size={13} /> No trackers</span>
+    <span class="footer-copyright">
+      © {new Date().getFullYear()} LinuxMatch. Made for people choosing Linux.
+    </span>
     <div class="footer-legal">
       <button onclick={() => onNavigate('privacy')}>Privacy</button>
       <span aria-hidden="true">·</span>
@@ -72,10 +74,10 @@
   }
 
   .brand-line img {
-    width: 36px;
-    height: 36px;
+    width: 48px;
+    height: 48px;
     object-fit: contain;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
   }
 
   .brand-line span {
@@ -85,18 +87,30 @@
     color: var(--text-main);
   }
 
-  .privacy-pill {
+  .privacy-badge {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: var(--space-3);
-    padding: 5px 10px;
+    gap: 5px;
+    padding: 4px 9px;
     font-size: 0.74rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    background-color: color-mix(in srgb, var(--card-bg) 40%, transparent);
-    border: 1px solid var(--border-color);
+    font-weight: 700;
+    color: var(--accent-tertiary);
+    background-color: var(--accent-tertiary-soft);
     border-radius: var(--radius-pill);
+    white-space: nowrap;
+  }
+
+  .footer-copyright {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+  }
+
+  .footer-legal {
+    display: flex;
+    align-items: center;
+    justify-self: end;
+    gap: var(--space-3);
   }
 
   .footer-column strong {
@@ -110,5 +124,18 @@
 
   .footer-column :global(svg) {
     color: var(--accent-ink);
+  }
+
+  @media (max-width: 720px) {
+    .privacy-badge,
+    .footer-copyright,
+    .footer-legal {
+      justify-self: center;
+      text-align: center;
+    }
+
+    .footer-bottom {
+      gap: var(--space-2);
+    }
   }
 </style>
