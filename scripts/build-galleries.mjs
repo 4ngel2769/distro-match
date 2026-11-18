@@ -6,8 +6,8 @@
  * verified images, and skips anything already used as the primary shot.
  *
  * Usage:
- *   node scripts/build-galleries.mjs
- *   node scripts/build-galleries.mjs --force
+ *   bun scripts/build-galleries.mjs
+ *   bun scripts/build-galleries.mjs --force
  */
 import fs from 'node:fs';
 import path from 'node:path';

@@ -8,8 +8,8 @@
  *   scripts/asset-overrides.json   — optional manual choices, keyed by distro id
  *
  * Usage:
- *   node scripts/build-assets.mjs            # print the plan + write scripts/asset-plan.json
- *   node scripts/build-assets.mjs --download # download/optimise and write src/data/distroAssets.js
+ *   bun scripts/build-assets.mjs            # print the plan + write scripts/asset-plan.json
+ *   bun scripts/build-assets.mjs --download # download/optimise and write src/data/distroAssets.js
  */
 import fs from 'node:fs';
 import path from 'node:path';

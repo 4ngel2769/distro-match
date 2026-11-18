@@ -6,7 +6,7 @@
  * build script) can pick correct files. Commons is used because every file has
  * a documented free license and a stable, hotlink-friendly URL.
  *
- * Run: node scripts/discover-assets.mjs
+ * Run: bun scripts/discover-assets.mjs
  * Output: scripts/asset-candidates.json
  */
 import fs from 'node:fs';

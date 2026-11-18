@@ -61,23 +61,25 @@ An encyclopedic, precision Linux distribution picker and triangulation engine co
 ## Development & Usage
 
 ### Prerequisites
-- Node.js (v18+) or Bun
+- [Bun](https://bun.sh) v1.3+ (the only supported runtime/package manager)
+
+Install dependencies with `bun install` (uses the committed `bun.lock`).
 
 ### Running Development Server
 ```bash
-npm run dev
+bun run dev
 ```
 By default, Vite runs at `http://localhost:5173/`.
 
 ### Building for Production
 ```bash
-npm run build
+bun run build
 ```
-Builds the optimized production assets into `dist/`.
+Builds the optimized production assets into `dist/` via Vite running on the Bun runtime.
 
 ### Previewing Production Build
 ```bash
-npm run preview
+bun run preview
 ```
 
 ### Deep links / static hosting
@@ -98,14 +100,14 @@ SPA fallback to `index.html`.
 
 ### Refreshing the image library
 ```bash
-node scripts/find-dw-slugs.mjs      # map distro ids to DistroWatch screenshot slugs
-node scripts/verify-dw-slugs.mjs    # confirm each slug really is that distro
-node scripts/discover-assets.mjs    # search Wikimedia Commons for logos/screenshots
-node scripts/build-assets.mjs       # write scripts/asset-plan.json and review it
-node scripts/build-assets.mjs --download
-node scripts/build-facts.mjs        # refresh DistroWatch ranks, release dates, popularity years
-node scripts/build-galleries.mjs    # refresh extra verified gallery screenshots
-node scripts/validate-assets.mjs    # verify asset paths, credits, galleries, duplicates
+bun scripts/find-dw-slugs.mjs      # map distro ids to DistroWatch screenshot slugs
+bun scripts/verify-dw-slugs.mjs    # confirm each slug really is that distro
+bun scripts/discover-assets.mjs    # search Wikimedia Commons for logos/screenshots
+bun scripts/build-assets.mjs       # write scripts/asset-plan.json and review it
+bun scripts/build-assets.mjs --download
+bun scripts/build-facts.mjs        # refresh DistroWatch ranks, release dates, popularity years
+bun scripts/build-galleries.mjs    # refresh extra verified gallery screenshots
+bun scripts/validate-assets.mjs    # verify asset paths, credits, galleries, duplicates
 ```
 Manual corrections live in `scripts/asset-overrides.json`. The download step
 optimises images into `public/assets/` and regenerates `src/data/distroAssets.js`.
@@ -132,7 +134,7 @@ terms do not fit your use.
 
 ### Build
 
-`bun run build` (or `npm run build`) runs `vite build`, and the `linuxmatch-seo` Vite plugin
+`bun run build` runs `vite build` on the Bun runtime, and the `linuxmatch-seo` Vite plugin
 then emits the SEO artefacts into `dist/`:
 
 | File | Purpose |

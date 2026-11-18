@@ -1,5 +1,7 @@
 # dependencies (bun install)
 node_modules
+# Bun is the only package manager here; keep npm's lockfile out of the repo.
+package-lock.json
 
 # output
 out
