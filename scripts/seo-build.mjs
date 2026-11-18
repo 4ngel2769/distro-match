@@ -613,7 +613,7 @@ function buildHead(route, originalHead = '') {
 }
 
 const FALLBACK_STYLE = `<style>
-      .seo-static{max-width:70ch;margin:0 auto;padding:48px 24px;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.6;color:#22202A}
+      .seo-static{max-width:70ch;margin:0 auto;padding:48px 24px;font-family:"Public Sans",system-ui,sans-serif;line-height:1.6;color:#22202A}
       .seo-static h1{font-size:2rem;margin:0 0 12px}
       .seo-static h2{font-size:1.15rem;margin:28px 0 8px}
       .seo-static ul{padding-left:20px}
