@@ -2,6 +2,8 @@
 
 An encyclopedic, precision Linux distribution picker and triangulation engine covering **116+ Linux distributions** across every architectural family, init system, package manager, and hardware setup. Built as a high-performance **Svelte** application.
 
+The default first experience is a swipe deck: filter the catalogue, swipe through real distro specimens, keep the ones you like, and see a ranked shortlist with the reasoning behind it. The pinpoint questionnaire remains available as an alternative for precise, branching interviews.
+
 ---
 
 ## What's New in Version 2.0

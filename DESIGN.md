@@ -75,6 +75,12 @@ components:
     typography: "{typography.label}"
     rounded: "{rounded.sm}"
     padding: "12px 16px"
+  swipe-card:
+    backgroundColor: "{colors.paper-surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body}"
+    rounded: "{rounded.sm}"
+    padding: "24px"
 ---
 
 # Design System: LinuxMatch
@@ -147,6 +153,7 @@ Corners are 2px. Rectangles and hairline rules dominate. Markers are precise squ
 - **Mode switch** — Newcomer / Expert segmented control; active segment marked by a 2px lime inset rule.
 - **Option row** — generous selectable row, square marker, selected state = lime wash + inset lime rule.
 - **Score anatomy** — ranked table with aligned mono rank, weight and score plus a hairline bar.
+- **Swipe deck** — full screenshot plate with two fanned preview cards, a mono caption strip, trait signals drawn from real catalogue fields, and restrained pass/like controls. Drag, buttons and arrow keys are equivalent; reduced motion removes the fly-out. Liked distros lead the result shortlist.
 
 ## Do's and Don'ts
 
