@@ -21,7 +21,12 @@ const hasFeature = (distro, ...needles) => {
   ]
     .join(' ')
     .toLowerCase();
-  return needles.some((needle) => haystack.includes(needle));
+  return needles.some((raw) => {
+    const needle = raw.toLowerCase().trim();
+    if (!needle) return false;
+    const escaped = needle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '[-_ ]');
+    return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(haystack);
+  });
 };
 
 /** Ordered by specificity; only the first three matches are kept. */
@@ -84,7 +89,11 @@ const RULES = [
   },
   {
     label: 'Turnkey NVIDIA',
-    matches: (d) => ['excellent-nvidia', 'standard-nvidia'].includes(d.gpuSupport)
+    matches: (d) => d.gpuSupport === 'excellent-nvidia'
+  },
+  {
+    label: 'NVIDIA drivers available',
+    matches: (d) => d.gpuSupport === 'standard-nvidia'
   }
 ];
 

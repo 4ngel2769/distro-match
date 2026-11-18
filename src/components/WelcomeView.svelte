@@ -71,6 +71,7 @@
               <span class="field-value pick-rank">{String(i + 1).padStart(2, '0')}</span>
               <span class="pick-name">{distro.name}</span>
               <span class="field-value pick-family">{distro.family}</span>
+              <span class="field-value pick-rank">#{distro.dwRank || '—'}</span>
             </li>
           {/each}
         </ol>
@@ -205,7 +206,7 @@
 
   .pick-row {
     display: grid;
-    grid-template-columns: 28px minmax(0, 1fr) auto;
+    grid-template-columns: 28px minmax(0, 1fr) auto auto;
     align-items: baseline;
     gap: var(--space-2);
     padding: var(--space-3) var(--space-5);

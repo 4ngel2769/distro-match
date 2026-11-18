@@ -3,6 +3,7 @@
   import DistroScreenshot from './DistroScreenshot.svelte';
   import Icon from './Icon.svelte';
   import { traitSignals } from '../lib/swipeTraits.js';
+  import { isSwipeable, nextCursor } from '../lib/swipeDeck.js';
 
   let {
     distros = [],
@@ -39,6 +40,7 @@
 
   let pool = $derived(
     distros.filter((d) => {
+      if (!isSwipeable(d)) return false;
       if (scope !== 'all' && d.tier !== scope) return false;
       if (family !== 'all' && d.family !== family) return false;
       if (useCase !== 'all' && !(d.primaryUseCases || []).includes(useCase)) return false;
@@ -68,7 +70,7 @@
     if (!id) return;
     if (direction === 'right') onLike(id);
     else onPass(id);
-    cycle = 0;
+    cycle = nextCursor(ordered, new Set([...seen, id]), cycle);
     dragX = 0;
     exit = null;
   }
@@ -174,6 +176,7 @@
         onpointermove={moveDrag}
         onpointerup={endDrag}
         onpointercancel={endDrag}
+        ondragstart={(event) => event.preventDefault()}
       >
         <div class="card-plate">
           <DistroScreenshot distro={active} height={260} fit="contain" eager={true} showName={false} />

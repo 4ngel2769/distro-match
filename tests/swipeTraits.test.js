@@ -25,6 +25,19 @@ test('a low-spec distro gets an old-hardware signal', () => {
   expect(labels({ hardwareSpec: 'potatoes-vintage' }).join(' ')).toMatch(/old|lightweight|low-spec/);
 });
 
+test('storage features do not produce a privacy signal', () => {
+  const labels = traitSignals({ specialFeatures: ['zfs-storage-clustering', 'repository-manager'] })
+    .map((signal) => signal.label);
+  expect(labels).not.toContain('Privacy-first');
+});
+
+test('turnkey nvidia is reserved for excellent support', () => {
+  expect(traitSignals({ gpuSupport: 'excellent-nvidia' }).map((s) => s.label))
+    .toContain('Turnkey NVIDIA');
+  expect(traitSignals({ gpuSupport: 'standard-nvidia' }).map((s) => s.label))
+    .not.toContain('Turnkey NVIDIA');
+});
+
 test('a rolling distro gets a rolling signal', () => {
   expect(labels({ releaseModel: 'rolling' }).join(' ')).toContain('rolling');
 });
