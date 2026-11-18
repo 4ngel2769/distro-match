@@ -146,6 +146,35 @@ export const QUESTIONS_DATA = [
     ]
   },
   {
+    id: 'q_gaming_depth',
+    stage: 2,
+    question: 'How serious is the gaming on this machine?',
+    hint: 'Only relevant if gaming or a handheld/tv device is part of the picture.',
+    why: 'Gaming-first images ship kernels, Proton tooling and driver stacks that a general desktop deliberately leaves out.',
+    defaultWeight: 2,
+    when: (answers) =>
+      answers.q_goal === 'gaming' ||
+      ['handheld', 'living-room'].includes(answers.q_device),
+    options: [
+      { id: 'competitive', label: 'Competitive / maximum frames', detail: 'Custom kernels, schedulers and pre-tuned Proton runners.' },
+      { id: 'casual', label: 'Occasional games are enough', detail: 'Steam and Proton should simply work when I want them.' }
+    ]
+  },
+  {
+    id: 'q_server_role',
+    stage: 2,
+    question: 'What will this server actually do?',
+    hint: 'Asked only for a server or homelab machine.',
+    why: 'Storage-first, container-first and web-facing boxes need different defaults and maintenance models.',
+    defaultWeight: 2,
+    when: (answers) => answers.q_goal === 'server' || answers.q_device === 'server',
+    options: [
+      { id: 'storage', label: 'Storage / NAS', detail: 'ZFS or RAID, sharing, backups and low idle power.' },
+      { id: 'containers', label: 'Containers / virtualisation', detail: 'Docker, Kubernetes, VMs and automation.' },
+      { id: 'web', label: 'Public-facing services', detail: 'Web servers, mail, databases and long uptimes.' }
+    ]
+  },
+  {
     id: 'q_maintenance',
     stage: 2,
     question: 'How much upkeep are you willing to do?',
@@ -233,6 +262,7 @@ export const QUESTIONS_DATA = [
     isMultiSelect: true,
     why: 'The desktop is the interface you touch every second, and swapping it later is not always simple.',
     defaultWeight: 3,
+    when: (answers) => answers.q_goal !== 'server' && answers.q_device !== 'server',
     options: [
       { id: 'modern', label: 'Sleek and gesture-driven', detail: 'GNOME, COSMIC or Pantheon.' },
       { id: 'plasma', label: 'Highly customisable', detail: 'KDE Plasma with widgets and a traditional taskbar.' },
@@ -258,6 +288,34 @@ export const QUESTIONS_DATA = [
     ]
   },
   {
+    id: 'q_kernel',
+    stage: 3,
+    expertOnly: true,
+    question: 'Which kernel policy do you want?',
+    hint: 'Expert path — this decides how often your hardware support changes.',
+    why: 'A frozen kernel is predictable but misses new hardware; a rolling or custom kernel buys enablement at the cost of upkeep.',
+    defaultWeight: 2,
+    options: [
+      { id: 'mainline-lts', label: 'Mainline LTS', detail: 'Predictable, long-supported kernel with backported fixes.' },
+      { id: 'newest', label: 'Newest upstream', detail: 'Rolling kernel that picks up hardware enablement first.' },
+      { id: 'custom', label: 'I build or patch my own', detail: 'Source-based or custom kernel workflows are normal for me.' }
+    ]
+  },
+  {
+    id: 'q_security',
+    stage: 3,
+    expertOnly: true,
+    question: 'What mandatory-access model do you expect?',
+    hint: 'Expert path — skipped for newcomers.',
+    why: 'SELinux, AppArmor and permissive defaults are a real architectural difference between major families.',
+    defaultWeight: 2,
+    options: [
+      { id: 'selinux', label: 'SELinux', detail: 'Fedora / RHEL-style enforced type enforcement.' },
+      { id: 'apparmor', label: 'AppArmor', detail: 'Ubuntu / openSUSE-style path-based profiles.' },
+      { id: 'flexible', label: 'No strong preference', detail: 'I will work with whatever the distro provides.' }
+    ]
+  },
+  {
     id: 'q_priority',
     stage: 3,
     question: 'If you could keep only one thing, what would it be?',
@@ -277,9 +335,15 @@ export const QUESTIONS_DATA = [
   }
 ];
 
-/** Questions that are actually asked for the current answers. */
-export function visibleQuestions(answers = {}) {
-  return QUESTIONS_DATA.filter((q) => (typeof q.when === 'function' ? q.when(answers) : true));
+/**
+ * Questions actually asked for the current answers and mode.
+ * `expertOnly` questions stay out of the newcomer path entirely.
+ */
+export function visibleQuestions(answers = {}, { expert = false } = {}) {
+  return QUESTIONS_DATA.filter((q) => {
+    if (q.expertOnly && !expert) return false;
+    return typeof q.when === 'function' ? q.when(answers) : true;
+  });
 }
 
 /** Stage metadata for a question id. */

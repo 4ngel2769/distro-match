@@ -1,4 +1,5 @@
 <script>
+  import Icon from './Icon.svelte';
   import { landingPath } from '../data/landingPages.js';
 
   let { onNavigate, distroCount = 0 } = $props();
@@ -28,7 +29,9 @@
     <div class="footer-credit">
       <h3 class="footer-heading">Project</h3>
       <span>Built by <strong>angeldev0</strong></span>
-      <a href="https://adev0.eu" target="_blank" rel="noopener noreferrer">https://adev0.eu ↗</a>
+      <a class="footer-external" href="https://adev0.eu" target="_blank" rel="noopener noreferrer">
+        https://adev0.eu <Icon name="external" size={13} />
+      </a>
       <span class="footer-note">Open data · no trackers · no accounts</span>
     </div>
   </div>
@@ -42,3 +45,32 @@
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-external {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+  }
+
+  .footer-external :global(svg) {
+    color: var(--accent-color);
+  }
+
+  .footer-note {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-subtle);
+    margin-top: var(--space-1);
+  }
+
+  .footer-legal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .footer-legal [aria-hidden='true'] {
+    color: var(--text-subtle);
+  }
+</style>

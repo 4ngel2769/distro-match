@@ -1,4 +1,5 @@
 <script>
+  import Icon from './Icon.svelte';
   import { LINUX_DISTROS, DISTRO_MAP } from '../data/distros.js';
   import DistroLogo from './DistroLogo.svelte';
   import DistroScreenshot from './DistroScreenshot.svelte';
@@ -97,28 +98,28 @@
 </script>
 
 <div class="page-container">
-  <div class="compare-header-card">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
+  <section class="compare-head">
+    <div class="compare-head-top">
       <div>
-        <h1 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 6px;">
-          Technical Distro Comparison Tool
-        </h1>
-        <p style="color: var(--text-muted); font-size: 0.95rem;">
+        <h1 class="compare-title">Technical Distro Comparison Tool</h1>
+        <p class="compare-intro">
           Type to search any distribution below to inspect side-by-side architectural trade-offs, package systems, init daemons, and hardware requirements.
         </p>
       </div>
 
       <div class="compare-sort-row">
-        <span class="compare-sort-label">SORT SUGGESTIONS:</span>
+        <span class="field-label">Sort suggestions</span>
         <button
-          class="btn-secondary compare-sort-btn {sortBy === 'popularity' ? 'active-sort' : ''}"
+          class="compare-sort-btn"
+          class:active-sort={sortBy === 'popularity'}
           aria-pressed={sortBy === 'popularity'}
           onclick={() => sortBy = 'popularity'}
         >
           DistroWatch Rank
         </button>
         <button
-          class="btn-secondary compare-sort-btn {sortBy === 'alphabetical' ? 'active-sort' : ''}"
+          class="compare-sort-btn"
+          class:active-sort={sortBy === 'alphabetical'}
           aria-pressed={sortBy === 'alphabetical'}
           onclick={() => sortBy = 'alphabetical'}
         >
@@ -128,14 +129,12 @@
     </div>
 
     <!-- 2 Search Bars with Autocomplete Dropdowns -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative;">
-      
+    <div class="compare-pickers">
       <!-- Search A -->
-      <div style="position: relative;">
-        <label for="search-a" style="font-family: var(--font-label); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
-          SELECT DISTRIBUTION A:
-        </label>
-        <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="picker">
+        <label class="field-label" for="search-a">Select distribution A</label>
+        <div class="search-field">
+          <Icon name="search" size={16} />
           <input
             id="search-a"
             type="text"
@@ -155,12 +154,11 @@
             {#each suggestionsA as d}
               <button class="suggestion-item" onclick={() => pickA(d)}>
                 <DistroLogo distro={d} size={22} decorative={true} />
-                <div>
-                  <strong>{d.name}</strong>
-                  <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
-                    #{d.dwRank || 'N/A'} • {d.family}
-                  </span>
-                </div>
+                <span class="suggestion-name">{d.name}</span>
+                <span class="suggestion-meta">
+                  <span class="field-value">#{d.dwRank || 'N/A'}</span>
+                  <span>{d.family}</span>
+                </span>
               </button>
             {/each}
           </div>
@@ -168,11 +166,10 @@
       </div>
 
       <!-- Search B -->
-      <div style="position: relative;">
-        <label for="search-b" style="font-family: var(--font-label); font-weight: 800; font-size: 0.82rem; display: block; margin-bottom: 6px; color: var(--text-muted);">
-          SELECT DISTRIBUTION B:
-        </label>
-        <div style="display: flex; align-items: center; gap: 8px;">
+      <div class="picker">
+        <label class="field-label" for="search-b">Select distribution B</label>
+        <div class="search-field">
+          <Icon name="search" size={16} />
           <input
             id="search-b"
             type="text"
@@ -192,63 +189,57 @@
             {#each suggestionsB as d}
               <button class="suggestion-item" onclick={() => pickB(d)}>
                 <DistroLogo distro={d} size={22} decorative={true} />
-                <div>
-                  <strong>{d.name}</strong>
-                  <span style="font-family: var(--font-label); font-size: 0.75rem; color: var(--text-subtle); margin-left: 6px;">
-                    #{d.dwRank || 'N/A'} • {d.family}
-                  </span>
-                </div>
+                <span class="suggestion-name">{d.name}</span>
+                <span class="suggestion-meta">
+                  <span class="field-value">#{d.dwRank || 'N/A'}</span>
+                  <span>{d.family}</span>
+                </span>
               </button>
             {/each}
           </div>
         {/if}
       </div>
-
     </div>
 
     <div class="compare-actions">
-      <button class="btn-secondary" onclick={swapSides} style="padding: 7px 12px; font-size: 0.82rem;">
-        ⇄ Swap sides
+      <button class="btn-secondary action-btn" onclick={swapSides}>
+        <Icon name="swap" size={15} /> Swap sides
       </button>
-      <button class="btn-primary" onclick={copyShareLink} style="padding: 7px 14px; font-size: 0.82rem;">
-        Copy shareable link
+      <button class="btn-primary action-btn" onclick={copyShareLink}>
+        <Icon name="copy" size={15} /> Copy shareable link
       </button>
       <span class="share-note">This comparison has its own URL. Bookmark or share it.</span>
       {#if shareStatus}
         <span class="share-status" role="status">{shareStatus}</span>
       {/if}
     </div>
-  </div>
+  </section>
 
   <!-- Comparison Side-by-Side Table -->
-  <div style="border: 2px solid var(--border-strong); background-color: var(--card-bg); overflow-x: auto; box-shadow: var(--shadow-sharp);">
+  <div class="compare-table-wrap">
     <table class="compare-table">
       <thead>
         <tr>
-          <th style="width: 24%;">Specification / Aspect</th>
-          <th style="width: 38%;">
-            <div style="display: flex; align-items: center; gap: 10px;">
+          <th class="aspect-col" scope="col">Specification / Aspect</th>
+          <th scope="col">
+            <div class="table-identity">
               <DistroLogo distro={distroA} size={30} decorative={true} />
-              <div>
-                <span style="font-size: 1.2rem; font-weight: 900;">{distroA.name}</span>
-                <span class="tier-badge tier-{distroA.tier}" style="margin-left: 6px;">{distroA.tier}</span>
-              </div>
+              <span class="identity-name">{distroA.name}</span>
+              <span class="tier-badge tier-{distroA.tier}">{distroA.tier}</span>
             </div>
           </th>
-          <th style="width: 38%;">
-            <div style="display: flex; align-items: center; gap: 10px;">
+          <th scope="col">
+            <div class="table-identity">
               <DistroLogo distro={distroB} size={30} decorative={true} />
-              <div>
-                <span style="font-size: 1.2rem; font-weight: 900;">{distroB.name}</span>
-                <span class="tier-badge tier-{distroB.tier}" style="margin-left: 6px;">{distroB.tier}</span>
-              </div>
+              <span class="identity-name">{distroB.name}</span>
+              <span class="tier-badge tier-{distroB.tier}">{distroB.tier}</span>
             </div>
           </th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Screenshot Preview</strong></td>
+          <th scope="row">Screenshot Preview</th>
           <td>
             <DistroScreenshot distro={distroA} height={180} compact={true} />
           </td>
@@ -258,117 +249,121 @@
         </tr>
 
         <tr>
-          <td><strong>DistroWatch Rank & Tier</strong></td>
+          <th scope="row">DistroWatch Rank &amp; Tier</th>
           <td>
-            <span style="font-family: var(--font-label); font-weight: 800;">#{distroA.dwRank || 'N/A'}</span>
-            <span style="color: var(--text-muted); font-size: 0.85rem;">({distroA.tier} classification)</span>
+            <span class="field-value rank">#{distroA.dwRank || 'N/A'}</span>
+            <span class="cell-sub">({distroA.tier} classification)</span>
           </td>
           <td>
-            <span style="font-family: var(--font-label); font-weight: 800;">#{distroB.dwRank || 'N/A'}</span>
-            <span style="color: var(--text-muted); font-size: 0.85rem;">({distroB.tier} classification)</span>
+            <span class="field-value rank">#{distroB.dwRank || 'N/A'}</span>
+            <span class="cell-sub">({distroB.tier} classification)</span>
           </td>
         </tr>
 
         <tr>
-          <td><strong>Core Tagline</strong></td>
-          <td style="color: var(--text-muted);">{distroA.tagline}</td>
-          <td style="color: var(--text-muted);">{distroB.tagline}</td>
+          <th scope="row">Core Tagline</th>
+          <td class="cell-muted">{distroA.tagline}</td>
+          <td class="cell-muted">{distroB.tagline}</td>
         </tr>
 
         <tr>
-          <td><strong>Family & Lineage</strong></td>
+          <th scope="row">Family &amp; Lineage</th>
           <td><strong>{distroA.family}</strong> (Base: {distroA.base})</td>
           <td><strong>{distroB.family}</strong> (Base: {distroB.base})</td>
         </tr>
 
         <tr>
-          <td><strong>Init System (PID 1)</strong></td>
-          <td><span style="font-family: var(--font-label);">{distroA.initSystem}</span></td>
-          <td><span style="font-family: var(--font-label);">{distroB.initSystem}</span></td>
+          <th scope="row">Init System (PID 1)</th>
+          <td><span class="field-value">{distroA.initSystem}</span></td>
+          <td><span class="field-value">{distroB.initSystem}</span></td>
         </tr>
 
         <tr>
-          <td><strong>Release Cadence</strong></td>
+          <th scope="row">Release Cadence</th>
           <td>{distroA.releaseModel}</td>
           <td>{distroB.releaseModel}</td>
         </tr>
 
         <tr>
-          <td><strong>Package Management</strong></td>
-          <td><span style="font-family: var(--font-label);">{distroA.packageManager}</span></td>
-          <td><span style="font-family: var(--font-label);">{distroB.packageManager}</span></td>
+          <th scope="row">Package Management</th>
+          <td><span class="field-value">{distroA.packageManager}</span></td>
+          <td><span class="field-value">{distroB.packageManager}</span></td>
         </tr>
 
         <tr>
-          <td><strong>Desktop Environments</strong></td>
+          <th scope="row">Desktop Environments</th>
           <td>{distroA.desktopEnvironments ? distroA.desktopEnvironments.join(', ') : 'Custom'}</td>
           <td>{distroB.desktopEnvironments ? distroB.desktopEnvironments.join(', ') : 'Custom'}</td>
         </tr>
 
         <tr>
-          <td><strong>Free Software Strictness</strong></td>
+          <th scope="row">Free Software Strictness</th>
           <td>{distroA.freeSoftwareStrictness}</td>
           <td>{distroB.freeSoftwareStrictness}</td>
         </tr>
 
         <tr>
-          <td><strong>NVIDIA & GPU Support</strong></td>
+          <th scope="row">NVIDIA &amp; GPU Support</th>
           <td>{distroA.gpuSupport}</td>
           <td>{distroB.gpuSupport}</td>
         </tr>
 
         <tr>
-          <td><strong>Memory Requirements</strong></td>
-          <td>Min: <strong>{distroA.minRam}</strong> | Rec: <strong>{distroA.recommendedRam}</strong></td>
-          <td>Min: <strong>{distroB.minRam}</strong> | Rec: <strong>{distroB.recommendedRam}</strong></td>
+          <th scope="row">Memory Requirements</th>
+          <td>
+            Min: <span class="field-value">{distroA.minRam}</span> · Rec: <span class="field-value">{distroA.recommendedRam}</span>
+          </td>
+          <td>
+            Min: <span class="field-value">{distroB.minRam}</span> · Rec: <span class="field-value">{distroB.recommendedRam}</span>
+          </td>
         </tr>
 
         <tr>
-          <td><strong>Key Strengths</strong></td>
+          <th scope="row">Key Strengths</th>
           <td>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;">
+            <ul class="trade-list">
               {#each (distroA.pros || []) as pro}
-                <li><span style="color: var(--accent-green);">✓</span> {pro}</li>
+                <li><span class="trade-mark good"><Icon name="check" size={14} /></span>{pro}</li>
               {/each}
             </ul>
           </td>
           <td>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;">
+            <ul class="trade-list">
               {#each (distroB.pros || []) as pro}
-                <li><span style="color: var(--accent-green);">✓</span> {pro}</li>
+                <li><span class="trade-mark good"><Icon name="check" size={14} /></span>{pro}</li>
               {/each}
             </ul>
           </td>
         </tr>
 
         <tr>
-          <td><strong>Considerations / Cons</strong></td>
+          <th scope="row">Considerations / Cons</th>
           <td>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;">
+            <ul class="trade-list">
               {#each (distroA.cons || []) as con}
-                <li><span style="color: var(--accent-red);">✗</span> {con}</li>
+                <li><span class="trade-mark bad"><Icon name="close" size={14} /></span>{con}</li>
               {/each}
             </ul>
           </td>
           <td>
-            <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px; font-size: 0.88rem;">
+            <ul class="trade-list">
               {#each (distroB.cons || []) as con}
-                <li><span style="color: var(--accent-red);">✗</span> {con}</li>
+                <li><span class="trade-mark bad"><Icon name="close" size={14} /></span>{con}</li>
               {/each}
             </ul>
           </td>
         </tr>
 
         <tr>
-          <td><strong>Official Links</strong></td>
+          <th scope="row">Official Links</th>
           <td>
-            <a href={distroA.website} target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; text-decoration: none;">
-              Website ↗
+            <a href={distroA.website} target="_blank" rel="noopener noreferrer" class="link-action">
+              Website <Icon name="external" size={13} />
             </a>
           </td>
           <td>
-            <a href={distroB.website} target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding: 6px 12px; font-size: 0.85rem; text-decoration: none;">
-              Website ↗
+            <a href={distroB.website} target="_blank" rel="noopener noreferrer" class="link-action">
+              Website <Icon name="external" size={13} />
             </a>
           </td>
         </tr>
@@ -378,47 +373,124 @@
 </div>
 
 <style>
-  .compare-header-card {
-    border: 2px solid var(--border-strong);
+  .compare-head {
+    border: 1px solid var(--hairline);
+    border-top: 2px solid var(--border-strong);
     background-color: var(--card-bg);
-    padding: 24px;
-    margin-bottom: 24px;
-    box-shadow: var(--shadow-sharp);
+    padding: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  .compare-head-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .compare-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  .compare-intro {
+    color: var(--text-muted);
+    font-size: 0.94rem;
+    max-width: 72ch;
+    line-height: 1.55;
   }
 
   .compare-sort-row {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
-  .compare-sort-label {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text-subtle);
+  .compare-sort-row .field-label {
     white-space: nowrap;
+    margin-right: var(--space-1);
   }
 
   .compare-sort-btn {
     padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-muted);
     font-family: var(--font-label);
-    font-size: 0.82rem;
+    font-size: 0.78rem;
+    font-weight: 600;
     white-space: nowrap;
+    transition: background-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  }
+
+  .compare-sort-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-main);
+  }
+
+  .compare-sort-btn.active-sort {
+    background-color: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-contrast);
+  }
+
+  .compare-pickers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+    position: relative;
+  }
+
+  .picker {
+    position: relative;
+    min-width: 0;
+  }
+
+  .picker > .field-label {
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    padding: 0 var(--space-3);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+
+  .search-field:focus-within {
+    border-color: var(--accent-color);
+    outline: 2px solid var(--accent-color);
+    outline-offset: 1px;
+  }
+
+  .search-field :global(svg) {
+    color: var(--text-subtle);
   }
 
   .compare-search-input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 2px solid var(--border-strong);
-    background-color: var(--bg-primary);
-    font-size: 0.95rem;
+    flex: 1;
+    min-width: 0;
+    padding: 11px 0;
+    border: 0;
+    background-color: transparent;
+    font-size: 0.92rem;
     font-family: var(--font-sans);
+    color: var(--text-main);
   }
 
   .compare-search-input:focus {
-    outline: 2px solid var(--accent-color);
+    outline: none;
   }
 
   .suggestions-dropdown {
@@ -427,8 +499,7 @@
     left: 0;
     right: 0;
     background-color: var(--card-bg);
-    border: 2px solid var(--border-strong);
-    box-shadow: var(--shadow-sharp);
+    border: 1px solid var(--border-color);
     z-index: 50;
     max-height: 280px;
     overflow-y: auto;
@@ -436,82 +507,199 @@
 
   .suggestion-item {
     width: 100%;
-    padding: 8px 12px;
-    border: none;
-    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-2) var(--space-3);
+    border: 0;
+    border-bottom: 1px solid var(--hairline);
     background: transparent;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
     text-align: left;
     cursor: pointer;
     font-size: 0.9rem;
+    color: var(--text-main);
+    transition: background-color var(--dur-1) var(--ease-out);
   }
 
   .suggestion-item:hover {
     background-color: var(--surface-hover);
   }
 
-  .suggestion-logo {
-    width: 22px;
-    height: 22px;
-    object-fit: contain;
+  .suggestion-name {
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .suggestion-meta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    margin-left: auto;
+    font-family: var(--font-label);
+    font-size: 0.74rem;
+    color: var(--text-subtle);
+    min-width: 0;
   }
 
   .compare-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
-    margin-top: 18px;
-    padding-top: 14px;
-    border-top: 1px solid var(--border-color);
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .action-btn {
+    font-size: 0.82rem;
+    padding: 7px 12px;
   }
 
   .share-note {
-    font-family: var(--font-label);
+    font-family: var(--font-mono);
     font-size: 0.72rem;
     color: var(--text-subtle);
   }
 
   .share-status {
-    font-family: var(--font-label);
+    font-family: var(--font-mono);
     font-size: 0.72rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--accent-green);
   }
 
-  @media (max-width: 760px) {
-    .compare-header-card > div:nth-child(2) {
-      grid-template-columns: 1fr !important;
-    }
-  }
-
-  .active-sort {
-    background-color: var(--border-strong) !important;
-    color: var(--bg-primary) !important;
+  .compare-table-wrap {
+    border: 1px solid var(--hairline);
+    background-color: var(--card-bg);
+    overflow-x: auto;
   }
 
   .compare-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.92rem;
+    font-size: 0.9rem;
   }
 
-  .compare-table th {
-    background-color: var(--bg-tertiary);
-    border-bottom: 2px solid var(--border-strong);
-    padding: 14px 16px;
-    text-align: left;
-  }
-
+  .compare-table th,
   .compare-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--hairline);
+    text-align: left;
     vertical-align: top;
   }
 
-  .compare-table tr:hover td {
+  .compare-table thead th {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-strong);
+  }
+
+  .compare-table tbody th {
+    font-family: var(--font-label);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    width: 24%;
+  }
+
+  .compare-table tbody td {
+    width: 38%;
+  }
+
+  .compare-table tbody tr:hover td,
+  .compare-table tbody tr:hover th {
     background-color: var(--surface-hover);
+  }
+
+  .aspect-col {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+
+  .table-identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .identity-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .rank {
+    font-size: 0.9rem;
+    color: var(--text-main);
+  }
+
+  .cell-sub {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-left: var(--space-2);
+  }
+
+  .cell-muted {
+    color: var(--text-muted);
+  }
+
+  .trade-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: 0.88rem;
+  }
+
+  .trade-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    line-height: 1.45;
+  }
+
+  .trade-mark {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .trade-mark.good {
+    color: var(--accent-green);
+  }
+
+  .trade-mark.bad {
+    color: var(--accent-red);
+  }
+
+  .link-action {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    text-decoration: none;
+    color: var(--accent-ink);
+    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  }
+
+  .link-action:hover {
+    background-color: var(--bg-tertiary);
+    border-color: var(--border-strong);
+  }
+
+  @media (max-width: 760px) {
+    .compare-pickers {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

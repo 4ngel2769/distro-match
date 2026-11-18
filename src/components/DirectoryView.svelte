@@ -4,6 +4,7 @@
   import { FAMILY_PAGES, USE_CASE_PAGES, landingPath } from '../data/landingPages.js';
   import DistroLogo from './DistroLogo.svelte';
   import DistroScreenshot from './DistroScreenshot.svelte';
+  import Icon from './Icon.svelte';
 
   let { onSelectForCompare, onOpenDistro } = $props();
 
@@ -39,6 +40,10 @@
   function shortDate(value) {
     if (!value) return null;
     return value.length > 7 ? value.slice(0, 7) : value;
+  }
+
+  function targetLabel(distro) {
+    return distro.primaryUseCases?.[0] || distro.desktopEnvironments?.[0] || '—';
   }
 
   let filteredDistros = $derived.by(() => {
@@ -102,50 +107,69 @@
 </script>
 
 <div class="page-container">
-  <div class="directory-controls-card">
-    <div class="directory-head">
-      <div>
-        <h1 class="directory-title">Linux Distribution Directory</h1>
-        <p class="directory-sub">
-          {LINUX_DISTROS.length} distributions, each with a full profile, verified logo and desktop screenshot.
-          Click any card to open its page.
-        </p>
+  <section class="toolbar surface" aria-label="Directory controls">
+    <div class="toolbar-intro">
+      <span class="field-label">CATALOGUE / ALL DISTRIBUTIONS</span>
+      <h1 class="directory-title">Linux Distribution Directory</h1>
+      <p class="directory-sub">
+        {LINUX_DISTROS.length} distributions, each with a full profile, verified logo and desktop screenshot.
+        Click any card to open its page.
+      </p>
+    </div>
+
+    <div class="toolbar-main">
+      <div class="search-field">
+        <span class="search-icon" aria-hidden="true"><Icon name="search" size={16} /></span>
+        <input
+          type="text"
+          bind:value={searchQuery}
+          class="search-input"
+          placeholder="Search name, family, package manager, desktop, init system or feature…"
+          aria-label="Search distributions"
+        />
+        {#if searchQuery}
+          <button class="clear-btn" onclick={() => (searchQuery = '')} aria-label="Clear search">
+            <Icon name="close" size={14} />
+          </button>
+        {/if}
       </div>
 
-      <div class="sort-row">
-        <span class="control-label">SORT BY</span>
-        <button
-          class="btn-secondary sort-btn"
-          class:active-sort={sortBy === 'popularity'}
-          aria-pressed={sortBy === 'popularity'}
-          onclick={() => setSort('popularity')}
-        >
-          Popularity
-        </button>
-        <button
-          class="btn-secondary sort-btn"
-          class:active-sort={sortBy === 'age'}
-          aria-pressed={sortBy === 'age'}
-          onclick={() => setSort('age')}
-        >
-          Age
-        </button>
-        <button
-          class="btn-secondary sort-btn"
-          class:active-sort={sortBy === 'updated'}
-          aria-pressed={sortBy === 'updated'}
-          onclick={() => setSort('updated')}
-        >
-          Last update
-        </button>
-        <button
-          class="btn-secondary sort-btn"
-          class:active-sort={sortBy === 'alphabetical'}
-          aria-pressed={sortBy === 'alphabetical'}
-          onclick={() => setSort('alphabetical')}
-        >
-          A–Z
-        </button>
+      <div class="sort-controls">
+        <span class="field-label">SORT</span>
+        <div class="sort-buttons" role="group" aria-label="Sort distributions">
+          <button
+            class="sort-btn"
+            class:active={sortBy === 'popularity'}
+            aria-pressed={sortBy === 'popularity'}
+            onclick={() => setSort('popularity')}
+          >
+            Popularity
+          </button>
+          <button
+            class="sort-btn"
+            class:active={sortBy === 'age'}
+            aria-pressed={sortBy === 'age'}
+            onclick={() => setSort('age')}
+          >
+            Age
+          </button>
+          <button
+            class="sort-btn"
+            class:active={sortBy === 'updated'}
+            aria-pressed={sortBy === 'updated'}
+            onclick={() => setSort('updated')}
+          >
+            Last update
+          </button>
+          <button
+            class="sort-btn"
+            class:active={sortBy === 'alphabetical'}
+            aria-pressed={sortBy === 'alphabetical'}
+            onclick={() => setSort('alphabetical')}
+          >
+            A–Z
+          </button>
+        </div>
 
         {#if sortBy === 'popularity'}
           <label class="sort-year-label">
@@ -158,76 +182,71 @@
             </select>
           </label>
         {:else if sortBy === 'age' || sortBy === 'updated'}
-          <button class="sort-dir" onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}>
-            {sortDir === 'asc' ? 'Oldest first ↑' : 'Newest first ↓'}
+          <button
+            class="sort-dir"
+            aria-label="Reverse sort direction"
+            onclick={() => (sortDir = sortDir === 'asc' ? 'desc' : 'asc')}
+          >
+            <Icon name="swap" size={13} />
+            <span>{sortDir === 'asc' ? 'Oldest first' : 'Newest first'}</span>
           </button>
         {/if}
       </div>
     </div>
 
-    <div class="search-row">
-      <input
-        type="text"
-        bind:value={searchQuery}
-        class="search-input"
-        placeholder="Search name, family, package manager, desktop, init system or feature…"
-        aria-label="Search distributions"
-      />
-      {#if searchQuery}
-        <button class="clear-btn" onclick={() => (searchQuery = '')} aria-label="Clear search">✕</button>
-      {/if}
-    </div>
-
-    <div class="family-row">
-      <span class="control-label">FAMILY</span>
-      {#each families as fam}
-        <button
-          class="filter-pill"
-          class:active={selectedFamily === fam}
-          aria-pressed={selectedFamily === fam}
-          onclick={() => (selectedFamily = fam)}
-        >
-          {fam === 'all' ? 'All families' : fam}
-        </button>
-      {/each}
-    </div>
-
-    <div class="result-count">
-      Showing <strong>{filteredDistros.length}</strong> of {LINUX_DISTROS.length} distributions
-      · sorted by
-      {sortBy === 'popularity'
-        ? `popularity (${yearLabel()})`
-        : sortBy === 'age'
-          ? `age (${sortDir === 'asc' ? 'oldest' : 'newest'} first)`
-          : sortBy === 'updated'
-            ? `last update (${sortDir === 'desc' ? 'newest' : 'oldest'} first)`
-            : 'name'}
-    </div>
-
-    <div class="browse-hubs">
-      <span class="control-label">Browse by family</span>
-      <div class="hub-row">
-        {#each FAMILY_PAGES as family}
-          <a class="hub-link" href={landingPath('family', family.slug)}>{family.label}</a>
-        {/each}
-      </div>
-
-      <span class="control-label">Browse by use case</span>
-      <div class="hub-row">
-        {#each USE_CASE_PAGES as useCase}
-          <a class="hub-link" href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
+    <div class="family-controls">
+      <span class="field-label">FAMILY</span>
+      <div class="filter-pills" role="group" aria-label="Filter by family">
+        {#each families as fam}
+          <button
+            class="filter-pill"
+            class:active={selectedFamily === fam}
+            aria-pressed={selectedFamily === fam}
+            onclick={() => (selectedFamily = fam)}
+          >
+            {fam === 'all' ? 'All families' : fam}
+          </button>
         {/each}
       </div>
     </div>
-  </div>
+
+    <div class="toolbar-foot">
+      <p class="result-count">
+        SHOWING <span class="field-value">{filteredDistros.length}</span> / {LINUX_DISTROS.length}
+        <span class="count-divider" aria-hidden="true"></span>
+        SORTED BY {sortBy === 'popularity'
+          ? `POPULARITY (${yearLabel().toUpperCase()})`
+          : sortBy === 'age'
+            ? `AGE (${sortDir === 'asc' ? 'OLDEST' : 'NEWEST'} FIRST)`
+            : sortBy === 'updated'
+              ? `LAST UPDATE (${sortDir === 'desc' ? 'NEWEST' : 'OLDEST'} FIRST)`
+              : 'NAME'}
+      </p>
+
+      <div class="browse-hubs">
+        <div class="hub-row">
+          <span class="field-label">Browse by family</span>
+          {#each FAMILY_PAGES as family}
+            <a class="hub-link" href={landingPath('family', family.slug)}>{family.label}</a>
+          {/each}
+        </div>
+        <div class="hub-row">
+          <span class="field-label">Browse by use case</span>
+          {#each USE_CASE_PAGES as useCase}
+            <a class="hub-link" href={landingPath('use-case', useCase.slug)}>{useCase.label}</a>
+          {/each}
+        </div>
+      </div>
+    </div>
+  </section>
 
   {#if filteredDistros.length === 0}
     <div class="empty-state">
-      <div class="eyebrow">NO MATCHES</div>
+      <div class="eyebrow field-label"><Icon name="alert" size={13} /> NO MATCHES</div>
       <h2>Nothing fits that filter</h2>
       <p>Try a broader search term or reset the family filter.</p>
       <button
-        class="btn-primary"
+        class="reset-btn"
         onclick={() => {
           searchQuery = '';
           selectedFamily = 'all';
@@ -237,7 +256,7 @@
       </button>
     </div>
   {:else}
-    <div class="directory-cards-grid">
+    <div class="directory-cards-grid stagger-in">
       {#each filteredDistros as distro (distro.id)}
         <a
           class="distro-card"
@@ -255,31 +274,48 @@
                 <DistroLogo {distro} size={30} decorative={true} />
                 <div class="card-title-text">
                   <span class="card-distro-name">{distro.name}</span>
-                  <span class="card-subline">{distro.family} · {rankLabel(distro)}</span>
+                  <span class="card-subline">
+                    {distro.family} <span class="card-rank">· {rankLabel(distro)}</span>
+                  </span>
                 </div>
               </div>
               <p class="card-tagline">{distro.tagline}</p>
             </div>
           </div>
 
-          <div class="card-body">
-            <div class="card-chip-row">
-              <span class="chip chip--accent">{distro.releaseModel}</span>
-              <span class="chip">{distro.initSystem}</span>
-              {#each (distro.desktopEnvironments || []).slice(0, 1) as de}
-                <span class="chip">{de}</span>
-              {/each}
-            </div>
-
-            <div class="card-specs-row">
-              <span title={distro.packageManager}><strong>Packages</strong> {primaryPackageManager(distro.packageManager)}</span>
-              <span><strong>Updated</strong> {shortDate(distro.latestRelease) || '—'}</span>
-            </div>
+          <div class="caption-strip card-caption">
+            <strong>TRAITS</strong>
+            <span class="specimen specimen--accent">{distro.releaseModel}</span>
+            <span class="specimen">{distro.initSystem}</span>
+            {#each (distro.desktopEnvironments || []).slice(0, 1) as de}
+              <span class="specimen">{de}</span>
+            {/each}
           </div>
+
+          <table class="spec-table card-specs">
+            <tbody>
+              <tr>
+                <th scope="row">Packages</th>
+                <td class="spec-value" title={distro.packageManager}>{primaryPackageManager(distro.packageManager)}</td>
+              </tr>
+              <tr>
+                <th scope="row">Target</th>
+                <td class="spec-value" title={targetLabel(distro)}>{targetLabel(distro)}</td>
+              </tr>
+              <tr>
+                <th scope="row">Since</th>
+                <td class="spec-value">{shortDate(distro.firstRelease) || '—'}</td>
+              </tr>
+              <tr>
+                <th scope="row">Updated</th>
+                <td class="spec-value">{shortDate(distro.latestRelease) || '—'}</td>
+              </tr>
+            </tbody>
+          </table>
 
           <div class="card-footer">
             <span>View profile</span>
-            <span class="card-arrow" aria-hidden="true">→</span>
+            <span class="card-arrow" aria-hidden="true"><Icon name="arrow-right" size={15} /></span>
           </div>
         </a>
       {/each}
@@ -288,78 +324,245 @@
 </div>
 
 <style>
-  .directory-controls-card {
-    border: 2px solid var(--border-strong);
+  /* ---------- Toolbar ---------- */
+  .toolbar {
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    padding: 24px;
-    margin-bottom: 22px;
-    box-shadow: var(--shadow-sharp);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 
-  .directory-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-bottom: 18px;
+  .toolbar-intro {
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
   }
 
   .directory-title {
-    font-size: 2.1rem;
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 6px;
+    font-family: var(--font-sans);
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-top: 6px;
   }
 
   .directory-sub {
     color: var(--text-muted);
-    font-size: 0.94rem;
-    max-width: 62ch;
-    line-height: 1.45;
+    font-size: 0.9rem;
+    max-width: 70ch;
+    line-height: 1.5;
+    margin-top: 4px;
   }
 
-  .control-label {
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
+  .toolbar-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: var(--space-5);
+    align-items: start;
+    padding: var(--space-4) 0;
+  }
+
+  .search-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    padding: 0 var(--space-3);
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+
+  .search-field:focus-within {
+    border-color: var(--accent-color);
+  }
+
+  .search-icon {
+    color: var(--text-subtle);
+    display: inline-flex;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+  }
+
+  .search-input::placeholder {
     color: var(--text-subtle);
   }
 
-  .sort-row {
-    display: flex;
+  .clear-btn {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--text-subtle);
+    transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
   }
 
-  .sort-btn {
-    padding: 6px 12px;
-    font-size: 0.8rem;
+  .clear-btn:hover {
+    color: var(--text-main);
+    border-color: var(--border-color);
+  }
+
+  .sort-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .sort-controls > .field-label {
+    flex-basis: 100%;
+  }
+
+  .sort-buttons,
+  .filter-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .sort-btn,
+  .filter-pill {
     font-family: var(--font-label);
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    padding: 5px 10px;
+    transition: background-color var(--dur-1) var(--ease-out),
+      border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+
+  .sort-btn:hover,
+  .filter-pill:hover {
+    border-color: var(--border-strong);
+    color: var(--text-main);
+    background-color: var(--surface-hover);
+  }
+
+  .sort-btn.active,
+  .filter-pill.active {
+    background-color: var(--selected-bg);
+    border-color: var(--selected-border);
+    color: var(--accent-ink);
+  }
+
+  .sort-select,
+  .sort-dir {
+    height: 31px;
+    padding: 0 9px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-variant-numeric: tabular-nums;
+    transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+  }
+
+  .sort-select:hover,
+  .sort-dir:hover {
+    border-color: var(--border-strong);
+  }
+
+  .sort-dir {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
   }
 
   .sort-year-label {
     display: inline-flex;
   }
 
-  .sort-select,
-  .sort-dir {
-    height: 35px;
-    padding: 0 10px;
-    border: 2px solid var(--border-strong);
-    background-color: var(--bg-primary);
-    color: var(--text-main);
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 700;
-    cursor: pointer;
+  .family-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
   }
 
-  .sort-dir {
-    background-color: var(--bg-tertiary);
+  .toolbar-foot {
+    padding-top: var(--space-3);
+  }
+
+  .result-count {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.03em;
+    color: var(--text-subtle);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .result-count .field-value {
+    color: var(--text-main);
+    font-weight: 600;
+  }
+
+  .count-divider {
+    width: 18px;
+    height: 1px;
+    background-color: var(--border-color);
+  }
+
+  .browse-hubs {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: var(--space-4);
+    padding-top: var(--space-2);
+  }
+
+  .hub-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 0;
+  }
+
+  .hub-row .field-label {
+    margin-right: var(--space-3);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  .hub-link {
+    font-family: var(--font-label);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 2px var(--space-3);
+    border-left: 1px solid var(--border-color);
+    border-bottom: 1px solid transparent;
+    transition: color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  }
+
+  .hub-link:first-of-type {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .hub-link:hover {
+    color: var(--accent-ink);
+    border-bottom-color: var(--accent-color);
   }
 
   .sr-only {
@@ -374,145 +577,39 @@
     border: 0;
   }
 
-  .active-sort {
-    background-color: var(--border-strong) !important;
-    color: var(--bg-primary) !important;
-  }
-
-  .search-row {
-    position: relative;
-  }
-
-  .search-input {
-    width: 100%;
-    padding: 12px 44px 12px 16px;
-    border: 2px solid var(--border-strong);
-    background-color: var(--bg-primary);
-    font-size: 1rem;
-    font-family: var(--font-sans);
-  }
-
-  .search-input:focus {
-    outline: 2px solid var(--accent-color);
-    outline-offset: 1px;
-  }
-
-  .clear-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: 1rem;
-    color: var(--text-subtle);
-    cursor: pointer;
-    padding: 4px 6px;
-  }
-
-  .family-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-    margin-top: 14px;
-  }
-
-  .filter-pill {
-    background-color: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    padding: 5px 12px;
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: all 0.1s ease;
-  }
-
-  .filter-pill:hover {
-    border-color: var(--border-strong);
-    background-color: var(--bg-tertiary);
-  }
-
-  .filter-pill.active {
-    background-color: var(--border-strong);
-    color: var(--bg-primary);
-    border-color: var(--border-strong);
-  }
-
-  .result-count {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    color: var(--text-subtle);
-    margin-top: 14px;
-  }
-
-  .result-count strong {
-    color: var(--text-main);
-  }
-
-  .browse-hubs {
-    margin-top: 18px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-color);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .hub-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 7px;
-    margin-bottom: 6px;
-  }
-
-  .hub-link {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 600;
-    border: 1px solid var(--border-color);
-    padding: 5px 11px;
-    text-decoration: none;
-    color: var(--text-main);
-    transition: border-color 0.12s ease, background-color 0.12s ease;
-  }
-
-  .hub-link:hover {
-    border-color: var(--border-strong);
-    background-color: var(--bg-tertiary);
-  }
-
+  /* ---------- Specimen grid ---------- */
   .directory-cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+    gap: 1px;
   }
 
   .distro-card {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    text-decoration: none;
     color: inherit;
-    transition: border-color 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
+    text-decoration: none;
+    transition: background-color var(--dur-2) var(--ease-out),
+      border-color var(--dur-2) var(--ease-out);
     position: relative;
-    overflow: hidden;
   }
 
   .distro-card:hover {
+    background-color: var(--surface-hover);
     border-color: var(--border-strong);
-    transform: translate(-2px, -2px);
-    box-shadow: var(--shadow-sharp);
+  }
+
+  .distro-card:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: -3px;
+    z-index: 2;
   }
 
   .distro-card:hover .card-arrow {
     transform: translateX(3px);
-  }
-
-  .distro-card:focus-visible {
-    outline: 3px solid var(--accent-color);
-    outline-offset: 2px;
   }
 
   .card-media {
@@ -536,37 +633,43 @@
     object-position: center;
   }
 
-  /* Soft upward scrim so the identity block stays legible without hiding the
-     full screenshot. Tied to the same neutral image plate as the other shots. */
+  /* A stepped, bottom-up scrim built from the plate tokens — two solid bands
+     keep the identity block legible without hiding the full screenshot. */
   .card-scrim {
     position: absolute;
-    inset: 0;
+    inset: auto 0 0 0;
+    height: 58%;
+    background-color: var(--scrim-plate);
     pointer-events: none;
-    background: linear-gradient(
-      to top,
-      rgba(8, 10, 6, 0.92) 0%,
-      rgba(8, 10, 6, 0.8) 20%,
-      rgba(8, 10, 6, 0.5) 40%,
-      rgba(8, 10, 6, 0.12) 66%,
-      rgba(8, 10, 6, 0) 100%
-    );
+    z-index: 1;
+  }
+
+  .card-scrim::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: 26px;
+    background-color: var(--scrim-plate);
+    opacity: 0.5;
   }
 
   .card-tier {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: var(--space-2);
+    right: var(--space-2);
     z-index: 2;
-    letter-spacing: 0.04em;
   }
 
   .card-overlay {
     position: absolute;
     inset: auto 0 0 0;
-    padding: 14px 16px 16px;
+    z-index: 2;
+    padding: var(--space-3) var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 6px;
     color: var(--scrim-text);
   }
 
@@ -584,8 +687,8 @@
   }
 
   .card-distro-name {
-    font-size: 1.12rem;
-    font-weight: 800;
+    font-size: 1.05rem;
+    font-weight: 700;
     letter-spacing: -0.01em;
     line-height: 1.2;
     white-space: nowrap;
@@ -596,7 +699,6 @@
   .card-subline {
     font-family: var(--font-label);
     font-size: 0.72rem;
-    font-weight: 500;
     color: var(--scrim-text-muted);
     margin-top: 2px;
     white-space: nowrap;
@@ -604,9 +706,14 @@
     text-overflow: ellipsis;
   }
 
+  .card-rank {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
   .card-tagline {
     font-family: var(--font-label);
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     color: var(--scrim-text);
     line-height: 1.45;
     display: -webkit-box;
@@ -615,73 +722,69 @@
     overflow: hidden;
   }
 
-  .card-body {
-    padding: 14px 16px 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    flex: 1;
+  .card-caption {
+    min-height: 38px;
+    padding: 7px var(--space-4);
+    align-items: center;
   }
 
-  .card-chip-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .chip {
+  .specimen {
     font-family: var(--font-label);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 500;
-    padding: 4px 8px;
+    line-height: 1.4;
+    padding: 2px 7px;
     background-color: var(--tag-neutral-bg);
     border: 1px solid var(--tag-neutral-border);
     color: var(--tag-neutral-text);
     white-space: nowrap;
-    max-width: 18ch;
+    max-width: 20ch;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  /* One accent chip at most; everything else stays neutral. */
-  .chip--accent {
+  .specimen--accent {
     background-color: var(--tag-accent-bg);
     border-color: var(--tag-accent-border);
     color: var(--tag-accent-text);
-    font-weight: 700;
   }
 
-  .card-specs-row {
-    font-family: var(--font-label);
+  .card-specs {
+    padding: var(--space-3) var(--space-4);
     font-size: 0.72rem;
-    color: var(--text-subtle);
-    border-top: 1px solid var(--border-color);
-    padding-top: 10px;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 6px 12px;
-    min-width: 0;
+    table-layout: fixed;
   }
 
-  .card-specs-row span {
+  .card-specs tr + tr th,
+  .card-specs tr + tr td {
+    border-top: 1px solid var(--border-color);
+  }
+
+  .card-specs th {
+    width: 38%;
+    padding: 5px 0;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .card-specs td {
+    padding: 5px 0;
     min-width: 0;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .card-specs-row strong {
-    color: var(--text-muted);
-    font-size: 0.72rem;
-    font-weight: 600;
-    margin-right: 4px;
+  .card-specs .spec-value {
+    font-variant-numeric: tabular-nums;
   }
 
   .card-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 16px;
+    margin-top: auto;
+    padding: 10px var(--space-4);
     border-top: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
     font-family: var(--font-label);
@@ -691,42 +794,70 @@
   }
 
   .card-arrow {
+    display: inline-flex;
     color: var(--accent-color);
-    transition: transform 0.12s ease;
+    transition: transform var(--dur-1) var(--ease-out);
   }
 
+  /* ---------- Empty state ---------- */
   .empty-state {
-    border: 2px solid var(--border-strong);
-    box-shadow: var(--shadow-sharp);
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    padding: 40px;
+    padding: var(--space-7);
   }
 
-  .eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 800;
+  .empty-state .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     color: var(--accent-red);
-    margin-bottom: 8px;
   }
 
   .empty-state h2 {
-    font-size: 1.6rem;
-    margin-bottom: 6px;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: var(--space-2) 0;
   }
 
   .empty-state p {
     color: var(--text-muted);
-    margin-bottom: 18px;
+    margin-bottom: var(--space-5);
+  }
+
+  .reset-btn {
+    font-family: var(--font-label);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 9px 16px;
+    border: 1px solid var(--accent-fill);
+    background-color: var(--accent-fill);
+    color: var(--accent-contrast);
+    transition: background-color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  }
+
+  .reset-btn:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  @media (max-width: 860px) {
+    .toolbar-main {
+      grid-template-columns: 1fr;
+    }
   }
 
   @media (max-width: 560px) {
-    .directory-controls-card {
-      padding: 18px;
+    .toolbar {
+      padding: var(--space-4);
     }
 
     .directory-title {
-      font-size: 1.7rem;
+      font-size: 1.5rem;
+    }
+
+    .empty-state {
+      padding: var(--space-5);
     }
   }
 </style>

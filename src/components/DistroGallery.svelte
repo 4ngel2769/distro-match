@@ -8,6 +8,7 @@
    * fall back to the labelled placeholder rather than borrowing another
    * distro's desktop.
    */
+  import Icon from './Icon.svelte';
   import { DISTRO_GALLERIES } from '../data/distroGalleries.js';
   import DistroScreenshot from './DistroScreenshot.svelte';
 
@@ -81,12 +82,12 @@
 
       {#if hasMultiple}
         <button class="gallery-nav gallery-prev" onclick={() => go(-1)} aria-label="Previous screenshot">
-          ‹
+          <Icon name="chevron-left" size={18} />
         </button>
         <button class="gallery-nav gallery-next" onclick={() => go(1)} aria-label="Next screenshot">
-          ›
+          <Icon name="chevron-right" size={18} />
         </button>
-        <span class="gallery-count" aria-live="polite">{index + 1} / {images.length}</span>
+        <span class="gallery-count field-value" aria-live="polite">{index + 1} / {images.length}</span>
       {/if}
     </div>
 
@@ -95,7 +96,7 @@
         <strong>{current.title || 'Desktop screenshot'}</strong>
         {#if current.credit?.url}
           <a href={current.credit.url} target="_blank" rel="noopener noreferrer">
-            {current.credit.label || 'Source'}
+            {current.credit.label || 'Source'} <Icon name="external" size={11} />
           </a>
           {#if current.credit.license}
             <span>· {current.credit.license}</span>
@@ -132,7 +133,7 @@
 
 <style>
   .gallery {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--hairline);
     background-color: var(--card-bg);
   }
 
@@ -165,7 +166,7 @@
     height: 100%;
     object-fit: contain;
     display: block;
-    animation: galleryFade 0.18s ease-out;
+    animation: galleryFade var(--dur-2) var(--ease-out);
   }
 
   @keyframes galleryFade {
@@ -183,11 +184,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: var(--space-2);
     color: var(--scrim-text-muted);
     font-size: 0.88rem;
     text-align: center;
-    padding: 20px;
+    padding: var(--space-5);
   }
 
   .gallery-broken strong {
@@ -204,78 +205,86 @@
     border: 1px solid var(--scrim-border);
     background: var(--scrim-plate);
     color: var(--scrim-text);
-    font-size: 1.6rem;
-    line-height: 1;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.12s ease;
+    transition: background-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
   }
 
   .gallery-nav:hover {
     background: var(--accent-fill);
     color: var(--accent-contrast);
-    border-color: transparent;
+    border-color: var(--accent-fill);
   }
 
   .gallery-prev {
-    left: 10px;
+    left: var(--space-3);
   }
 
   .gallery-next {
-    right: 10px;
+    right: var(--space-3);
   }
 
   .gallery-count {
     position: absolute;
     z-index: 2;
-    top: 10px;
-    right: 10px;
-    font-family: var(--font-label);
+    top: var(--space-3);
+    right: var(--space-3);
     font-size: 0.68rem;
-    font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--scrim-text);
     background: var(--scrim-plate);
     border: 1px solid var(--scrim-border);
-    padding: 3px 7px;
+    padding: 4px 8px;
   }
 
   .gallery-caption {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: var(--space-4);
     flex-wrap: wrap;
-    padding: 10px 12px;
-    border-top: 1px solid var(--border-color);
+    padding: var(--space-3) var(--space-4);
+    border-top: 1px solid var(--hairline);
     background-color: var(--bg-secondary);
   }
 
   .gallery-caption-text {
-    font-family: var(--font-label);
-    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
     color: var(--text-subtle);
     min-width: 0;
     display: flex;
     flex-wrap: wrap;
-    gap: 4px;
+    gap: var(--space-1) var(--space-2);
     align-items: baseline;
   }
 
   .gallery-caption-text strong {
     color: var(--text-main);
-    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-right: var(--space-1);
   }
 
   .gallery-caption-text a {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
     color: var(--text-muted);
+    transition: color var(--dur-1) var(--ease-out);
+  }
+
+  .gallery-caption-text a:hover {
+    color: var(--accent-ink);
   }
 
   .gallery-thumbs {
     display: flex;
-    gap: 5px;
+    gap: var(--space-1);
     flex-shrink: 0;
   }
 
@@ -283,11 +292,11 @@
     width: 54px;
     height: 34px;
     padding: 0;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     background: var(--image-void);
     cursor: pointer;
-    opacity: 0.62;
-    transition: opacity 0.12s ease, border-color 0.12s ease;
+    opacity: 0.6;
+    transition: opacity var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
   }
 
   .gallery-thumb img {
@@ -301,7 +310,7 @@
   .gallery-thumb:hover,
   .gallery-thumb.active {
     opacity: 1;
-    border-color: var(--accent-color);
+    border-color: var(--selected-border);
   }
 
   @media (max-width: 560px) {

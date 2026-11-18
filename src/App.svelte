@@ -35,7 +35,7 @@
 
   // Only questions relevant to the current answers are asked. The NVIDIA
   // driver question, for example, disappears if another GPU is selected.
-  let quizQuestions = $derived(visibleQuestions(userAnswers));
+  let quizQuestions = $derived(visibleQuestions(userAnswers, { expert: Boolean(steering.expertMode) }));
   let currentQuestion = $derived(quizQuestions[currentQuestionIndex] || null);
   let currentStage = $derived(
     currentQuestion ? QUIZ_STAGES.find((s) => s.id === currentQuestion.stage) || QUIZ_STAGES[0] : QUIZ_STAGES[0]
@@ -54,7 +54,8 @@
     gamingBoost: false,
     stabilityBias: 'any',
     nvidiaBoost: false,
-    snapsPreference: 'neutral'
+    snapsPreference: 'neutral',
+    expertMode: false
   });
 
   // Comparison tool initial inputs (the URL is the source of truth when present)
@@ -273,6 +274,18 @@
     steering = newSteering;
   }
 
+  /** Switch between newcomer and expert paths without losing the current question. */
+  function handleExpertModeChange() {
+    const currentId = currentQuestion?.id;
+    const next = { ...steering, expertMode: !steering.expertMode };
+    steering = next;
+    const list = visibleQuestions(userAnswers, { expert: next.expertMode });
+    const idx = list.findIndex((q) => q.id === currentId);
+    currentQuestionIndex = idx >= 0 ? idx : Math.min(currentQuestionIndex, Math.max(0, list.length - 1));
+    questionHistory = [];
+    intermissionOpen = false;
+  }
+
   function finishQuiz() {
     intermissionOpen = false;
     navigateTo('results');
@@ -382,6 +395,8 @@
       onStartQuiz={handleStartQuiz}
       onNavigate={navigateTo}
       {steering}
+      expertMode={Boolean(steering.expertMode)}
+      onExpertModeChange={handleExpertModeChange}
       onSteeringChange={handleSteeringChange}
     />
   {:else if activeView === 'quiz'}
@@ -403,6 +418,8 @@
         total={quizQuestions.length}
         answeredCount={answeredCount}
         stage={currentStage}
+        expertMode={Boolean(steering.expertMode)}
+        onExpertModeChange={handleExpertModeChange}
         {userAnswers}
         {questionWeights}
         onAnswer={handleAnswer}

@@ -1,6 +1,7 @@
 <script>
   import { MatchingEngine } from '../lib/matchingEngine.js';
   import DistroLogo from './DistroLogo.svelte';
+  import Icon from './Icon.svelte';
 
   let {
     stage = null,
@@ -19,200 +20,178 @@
       3
     ).picks
   );
+
+  function reasonFor(result) {
+    const reasons = result.matchReasons;
+    if (Array.isArray(reasons) && reasons.length) return reasons[0];
+    return `${result.distro.family} · ${result.distro.releaseModel}`;
+  }
 </script>
 
 <div class="page-container">
-  <section class="break-card">
-    <div class="break-head">
-      <div>
-        <div class="eyebrow">STAGE {stage?.id} COMPLETE</div>
-        <h1>{isFinal ? 'Your shortlist is ready' : `${stage?.title} — done`}</h1>
-        <p>
-          {isFinal
-            ? 'We have everything we need. Here are the three strongest matches before the final calculation.'
-            : `With ${stage?.short.toLowerCase()} out of the way, these are the current front-runners. You can still change any answer.`}
-        </p>
-      </div>
-      <span class="stage-mark" aria-hidden="true">{stage?.id}</span>
+  <section class="report surface">
+    <div class="report-head">
+      <span class="field-label">Field report · Stage {stage?.id}</span>
+      <h1>{isFinal ? 'Your shortlist is ready' : `${stage?.title} — done`}</h1>
+      <p>
+        {isFinal
+          ? 'We have everything we need. Here are the three strongest matches before the final calculation.'
+          : `With ${stage?.short.toLowerCase()} out of the way, these are the current front-runners. You can still change any answer.`}
+      </p>
     </div>
 
-    <div class="leading-list">
+    <div class="report-rows" aria-label="Current front-runners">
       {#each leading as result, i}
-        <div class="leading-row">
-          <span class="leading-rank">{i + 1}</span>
-          <DistroLogo distro={result.distro} size={34} decorative={true} />
-          <div class="leading-info">
+        <div class="report-row">
+          <span class="row-rank field-value">{String(i + 1).padStart(2, '0')}</span>
+          <DistroLogo distro={result.distro} size={30} decorative={true} />
+          <div class="row-body">
             <strong>{result.distro.name}</strong>
-            <span>{result.distro.family} · {result.distro.releaseModel}</span>
+            <span class="row-reason">{reasonFor(result)}</span>
           </div>
-          <span class="leading-score">{result.matchPercentage}%</span>
+          <span class="row-score field-value">{result.matchPercentage}<small>%</small></span>
         </div>
       {:else}
         <p class="no-matches">No distro passes every hard requirement yet. You can keep going — later answers may open the field up.</p>
       {/each}
     </div>
 
-    <div class="break-note">
+    <p class="report-note">
       {#if nextStage}
         Next up: <strong>{nextStage.title}</strong> — {nextStage.subtitle}
       {:else}
         No more questions. The final result explains why the winner beat the runners-up.
       {/if}
-    </div>
+    </p>
 
-    <div class="break-actions">
-      <button class="btn-secondary" onclick={onBack}>← Change an answer</button>
+    <div class="report-actions">
+      <button class="btn-secondary" onclick={onBack}>
+        <Icon name="arrow-left" size={14} /> Change an answer
+      </button>
       <button class="btn-primary" onclick={onContinue}>
-        {isFinal ? 'See my matches →' : `Continue to ${nextStage?.short || 'next stage'} →`}
+        {isFinal ? 'See my matches' : `Continue to ${nextStage?.short || 'next stage'}`}
+        <Icon name="arrow-right" size={14} />
       </button>
     </div>
   </section>
 </div>
 
 <style>
-  .break-card {
+  .report {
     max-width: 760px;
     margin: 0 auto;
-    border: 2px solid var(--border-strong);
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow-sharp);
-    padding: 32px;
+    padding: var(--space-6);
   }
 
-  .break-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 18px;
+  .report-head {
     border-bottom: 1px solid var(--border-color);
-    padding-bottom: 20px;
-    margin-bottom: 20px;
+    padding-bottom: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 
-  .eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent-color);
-    margin-bottom: 10px;
+  .report-head h1 {
+    font-size: clamp(1.5rem, 3vw, 1.9rem);
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: var(--space-4) 0 var(--space-2);
   }
 
-  .break-head h1 {
-    font-size: 1.8rem;
-    font-weight: 900;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-    margin-bottom: 8px;
-  }
-
-  .break-head p {
+  .report-head p {
     font-size: 0.94rem;
     color: var(--text-muted);
-    max-width: 52ch;
-    line-height: 1.5;
+    max-width: 62ch;
+    line-height: 1.6;
   }
 
-  .stage-mark {
-    font-family: var(--font-label);
-    font-size: 2.6rem;
-    font-weight: 900;
-    line-height: 1;
-    color: var(--bg-tertiary);
+  .report-rows {
+    border-top: 1px solid var(--border-color);
+    margin-bottom: var(--space-5);
+  }
+
+  .report-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-2);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .row-rank {
+    font-size: 0.76rem;
+    color: var(--text-subtle);
+    width: 20px;
     flex-shrink: 0;
   }
 
-  .leading-list {
+  .row-body {
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--border-color);
-    margin-bottom: 18px;
-  }
-
-  .leading-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  .leading-row:last-child {
-    border-bottom: none;
-  }
-
-  .leading-rank {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: var(--text-subtle);
-    width: 16px;
-  }
-
-  .leading-info {
-    display: flex;
-    flex-direction: column;
+    gap: 2px;
     flex: 1;
     min-width: 0;
   }
 
-  .leading-info strong {
+  .row-body strong {
     font-size: 0.98rem;
+    font-weight: 600;
   }
 
-  .leading-info span {
-    font-family: var(--font-label);
-    font-size: 0.74rem;
+  .row-reason {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .row-score {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-ink);
+    white-space: nowrap;
+  }
+
+  .row-score small {
+    font-size: 0.7rem;
     color: var(--text-subtle);
-  }
-
-  .leading-score {
-    font-family: var(--font-label);
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: var(--accent-color);
+    margin-left: 1px;
   }
 
   .no-matches {
-    padding: 16px;
+    padding: var(--space-4) var(--space-2);
     font-size: 0.9rem;
     color: var(--text-muted);
     line-height: 1.5;
   }
 
-  .break-note {
+  .report-note {
     font-size: 0.85rem;
     color: var(--text-muted);
-    line-height: 1.5;
-    margin-bottom: 22px;
+    line-height: 1.55;
+    max-width: 62ch;
+    margin-bottom: var(--space-6);
   }
 
-  .break-note strong {
+  .report-note strong {
     color: var(--text-main);
   }
 
-  .break-actions {
+  .report-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
     border-top: 1px solid var(--border-color);
-    padding-top: 18px;
+    padding-top: var(--space-5);
   }
 
   @media (max-width: 600px) {
-    .break-card {
-      padding: 20px;
+    .report {
+      padding: var(--space-5);
     }
 
-    .break-head h1 {
-      font-size: 1.45rem;
-    }
-
-    .stage-mark {
-      display: none;
+    .report-head h1 {
+      font-size: 1.4rem;
     }
   }
 </style>

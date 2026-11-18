@@ -1,4 +1,6 @@
 <script>
+  import Icon from './Icon.svelte';
+
   function purgeData() {
     localStorage.clear();
     alert('All local browser storage wiped successfully.');
@@ -6,29 +8,30 @@
 </script>
 
 <div class="page-container">
-  <div class="legal-card">
-    <div class="legal-header">
+  <article class="legal-doc">
+    <header class="legal-header">
       <h1 class="legal-title">Privacy Policy</h1>
-      <div class="legal-sub">Strict Zero-Data Retention Standard • Fully GDPR & CCPA Compliant</div>
-    </div>
+      <div class="legal-sub">Strict Zero-Data Retention Standard • Fully GDPR &amp; CCPA Compliant</div>
+    </header>
 
-    <div class="gdpr-box">
-      <h3 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 8px; color: var(--accent-green);">
-        ✓ Summary of Our Privacy Stance: Absolute Local Isolation
-      </h3>
-      <p style="margin-bottom: 0; font-size: 0.95rem; line-height: 1.5;">
+    <section class="legal-callout">
+      <h2 class="callout-title">
+        <Icon name="check" size={17} />
+        <span>Summary of Our Privacy Stance: Absolute Local Isolation</span>
+      </h2>
+      <p>
         LinuxMatch operates <strong>100% inside your web browser</strong>. Your question responses, hardware specifications, answers, and scoring calculations never leave your local device. We have no analytics trackers, no advertising cookies, no server-side telemetry, and zero user databases.
       </p>
-    </div>
+    </section>
 
     <div class="legal-content">
-      <h2>1. Introduction & General Data Protection Regulation (GDPR) Compliance</h2>
+      <h2>1. Introduction &amp; General Data Protection Regulation (GDPR) Compliance</h2>
       <p>
         Under Regulation (EU) 2016/679 of the European Parliament and of the Council (General Data Protection Regulation or GDPR), you have fundamental rights regarding the processing and ownership of personal information. LinuxMatch is architected to achieve compliance through the most robust mechanism possible: by declining to collect, store, transmit, or monetize any personal data whatsoever.
       </p>
 
-      <h2>2. Data Collection & Processing Mechanism</h2>
-      <ul style="padding-left: 20px; line-height: 1.7; margin-bottom: 16px;">
+      <h2>2. Data Collection &amp; Processing Mechanism</h2>
+      <ul>
         <li><strong>Zero Server-Side Logging:</strong> All survey calculations, matching algorithms, and matrix scoring occur locally on your machine via client-side JavaScript execution.</li>
         <li><strong>Zero Tracking Cookies:</strong> We do not deploy advertising cookies, fingerprinting scripts, third-party analytics, or behavioral profiling beacons.</li>
         <li><strong>Zero Data Retention:</strong> The moment you close or refresh this browser tab, all transient survey responses residing in volatile memory (RAM) are instantly destroyed.</li>
@@ -40,7 +43,7 @@
         Under GDPR Articles 15 through 22 and the California Consumer Privacy Act (CCPA), individuals hold the right of access, rectification, erasure ("right to be forgotten"), and restriction of data processing. Because LinuxMatch retains zero identifier records, there is no personal data ledger to access or delete. If you wish to purge the local theme setting, click the button below:
       </p>
 
-      <div style="margin: 20px 0;">
+      <div class="purge-row">
         <button class="btn-secondary" onclick={purgeData}>
           Purge Local Browser Storage Now
         </button>
@@ -51,54 +54,102 @@
         LinuxMatch provides direct outbound hyperlinks to external distribution websites, documentation wikis, and repositories. We do not control and are not responsible for the privacy practices of external projects. When visiting external domains, refer to their respective privacy disclosures.
       </p>
     </div>
-  </div>
+  </article>
 </div>
 
 <style>
-  .legal-card {
-    border: 2px solid var(--border-strong);
-    background-color: var(--card-bg);
-    padding: 36px;
-    box-shadow: var(--shadow-sharp);
+  .legal-doc {
+    max-width: 74ch;
   }
 
   .legal-header {
-    border-bottom: 2px solid var(--border-strong);
-    padding-bottom: 16px;
-    margin-bottom: 24px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-6);
   }
 
   .legal-title {
-    font-size: 2.2rem;
-    font-weight: 900;
+    font-size: 2rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
   }
 
   .legal-sub {
-    font-family: var(--font-label);
-    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;
     color: var(--text-subtle);
-    margin-top: 4px;
+    margin-top: var(--space-2);
   }
 
-  .gdpr-box {
+  .legal-callout {
     background-color: var(--bg-secondary);
-    border: 2px solid var(--border-strong);
-    padding: 20px;
-    margin-bottom: 24px;
+    border: 1px solid var(--hairline);
+    border-left: 2px solid var(--accent-fill);
+    padding: var(--space-5);
+    margin-bottom: var(--space-6);
+  }
+
+  .callout-title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent-green);
+    margin-bottom: var(--space-2);
+  }
+
+  .callout-title :global(svg) {
+    flex-shrink: 0;
+    color: var(--accent-green);
+  }
+
+  .legal-callout p {
+    font-size: 0.94rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+
+  .legal-callout strong {
+    color: var(--text-main);
   }
 
   .legal-content h2 {
-    font-size: 1.3rem;
-    font-weight: 800;
-    margin: 24px 0 8px 0;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 4px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: var(--space-6) 0 var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--hairline);
   }
 
   .legal-content p {
     font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 14px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .legal-content ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .legal-content li {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .legal-content strong {
+    color: var(--text-main);
+  }
+
+  .purge-row {
+    margin: var(--space-5) 0;
   }
 </style>

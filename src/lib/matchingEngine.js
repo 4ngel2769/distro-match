@@ -404,6 +404,39 @@ function buildCriteria(distro, answers, questionWeights) {
     addNeutral('q_rollback', 'Backup strategy', 0.85);
   }
 
+  // 10b — Gaming depth (only asked when gaming is actually relevant)
+  const gamingDepth = answers.q_gaming_depth;
+  if (gamingDepth === 'competitive') {
+    const v = GAMING_SPECIALISTS.has(distro.id) ? 1 : isGamingDistro(distro) ? 0.7 : 0.3;
+    add('q_gaming_depth', 'Competitive gaming fit', v,
+      v === 1 ? 'Gaming kernel and Proton tuning baked in' : null,
+      v < 0.5 ? 'No low-latency gaming stack by default' : null);
+  } else if (gamingDepth === 'casual') {
+    const v = isGamingDistro(distro) ? 1 : 0.75;
+    add('q_gaming_depth', 'Casual gaming readiness', v);
+  }
+
+  // 10c — Server role (only asked for server/homelab paths)
+  const serverRole = answers.q_server_role;
+  if (serverRole === 'storage') {
+    const v = (distro.primaryUseCases || []).includes('server-homelab') &&
+      hasFeature(distro, 'zfs', 'btrfs', 'nas', 'storage') ? 1
+      : (distro.primaryUseCases || []).includes('server-homelab') ? 0.75 : 0.25;
+    add('q_server_role', 'Storage / NAS fit', v,
+      v === 1 ? 'Storage filesystem and sharing tooling included' : null,
+      v < 0.5 ? 'Desktop-first distribution' : null);
+  } else if (serverRole === 'containers') {
+    const v = hasFeature(distro, 'docker', 'kubernetes', 'container', 'virtualization') ? 1 : 0.4;
+    add('q_server_role', 'Container / VM fit', v,
+      v === 1 ? 'Container and virtualisation tooling available' : null,
+      v < 0.5 ? 'Limited container tooling' : null);
+  } else if (serverRole === 'web') {
+    const v = (distro.primaryUseCases || []).includes('server-homelab') ? 1 : 0.3;
+    add('q_server_role', 'Service server fit', v,
+      v === 1 ? 'Headless server oriented' : null,
+      v < 0.5 ? 'Desktop-first distribution' : null);
+  }
+
   // 11 — Software freedom
   const freedom = answers.q_freedom;
   if (freedom === 'libre-only') {
@@ -490,6 +523,39 @@ function buildCriteria(distro, answers, questionWeights) {
       v === 1 ? 'Flatpak-first with a graphical app store' : null);
   }
 
+  // 15b — Kernel policy (expert path)
+  const kernel = answers.q_kernel;
+  if (kernel === 'mainline-lts') {
+    const v = ['fixed', 'immutable-atomic'].includes(distro.releaseModel) ? 1 : 0.45;
+    add('q_kernel', 'Long-term kernel policy', v,
+      v === 1 ? 'Stable, long-supported kernel baseline' : null,
+      v < 0.5 ? 'Frequent kernel changes on this distro' : null);
+  } else if (kernel === 'newest') {
+    const v = distro.releaseModel === 'rolling' ? 1 : distro.releaseModel === 'semi-rolling' ? 0.7 : 0.35;
+    add('q_kernel', 'Current upstream kernel', v,
+      v === 1 ? 'Rolling kernel picks up new hardware first' : null,
+      v < 0.5 ? 'Frozen kernel — newer hardware may need backports' : null);
+  } else if (kernel === 'custom') {
+    const v = ['gentoo', 'arch-linux', 'slackware', 'nixos', 'void-linux'].includes(distro.id) ? 1 : 0.35;
+    add('q_kernel', 'Custom kernel workflow', v,
+      v === 1 ? 'Source-level kernel control is normal here' : null,
+      v < 0.5 ? 'Prebuilt kernel workflow only' : null);
+  }
+
+  // 15c — Mandatory access control (expert path)
+  const security = answers.q_security;
+  if (security === 'selinux') {
+    const v = ['Fedora/RHEL'].includes(distro.family) ? 1 : 0.45;
+    add('q_security', 'SELinux model', v,
+      v === 1 ? 'SELinux is a first-class part of the system' : null,
+      v < 0.5 ? 'No SELinux policy by default' : null);
+  } else if (security === 'apparmor') {
+    const v = ['Ubuntu', 'Debian', 'openSUSE'].includes(distro.family) || hasFeature(distro, 'apparmor') ? 1 : 0.45;
+    add('q_security', 'AppArmor model', v,
+      v === 1 ? 'AppArmor profiles ship with the system' : null,
+      v < 0.5 ? 'No AppArmor policy by default' : null);
+  }
+
   // 16 — Highest priority
   const priority = answers.q_priority;
   if (priority) {
@@ -561,7 +627,7 @@ function steeringAdjustment(distro, steering) {
 
 export const MatchingEngine = {
   evaluate(userAnswers = {}, questionWeights = {}, steering = {}) {
-    const asked = visibleQuestions(userAnswers);
+    const asked = visibleQuestions(userAnswers, { expert: Boolean(steering.expertMode) });
     const askedIds = new Set(asked.map((q) => q.id));
     const answeredCount = asked.filter((q) => {
       const v = userAnswers[q.id];
@@ -767,6 +833,15 @@ export const MatchingEngine = {
         quote: 'State is a bug; reproducible configuration is the only sanity.',
         description: 'You treat your operating system as immutable infrastructure: atomic deployments, instant rollback and containerised environments that never rot.',
         keyTraits: ['Atomic Root', 'Declarative Builds', 'Container Workflows', 'Instant Rollback']
+      };
+    }
+    if (goal === 'server' || userAnswers.q_server_role) {
+      return {
+        title: 'The Steady Operator',
+        badge: 'RELIABILITY ENGINEER',
+        quote: 'Nothing is more impressive than a service nobody had to think about.',
+        description: 'You value boring, dependable systems: headless operation, long support windows, storage or container tooling that stays out of the way, and upgrades that never surprise you.',
+        keyTraits: ['Long Uptime', 'Headless Operation', 'Storage & Containers', 'Quiet Maintenance']
       };
     }
     if (experience === 'expert' || updates === 'rolling' || priority === 'freshness') {

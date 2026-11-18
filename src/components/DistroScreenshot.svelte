@@ -7,6 +7,7 @@
    * borrowing another distro's desktop (which is what the old hard-coded
    * Linux Mint fallback did).
    */
+  import Icon from './Icon.svelte';
   import DistroLogo from './DistroLogo.svelte';
 
   let { distro = null, height = 380, eager = false, compact = false, fit = 'contain', showName = true } = $props();
@@ -68,7 +69,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              See the official gallery ↗
+              See the official gallery <Icon name="external" size={13} />
             </a>
           {/if}
         </div>
@@ -85,6 +86,7 @@
       title="Image source and license"
     >
       {credit.label || 'Wikimedia Commons'} · {credit.license || 'free license'}
+      <Icon name="external" size={11} />
     </a>
   {/if}
 </div>
@@ -92,7 +94,7 @@
 <style>
   .screenshot-shell {
     position: relative;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--hairline);
     background-color: var(--image-void);
     overflow: hidden;
   }
@@ -124,22 +126,22 @@
     flex-direction: column;
     background-color: var(--bg-secondary);
     color: var(--text-main);
-    border-top: 4px solid var(--shot-accent);
+    border-top: 1px solid var(--shot-accent);
   }
 
   .shot-placeholder--compact {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 10px;
-    padding: 0 14px;
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
     border-top: none;
-    border-left: 4px solid var(--shot-accent);
+    border-left: 1px solid var(--shot-accent);
     background-color: var(--bg-tertiary);
   }
 
   .shot-compact-name {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 0.92rem;
     letter-spacing: -0.01em;
     white-space: nowrap;
@@ -149,16 +151,16 @@
 
   .shot-placeholder-bar {
     display: flex;
-    gap: 6px;
+    gap: var(--space-2);
     align-items: center;
-    padding: 8px 12px;
-    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--hairline);
     background-color: var(--bg-tertiary);
   }
 
   .shot-placeholder-bar span {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     background-color: var(--border-color);
     display: block;
   }
@@ -169,13 +171,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 20px;
+    gap: var(--space-3);
+    padding: var(--space-5);
     text-align: center;
   }
 
   .shot-placeholder-name {
-    font-weight: 800;
+    font-weight: 700;
     font-size: 1.1rem;
     letter-spacing: -0.01em;
   }
@@ -187,17 +189,30 @@
   }
 
   .shot-placeholder-link {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-1);
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--accent-ink);
+    transition: color var(--dur-1) var(--ease-out);
+  }
+
+  .shot-placeholder-link:hover {
+    color: var(--accent-hover);
   }
 
   .screenshot-credit {
     position: absolute;
     right: 0;
     bottom: 0;
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    padding: 3px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.66rem;
+    padding: 4px 9px;
     background-color: var(--scrim-plate);
     color: var(--scrim-text);
     text-decoration: none;
@@ -205,6 +220,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: background-color var(--dur-1) var(--ease-out);
   }
 
   .screenshot-credit:hover {

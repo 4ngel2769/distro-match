@@ -82,12 +82,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--hairline);
     overflow: hidden;
   }
 
   .logo-tile--image {
-    background-color: #ffffff;
+    background-color: var(--card-bg);
     padding: calc(var(--logo-size) * 0.12);
     width: var(--logo-width);
   }
@@ -104,9 +104,10 @@
   }
 
   .logo-monogram {
-    font-family: var(--font-label);
-    font-weight: 800;
-    font-size: calc(var(--logo-size) * 0.36);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: calc(var(--logo-size) * 0.34);
     line-height: 1;
     letter-spacing: -0.04em;
     color: var(--logo-text);

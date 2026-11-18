@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-18T14:00:00Z",
+  "title": "Design System: LinuxMatch",
+  "extensions": {
+    "colorMeta": {
+      "lime": { "role": "primary", "displayName": "Annotation Lime", "tonalRamp": ["#E7FFA8", "#C8FA5C", "#A0F002", "#6FA201", "#3E5B08"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "tonalRamp": ["#FFFFFF", "#F6F5F0", "#EFEEE7", "#E7E6DE", "#D8DBD0"] },
+      "graphite": { "role": "neutral", "displayName": "Graphite", "tonalRamp": ["#14170F", "#0D0F0C", "#080A06"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Welcome promise and page titles." },
+      "title": { "displayName": "Title", "purpose": "Questions and section headings." },
+      "body": { "displayName": "Body", "purpose": "Reading copy and actions." },
+      "label": { "displayName": "Field label", "purpose": "Ranks, versions, measurements and field labels only." }
+    },
+    "shadows": [
+      { "name": "ambient-low", "value": "0 1px 2px rgba(21,24,15,0.05), 0 14px 34px rgba(21,24,15,0.07)", "purpose": "Raised specimen surfaces in light mode." },
+      { "name": "ambient-dark", "value": "0 1px 2px rgba(0,0,0,0.4), 0 18px 40px rgba(0,0,0,0.34)", "purpose": "Raised specimen surfaces in dark mode." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "The single authored view entrance and hover transitions." },
+      { "name": "duration-state", "value": "140ms", "purpose": "State changes on buttons and controls." },
+      { "name": "duration-entrance", "value": "420ms", "purpose": "View entrance and staggered list reveal." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "560px" },
+      { "name": "chrome", "value": "720px" },
+      { "name": "detail", "value": "860px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single primary action on a surface.",
+      "html": "<button class=\"ds-btn-primary\">Find my distro <span aria-hidden=\"true\">→</span></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid #1D2216; background:#1D2216; color:#F6F5F0; font:600 0.9rem 'Public Sans',sans-serif; border-radius:2px; transition:background 140ms cubic-bezier(0.22,1,0.36,1), transform 140ms; } .ds-btn-primary:hover { background:#A0F002; border-color:#A0F002; color:#11160A; transform:translateY(-1px); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quiet alternative actions.",
+      "html": "<button class=\"ds-btn-secondary\">Browse the catalogue</button>",
+      "css": ".ds-btn-secondary { display:inline-flex; align-items:center; padding:10px 18px; border:1px solid #1D2216; background:transparent; color:#15180F; font:600 0.9rem 'Public Sans',sans-serif; border-radius:2px; } .ds-btn-secondary:hover { background:#E7E6DE; }"
+    },
+    {
+      "name": "Field Label",
+      "kind": "chip",
+      "refersTo": "label",
+      "description": "Functional metadata label, never a decorative kicker.",
+      "html": "<span class=\"ds-field-label\">FIELD SHEET</span>",
+      "css": ".ds-field-label { font:500 0.7rem 'Geist Mono',monospace; letter-spacing:0.06em; text-transform:uppercase; color:#6E7568; }"
+    },
+    {
+      "name": "Specimen Plate Caption",
+      "kind": "card",
+      "refersTo": "plate-caption",
+      "description": "Metadata strip under a full screenshot plate.",
+      "html": "<div class=\"ds-caption\"><span><strong>PLATE</strong> Linux Mint desktop</span><span><strong>RELEASE</strong> Fixed</span></div>",
+      "css": ".ds-caption { display:flex; flex-wrap:wrap; gap:8px 16px; padding:12px 16px; border-top:1px solid #D8DBD0; background:#FFFFFF; font:0.72rem 'Geist Mono',monospace; color:#50564A; } .ds-caption strong { font-weight:500; text-transform:uppercase; color:#6E7568; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Modern Field Guide",
+    "overview": "LinuxMatch reads like a well-labelled specimen drawer: a working tool whose visual language comes from field guides, catalogue plates and annotation marks rather than from the terminal or the marketing landing page. The page stays calm and paper-like; meaning is carried by hairline rules, alignment and tabular metadata, not by ornament. Lime is annotation ink, used only for actions and active states.",
+    "keyCharacteristics": [
+      "Paper and graphite grounds with identical role structure",
+      "Hairline rules, tabular metadata and generous margins",
+      "One lime accent reserved for action and selection",
+      "Full, captioned screenshot plates"
+    ],
+    "rules": [
+      { "name": "The Annotation Rule", "body": "Lime marks a decision or an action. If it decorates a static surface, remove it.", "section": "colors" },
+      { "name": "The Plate Rule", "body": "Show distro screenshots whole and caption them; never crop them into a false comparison.", "section": "layout" }
+    ],
+    "dos": [
+      "Do use verified catalogue data and local assets.",
+      "Do keep body text in Public Sans and measurements in Geist Mono.",
+      "Do preserve focus visibility and reduced-motion behavior."
+    ],
+    "donts": [
+      "Don't use gradients, neon glow, emoji icons or hard offset shadows.",
+      "Don't use decorative kickers or rounded-card filler.",
+      "Don't animate layout properties."
+    ]
+  }
+}

@@ -1,10 +1,9 @@
 <script>
-  import { onMount } from 'svelte';
   import { MatchingEngine } from '../lib/matchingEngine.js';
-  import { ConfettiCannon } from '../lib/confetti.js';
   import SteeringPanel from './SteeringPanel.svelte';
   import DistroLogo from './DistroLogo.svelte';
   import DistroScreenshot from './DistroScreenshot.svelte';
+  import Icon from './Icon.svelte';
 
   let {
     userAnswers = {},
@@ -34,12 +33,6 @@
   let topBreakdown = $derived(winner ? winner.breakdown.slice(0, 8) : []);
   let lowConfidence = $derived(winner && winner.confidence.percent < 55);
 
-  onMount(() => {
-    if (recommendation.winner) {
-      setTimeout(() => ConfettiCannon.pop({ count: 140 }), 200);
-    }
-  });
-
   function barClass(value) {
     if (value >= 78) return 'bar-good';
     if (value >= 50) return 'bar-mid';
@@ -51,12 +44,35 @@
     event.preventDefault();
     onOpenDistro?.(id);
   }
+
+  function toggleExpertMode() {
+    onSteeringChange({ ...steering, expertMode: !steering.expertMode });
+  }
 </script>
 
 <div class="page-container">
   {#if !winner}
-    <div class="empty-result-card">
-      <div class="eyebrow">NO DISTRO PASSES EVERY HARD REQUIREMENT</div>
+    <!-- Empty result: a calm, labelled sheet rather than an error panel. -->
+    <section class="sheet empty-sheet">
+      <div class="sheet-topline">
+        <span class="field-label"><Icon name="alert" size={13} /> NO SPECIMEN / HARD CONSTRAINTS</span>
+        <div class="head-tools">
+          <button
+            class="mode-switch"
+            onclick={toggleExpertMode}
+            aria-pressed={!!steering.expertMode}
+            aria-label="Switch between newcomer and expert mode"
+          >
+            <span class="mode-opt" class:on={!steering.expertMode}>Newcomer</span>
+            <span class="mode-opt" class:on={!!steering.expertMode}>Expert</span>
+          </button>
+          <button class="act-btn act-quiet" onclick={() => (showSteering = !showSteering)} aria-expanded={showSteering}>
+            <Icon name="sliders" size={14} />
+            <span>{showSteering ? 'Hide steering' : 'Steer results'}</span>
+          </button>
+        </div>
+      </div>
+
       <h1>Your constraints rule out every distribution</h1>
       <p>
         That usually means two hard requirements conflict — for example a strictly libre system with
@@ -64,314 +80,498 @@
         requirement and the shortlist returns immediately.
       </p>
       <div class="empty-actions">
-        <button class="btn-primary" onclick={() => (showSteering = !showSteering)}>
-          {showSteering ? 'Hide steering levers' : 'Open steering levers'}
+        <button class="act-btn act-primary" onclick={onRetake}>
+          <Icon name="arrow-left" size={14} />
+          <span>Retake the quiz</span>
         </button>
-        <button class="btn-secondary" onclick={onRetake}>Retake the quiz</button>
       </div>
+
       {#if showSteering}
         <div class="steering-slot">
           <SteeringPanel {steering} {onSteeringChange} />
         </div>
       {/if}
+
       {#if closestDisqualified.length}
-        <h2 class="close-heading">Closest fits, with one blocker each</h2>
-        <div class="close-grid">
-          {#each closestDisqualified as r}
-            <div class="close-card">
-              <DistroLogo distro={r.distro} size={40} decorative={true} />
-              <div>
-                <div class="close-name">{r.distro.name}</div>
-                <div class="close-reason">{r.disqualifiers[0]}</div>
+        <div class="close-section">
+          <span class="field-label">CLOSEST FITS / ONE BLOCKER EACH</span>
+          <div class="close-grid stagger-in">
+            {#each closestDisqualified as r}
+              <div class="close-card">
+                <span class="close-mark" aria-hidden="true"><Icon name="alert" size={13} /></span>
+                <span class="close-name">{r.distro.name}</span>
+                <span class="close-reason">{r.disqualifiers[0]}</span>
               </div>
-            </div>
-          {/each}
+            {/each}
+          </div>
         </div>
       {/if}
-    </div>
+    </section>
   {:else}
-    <!-- Winner -->
-    <section class="winner-card">
-      <div class="winner-topline">
-        <span class="winner-badge">★ BEST MATCH</span>
-        <div class="winner-topline-actions">
-          <span class="confidence-note">
-            Based on {winner.confidence.answered}/{winner.confidence.total} answers
-          </span>
-          <button
-            class="btn-secondary compact-btn"
-            onclick={() => (showSteering = !showSteering)}
-          >
-            {showSteering ? 'Hide steering' : 'Steer results'}
-          </button>
-        </div>
-      </div>
-
-      {#if showSteering}
-        <div class="steering-slot">
-          <SteeringPanel {steering} {onSteeringChange} />
-        </div>
-      {/if}
-
-      {#if lowConfidence}
-        <div class="confidence-warning">
-          <strong>Thin data.</strong> You answered {winner.confidence.percent}% of the quiz. Answer a few more
-          questions (especially hardware and priority) to make this recommendation reliable.
-        </div>
-      {/if}
-
-      <div class="winner-head">
-        <div class="winner-identity">
-          <DistroLogo distro={winner.distro} size={72} />
-          <div class="winner-text">
-            <div class="winner-name-row">
-              <h1>{winner.distro.name}</h1>
-              <span class="tier-badge tier-{winner.distro.tier}">{winner.distro.tier}</span>
-            </div>
-            <p class="winner-tagline">{winner.distro.tagline}</p>
-            <div class="winner-meta">
-              <span><strong>Family</strong> {winner.distro.family}</span>
-              <span><strong>Init</strong> {winner.distro.initSystem}</span>
-              <span><strong>Packages</strong> {winner.distro.packageManager}</span>
-              <span><strong>Rank</strong> {winner.distro.dwRank ? `#${winner.distro.dwRank}` : 'unranked'}</span>
-            </div>
+    <article class="specimen-sheet">
+      <!-- Winner sheet -->
+      <section class="sheet winner-sheet">
+        <div class="sheet-topline">
+          <span class="field-label"><Icon name="star" size={13} /> FIELD SHEET / RECOMMENDATION</span>
+          <div class="head-tools">
+            <button
+              class="mode-switch"
+              onclick={toggleExpertMode}
+              aria-pressed={!!steering.expertMode}
+              aria-label="Switch between newcomer and expert mode"
+            >
+              <span class="mode-opt" class:on={!steering.expertMode}>Newcomer</span>
+              <span class="mode-opt" class:on={!!steering.expertMode}>Expert</span>
+            </button>
+            <button class="act-btn act-quiet" onclick={() => (showSteering = !showSteering)} aria-expanded={showSteering}>
+              <Icon name="sliders" size={14} />
+              <span>{showSteering ? 'Hide steering' : 'Steer results'}</span>
+            </button>
           </div>
         </div>
 
-        <div class="score-block">
-          <div class="score-number">{winner.matchPercentage}<span>%</span></div>
-          <div class="score-label">MATCH SCORE</div>
+        {#if showSteering}
+          <div class="steering-slot">
+            <SteeringPanel {steering} {onSteeringChange} />
+          </div>
+        {/if}
+
+        {#if lowConfidence}
+          <div class="confidence-warning">
+            <Icon name="alert" size={15} />
+            <span>
+              <strong>Thin data.</strong> You answered {winner.confidence.percent}% of the quiz. Answer a few more
+              questions (especially hardware and priority) to make this recommendation reliable.
+            </span>
+          </div>
+        {/if}
+
+        <div class="winner-head">
+          <div class="winner-identity">
+            <DistroLogo distro={winner.distro} size={72} />
+            <div class="winner-text">
+              <span class="field-label best-label"><Icon name="star" size={12} /> BEST MATCH</span>
+              <div class="winner-name-row">
+                <h1>{winner.distro.name}</h1>
+                <span class="tier-badge tier-{winner.distro.tier}">{winner.distro.tier}</span>
+              </div>
+              <p class="winner-tagline">{winner.distro.tagline}</p>
+              <dl class="winner-meta spec-table">
+                <div><dt>Family</dt><dd>{winner.distro.family}</dd></div>
+                <div><dt>Init</dt><dd>{winner.distro.initSystem}</dd></div>
+                <div><dt>Packages</dt><dd>{winner.distro.packageManager}</dd></div>
+                <div><dt>Rank</dt><dd>{winner.distro.dwRank ? `#${winner.distro.dwRank}` : 'unranked'}</dd></div>
+              </dl>
+            </div>
+          </div>
+
+          <div class="score-block">
+            <div class="field-label score-label">MATCH SCORE</div>
+            <div class="score-number field-value">{winner.matchPercentage}<span>%</span></div>
+            <div class="score-sub field-value">
+              {winner.confidence.answered}/{winner.confidence.total} ANSWERS
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <DistroScreenshot distro={winner.distro} height={380} eager={true} />
+      <figure class="plate-figure">
+        <DistroScreenshot distro={winner.distro} height={380} eager={true} />
+        <figcaption class="caption-strip">
+          <span><strong>PLATE</strong> {winner.distro.name} desktop</span>
+          <span><strong>FAMILY</strong> {winner.distro.family}</span>
+          <span><strong>RELEASE</strong> {winner.distro.releaseModel}</span>
+        </figcaption>
+      </figure>
 
-      <div class="winner-columns">
-        <div class="reasons-block">
+      <!-- Reasoning + score anatomy -->
+      <div class="sheet-columns">
+        <section class="reasons-block">
           <h2 class="block-title">Why this is your match</h2>
-          <ul class="reasons-list">
+          <ul class="mark-list">
             {#each winner.matchReasons as reason}
-              <li><span class="mark good">■</span>{reason}</li>
+              <li>
+                <span class="mark-icon mark-good" aria-hidden="true"><Icon name="check" size={15} /></span>
+                <span>{reason}</span>
+              </li>
             {/each}
           </ul>
 
           {#if winner.tradeoffs.length}
-            <h2 class="block-title gaps-title">What you accept by choosing it</h2>
-            <ul class="reasons-list">
+            <h2 class="block-title gaps-title">What you accept</h2>
+            <ul class="mark-list">
               {#each winner.tradeoffs as gap}
-                <li><span class="mark bad">■</span>{gap}</li>
+                <li>
+                  <span class="mark-icon mark-warn" aria-hidden="true"><Icon name="alert" size={15} /></span>
+                  <span>{gap}</span>
+                </li>
               {/each}
             </ul>
           {/if}
-        </div>
+        </section>
 
-        <div class="breakdown-block">
+        <section class="breakdown-block">
           <h2 class="block-title">Score anatomy</h2>
-          <div class="breakdown-list">
-            {#each topBreakdown as item}
-              <div class="breakdown-row">
-                <div class="breakdown-head">
-                  <span class="breakdown-label">{item.label}</span>
-                  <span class="breakdown-value">{item.value}%</span>
-                </div>
-                <div class="bar-track">
-                  <div class="bar-fill {barClass(item.value)}" style="width: {item.value}%"></div>
-                </div>
-                <div class="breakdown-weight">weight ×{item.weight}</div>
-              </div>
-            {/each}
-          </div>
+          <table class="anatomy-table">
+            <thead>
+              <tr>
+                <th scope="col">Rk</th>
+                <th scope="col">Criterion</th>
+                <th scope="col">Wt</th>
+                <th scope="col">Score</th>
+              </tr>
+            </thead>
+            <tbody>
+              {#each topBreakdown as item, i}
+                <tr>
+                  <td class="anatomy-rank field-value">{String(i + 1).padStart(2, '0')}</td>
+                  <td>
+                    <div class="anatomy-label">{item.label}</div>
+                    <div class="bar-track">
+                      <div class="bar-fill {barClass(item.value)}" style="width: {item.value}%"></div>
+                    </div>
+                  </td>
+                  <td class="anatomy-weight field-value">×{item.weight}</td>
+                  <td class="anatomy-value field-value">{item.value}</td>
+                </tr>
+              {/each}
+            </tbody>
+          </table>
           <p class="breakdown-note">
             Each answer is scored 0–100 against the distro's traits, then weighted. Hard requirements
             (NVIDIA driver support, ARM64, init system, FSF-libre) disqualify instead of deducting.
           </p>
-        </div>
+        </section>
       </div>
 
-      <div class="winner-actions">
+      <!-- Actions -->
+      <div class="sheet-actions">
         <div class="action-row">
           <a
-            class="btn-primary"
+            class="act-btn act-primary"
             href={`/distro/${winner.distro.id}/`}
             onclick={(event) => profileClick(event, winner.distro.id)}
           >
-            Open full profile →
+            <Icon name="arrow-right" size={14} />
+            <span>Open full profile</span>
           </a>
-          <a class="btn-secondary" href={winner.distro.website} target="_blank" rel="noopener noreferrer">
-            Official site ↗
+          <a class="act-btn act-quiet" href={winner.distro.website} target="_blank" rel="noopener noreferrer">
+            <Icon name="external" size={14} />
+            <span>Official site</span>
           </a>
-          <button class="btn-secondary" onclick={() => onCompareWith(winner.distro.id)}>
-            Compare with another ⇄
+          <button class="act-btn act-quiet" onclick={() => onCompareWith(winner.distro.id)}>
+            <Icon name="swap" size={14} />
+            <span>Compare with another</span>
           </button>
         </div>
-        <button class="btn-secondary" onclick={onRetake}>Retake the quiz</button>
-      </div>
-    </section>
-
-    <!-- Persona -->
-    <section class="persona-card">
-      <div class="persona-topline">
-        <span class="persona-tag">{persona.badge}</span>
-        <span class="persona-eyebrow">YOUR LINUX PERSONA</span>
-      </div>
-      <h2 class="persona-title">{persona.title}</h2>
-      <div class="persona-quote">“{persona.quote}”</div>
-      <p class="persona-description">{persona.description}</p>
-      <div class="trait-row">
-        {#each persona.keyTraits as trait}
-          <span class="trait-pill">{trait}</span>
-        {/each}
-      </div>
-    </section>
-
-    <!-- Alternatives -->
-    <section class="alternatives-card">
-      <div class="alternatives-head">
-        <h2>Runner-up contenders</h2>
-        <p>Diversified by family so these are real alternatives, not five versions of the same base.</p>
+        <button class="act-btn act-quiet" onclick={onRetake}>
+          <Icon name="arrow-left" size={14} />
+          <span>Retake the quiz</span>
+        </button>
       </div>
 
-      <div class="runner-list">
-        {#each runnersUp as r, i}
-          <article class="runner-row">
-            <div class="runner-thumb">
-              <DistroScreenshot distro={r.distro} height={104} compact={true} />
-            </div>
-            <div class="runner-main">
-              <div class="runner-title-row">
-                <span class="runner-rank">#{i + 2}</span>
-                <DistroLogo distro={r.distro} size={28} decorative={true} />
+      <!-- Persona field note -->
+      <aside class="field-note">
+        <div class="note-head">
+          <span class="field-label">FIELD NOTE / YOUR PROFILE</span>
+          <span class="note-badge field-value">{persona.badge}</span>
+        </div>
+        <blockquote class="note-quote">“{persona.quote}”</blockquote>
+        <h2 class="note-title">{persona.title}</h2>
+        <p class="note-description">{persona.description}</p>
+        <div class="trait-row">
+          {#each persona.keyTraits as trait}
+            <span class="specimen">{trait}</span>
+          {/each}
+        </div>
+      </aside>
+
+      <!-- Alternatives -->
+      <section class="alternatives sheet">
+        <header class="alternatives-head">
+          <span class="field-label">SHORTLIST / ALTERNATIVES</span>
+          <h2>Runner-up contenders</h2>
+          <p>Diversified by family so these are real alternatives, not five versions of the same base.</p>
+        </header>
+
+        <div class="runner-list stagger-in">
+          {#each runnersUp as r, i}
+            <article class="runner-row">
+              <div class="runner-rank field-value">{String(i + 2).padStart(2, '0')}</div>
+              <div class="runner-thumb">
+                <DistroScreenshot distro={r.distro} height={104} compact={true} eager={true} />
+              </div>
+              <div class="runner-main">
+                <div class="runner-title-row">
+                  <a
+                    class="runner-name"
+                    href={`/distro/${r.distro.id}/`}
+                    onclick={(event) => profileClick(event, r.distro.id)}
+                  >
+                    {r.distro.name}
+                  </a>
+                  <span class="tier-badge tier-{r.distro.tier}">{r.distro.tier}</span>
+                </div>
+                <p class="runner-tagline">{r.distro.tagline}</p>
+                <div class="runner-meta field-value">
+                  {r.distro.family} · {r.distro.initSystem} · {r.distro.packageManager}
+                </div>
+              </div>
+              <div class="runner-score field-value">
+                {r.matchPercentage}<span>%</span>
+              </div>
+              <div class="runner-actions">
                 <a
-                  class="runner-name"
+                  class="act-btn act-quiet compact"
                   href={`/distro/${r.distro.id}/`}
                   onclick={(event) => profileClick(event, r.distro.id)}
                 >
-                  {r.distro.name}
+                  <Icon name="arrow-right" size={13} />
+                  <span>Profile</span>
                 </a>
-                <span class="tier-badge tier-{r.distro.tier}">{r.distro.tier}</span>
+                <button class="act-btn act-quiet compact" onclick={() => onCompareWith(r.distro.id)}>
+                  <Icon name="swap" size={13} />
+                  <span>Compare</span>
+                </button>
               </div>
-              <p class="runner-tagline">{r.distro.tagline}</p>
-              <div class="runner-meta">
-                {r.distro.family} · {r.distro.initSystem} · {r.distro.packageManager}
-              </div>
-            </div>
-            <div class="runner-actions">
-              <div class="runner-score">{r.matchPercentage}%</div>
-              <a
-                class="btn-secondary compact-btn"
-                href={`/distro/${r.distro.id}/`}
-                onclick={(event) => profileClick(event, r.distro.id)}
-              >
-                Profile →
-              </a>
-              <button class="btn-secondary compact-btn" onclick={() => onCompareWith(r.distro.id)}>
-                Compare ⇄
-              </button>
-            </div>
-          </article>
-        {/each}
-      </div>
-
-      {#if alsoConsidered.length}
-        <div class="also-considered">
-          <h3>Just outside the shortlist</h3>
-          <div class="also-row">
-            {#each alsoConsidered as r}
-              <a
-                class="also-chip"
-                href={`/distro/${r.distro.id}/`}
-                onclick={(event) => profileClick(event, r.distro.id)}
-              >
-                <span>{r.distro.name}</span>
-                <span class="also-score">{r.matchPercentage}%</span>
-              </a>
-            {/each}
-          </div>
+            </article>
+          {/each}
         </div>
-      {/if}
-    </section>
+
+        {#if alsoConsidered.length}
+          <div class="also-considered">
+            <span class="field-label">JUST OUTSIDE THE SHORTLIST</span>
+            <div class="also-row">
+              {#each alsoConsidered as r}
+                <a
+                  class="also-chip"
+                  href={`/distro/${r.distro.id}/`}
+                  onclick={(event) => profileClick(event, r.distro.id)}
+                >
+                  <span>{r.distro.name}</span>
+                  <span class="also-score field-value">{r.matchPercentage}%</span>
+                </a>
+              {/each}
+            </div>
+          </div>
+        {/if}
+      </section>
+    </article>
   {/if}
 </div>
 
 <style>
-  .winner-card,
-  .persona-card,
-  .alternatives-card,
-  .empty-result-card {
-    border: 2px solid var(--border-strong);
+  /* ---------- Shared sheet primitives ---------- */
+  .sheet {
+    border: 1px solid var(--border-color);
     background-color: var(--card-bg);
-    box-shadow: var(--shadow-sharp);
-    padding: 30px;
-    margin-bottom: 24px;
+    padding: var(--space-6);
+    margin-bottom: var(--space-5);
   }
 
-  .winner-topline {
+  .specimen-sheet {
+    display: block;
+  }
+
+  .sheet-topline {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: var(--space-5);
   }
 
-  .winner-topline-actions {
+  .sheet-topline .field-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .head-tools {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-2);
     flex-wrap: wrap;
   }
 
-  .winner-badge {
+  .act-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    padding: 9px 14px;
     font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    background-color: var(--accent-green);
-    color: #052e1c;
-    padding: 5px 10px;
-    display: inline-block;
-  }
-
-  .confidence-note {
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    color: var(--text-subtle);
-  }
-
-  .confidence-warning {
-    border: 1px solid var(--accent-amber);
-    border-left-width: 4px;
-    background-color: var(--bg-secondary);
-    padding: 10px 14px;
-    font-size: 0.88rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border: 1px solid var(--border-strong);
+    background-color: transparent;
     color: var(--text-main);
-    margin-bottom: 18px;
+    text-decoration: none;
+    transition: background-color var(--dur-1) var(--ease-out),
+      color var(--dur-1) var(--ease-out), border-color var(--dur-1) var(--ease-out);
+  }
+
+  .act-btn:hover {
+    background-color: var(--bg-tertiary);
+  }
+
+  .act-primary {
+    background-color: var(--accent-fill);
+    border-color: var(--accent-fill);
+    color: var(--accent-contrast);
+  }
+
+  .act-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .act-quiet {
+    border-color: var(--border-color);
+    color: var(--text-muted);
+  }
+
+  .act-quiet:hover {
+    border-color: var(--border-strong);
+    color: var(--text-main);
+    background-color: var(--surface-hover);
+  }
+
+  .act-btn.compact {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+
+  .mode-switch {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    padding: 2px;
+    transition: border-color var(--dur-1) var(--ease-out);
+  }
+
+  .mode-switch:hover {
+    border-color: var(--border-strong);
+  }
+
+  .mode-opt {
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    padding: 4px 9px;
+    transition: background-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
+  }
+
+  .mode-opt + .mode-opt {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .mode-opt.on {
+    background-color: var(--selected-bg);
+    color: var(--accent-ink);
   }
 
   .steering-slot {
-    margin-bottom: 22px;
+    margin-bottom: var(--space-5);
   }
 
-  .compact-btn {
-    padding: 5px 10px;
-    font-size: 0.78rem;
-    font-family: var(--font-label);
-    text-decoration: none;
+  /* ---------- Empty sheet ---------- */
+  .empty-sheet h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-2);
+  }
+
+  .empty-sheet > p {
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    max-width: 72ch;
+  }
+
+  .empty-actions {
+    margin-top: var(--space-5);
+  }
+
+  .close-section {
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-4);
+  }
+
+  .close-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1px;
+    margin-top: var(--space-3);
+  }
+
+  .close-card {
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    column-gap: var(--space-2);
+    align-items: start;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .close-mark {
+    color: var(--accent-red);
+    display: inline-flex;
+    padding-top: 2px;
+  }
+
+  .close-name {
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .close-reason {
+    grid-column: 2;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* ---------- Winner header ---------- */
+  .confidence-warning {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    border: 1px solid var(--accent-amber);
+    border-left-width: 1px;
+    background-color: var(--bg-secondary);
+    padding: 10px 14px;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--text-main);
+    margin-bottom: var(--space-5);
+  }
+
+  .confidence-warning :global(svg) {
+    color: var(--accent-amber);
+    margin-top: 2px;
   }
 
   .winner-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 22px;
+    gap: var(--space-5);
     flex-wrap: wrap;
-    margin-bottom: 22px;
   }
 
   .winner-identity {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: var(--space-5);
     min-width: 0;
   }
 
@@ -379,292 +579,342 @@
     min-width: 0;
   }
 
+  .best-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent-ink);
+  }
+
   .winner-name-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
     flex-wrap: wrap;
+    margin-top: 6px;
   }
 
   .winner-name-row h1 {
-    font-size: 2.5rem;
-    font-weight: 900;
-    line-height: 1.02;
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.05;
     letter-spacing: -0.03em;
   }
 
   .winner-tagline {
-    font-size: 1rem;
+    font-size: 0.94rem;
     color: var(--text-muted);
     margin-top: 6px;
-    max-width: 60ch;
-    line-height: 1.45;
+    max-width: 62ch;
+    line-height: 1.5;
   }
 
   .winner-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 4px 16px;
-    margin-top: 10px;
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    color: var(--text-muted);
+    gap: 4px var(--space-5);
+    margin-top: var(--space-3);
+    font-size: 0.72rem;
   }
 
-  .winner-meta strong {
-    color: var(--text-subtle);
+  .winner-meta > div {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .winner-meta dt {
     text-transform: uppercase;
-    font-size: 0.66rem;
-    letter-spacing: 0.04em;
-    margin-right: 4px;
+    letter-spacing: 0.06em;
+    font-size: 0.62rem;
+  }
+
+  .winner-meta dd {
+    color: var(--text-main);
+    font-variant-numeric: tabular-nums;
   }
 
   .score-block {
+    border: 1px solid var(--border-strong);
+    padding: var(--space-3) var(--space-5);
+    min-width: 152px;
     text-align: right;
-    border: 2px solid var(--border-strong);
-    padding: 10px 18px;
-    background-color: var(--border-strong);
-    color: var(--bg-primary);
     flex-shrink: 0;
   }
 
   .score-number {
-    font-family: var(--font-label);
-    font-size: 2.1rem;
-    font-weight: 900;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 2.2rem;
+    font-weight: 600;
     line-height: 1;
+    margin-top: 4px;
+    color: var(--text-main);
   }
 
   .score-number span {
-    font-size: 1.1rem;
-    margin-left: 1px;
+    font-size: 1rem;
+    color: var(--text-subtle);
+    margin-left: 2px;
   }
 
-  .score-label {
-    font-family: var(--font-label);
+  .score-sub {
     font-size: 0.62rem;
-    letter-spacing: 0.14em;
-    margin-top: 4px;
-    opacity: 0.85;
+    color: var(--text-subtle);
+    margin-top: 6px;
   }
 
-  .winner-columns {
+  /* ---------- Plate ---------- */
+  .plate-figure {
+    margin: 0 0 var(--space-5);
+  }
+
+  .plate-figure :global(.screenshot-shell) {
+    border: 1px solid var(--border-color);
+  }
+
+  /* ---------- Reasoning columns ---------- */
+  .sheet-columns {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-    gap: 26px;
-    margin-top: 24px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 22px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: var(--space-6);
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 
   .block-title {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
     color: var(--text-subtle);
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
   }
 
   .gaps-title {
-    margin-top: 22px;
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-color);
   }
 
-  .reasons-list {
+  .mark-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    font-size: 0.92rem;
-    line-height: 1.45;
+    gap: 9px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-main);
   }
 
-  .reasons-list li {
+  .mark-list li {
     display: flex;
-    gap: 9px;
+    gap: 10px;
     align-items: flex-start;
   }
 
-  .mark {
-    font-size: 0.66rem;
-    line-height: 1.8;
+  .mark-icon {
+    display: inline-flex;
     flex-shrink: 0;
+    padding-top: 2px;
   }
 
-  .mark.good {
-    color: var(--accent-green);
+  .mark-good { color: var(--accent-green); }
+  .mark-warn { color: var(--accent-amber); }
+
+  .breakdown-block {
+    min-width: 0;
+    border-left: 1px solid var(--border-color);
+    padding-left: var(--space-6);
   }
 
-  .mark.bad {
-    color: var(--accent-red);
+  .anatomy-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
   }
 
-  .breakdown-list {
-    display: flex;
-    flex-direction: column;
-    gap: 11px;
+  .anatomy-table th {
+    font-family: var(--font-label);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    text-align: left;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border-color);
   }
 
-  .breakdown-head {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+  .anatomy-table td {
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+  }
+
+  .anatomy-table .anatomy-rank {
+    width: 26px;
+    color: var(--text-subtle);
+  }
+
+  .anatomy-label {
+    font-family: var(--font-sans);
     font-size: 0.8rem;
+    color: var(--text-main);
+    margin-bottom: 4px;
   }
 
-  .breakdown-label {
+  .anatomy-weight,
+  .anatomy-value {
+    text-align: right;
+  }
+
+  .anatomy-weight {
+    width: 44px;
+    color: var(--text-subtle);
+  }
+
+  .anatomy-value {
+    width: 42px;
     color: var(--text-main);
     font-weight: 600;
   }
 
-  .breakdown-value {
-    font-family: var(--font-label);
-    font-size: 0.76rem;
-    color: var(--text-muted);
-  }
-
   .bar-track {
-    height: 6px;
+    height: 4px;
     background-color: var(--bg-tertiary);
     border: 1px solid var(--border-color);
-    margin-top: 4px;
   }
 
   .bar-fill {
     height: 100%;
   }
 
-  .bar-good {
-    background-color: var(--accent-green);
-  }
-
-  .bar-mid {
-    background-color: var(--accent-amber);
-  }
-
-  .bar-bad {
-    background-color: var(--accent-red);
-  }
-
-  .breakdown-weight {
-    font-family: var(--font-label);
-    font-size: 0.63rem;
-    color: var(--text-subtle);
-    margin-top: 3px;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-  }
+  .bar-good { background-color: var(--accent-green); }
+  .bar-mid { background-color: var(--accent-amber); }
+  .bar-bad { background-color: var(--accent-red); }
 
   .breakdown-note {
-    margin-top: 14px;
-    font-size: 0.78rem;
+    margin-top: var(--space-4);
+    font-size: 0.76rem;
     color: var(--text-subtle);
     line-height: 1.5;
-    border-top: 1px dashed var(--border-color);
-    padding-top: 10px;
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-3);
   }
 
-  .winner-actions {
+  /* ---------- Actions ---------- */
+  .sheet-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 14px;
+    gap: var(--space-4);
     flex-wrap: wrap;
-    border-top: 1px solid var(--border-color);
-    margin-top: 24px;
-    padding-top: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    padding: var(--space-3) var(--space-4);
+    margin-bottom: var(--space-5);
   }
 
   .action-row {
     display: flex;
-    gap: 10px;
+    gap: var(--space-2);
     flex-wrap: wrap;
   }
 
-  .winner-actions a.btn-primary,
-  .winner-actions a.btn-secondary {
-    text-decoration: none;
+  /* ---------- Field note ---------- */
+  .field-note {
+    border: 1px solid var(--border-color);
+    border-left: 2px solid var(--accent-color);
+    background-color: var(--card-bg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 
-  /* Persona */
-  .persona-topline {
+  .note-head {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-3);
   }
 
-  .persona-tag {
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    font-weight: 800;
-    background-color: var(--border-strong);
-    color: var(--bg-primary);
-    padding: 4px 9px;
+  .note-badge {
+    font-size: 0.66rem;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    background-color: var(--tag-accent-bg);
+    border: 1px solid var(--tag-accent-border);
+    color: var(--tag-accent-text);
   }
 
-  .persona-eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    color: var(--text-subtle);
-    letter-spacing: 0.08em;
-  }
-
-  .persona-title {
-    font-size: 1.9rem;
-    font-weight: 900;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
-  }
-
-  .persona-quote {
+  .note-quote {
     font-style: italic;
-    font-size: 1rem;
-    color: var(--text-muted);
-    border-left: 3px solid var(--border-strong);
-    padding-left: 14px;
-    margin-bottom: 14px;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: var(--text-main);
+    margin-bottom: var(--space-3);
   }
 
-  .persona-description {
-    font-size: 0.94rem;
+  .note-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+
+  .note-description {
+    font-size: 0.88rem;
     line-height: 1.6;
-    margin-bottom: 16px;
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+    max-width: 76ch;
   }
 
   .trait-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
 
-  .trait-pill {
+  .specimen {
     font-family: var(--font-label);
-    font-size: 0.76rem;
-    font-weight: 700;
-    background-color: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    padding: 4px 9px;
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 3px 8px;
+    background-color: var(--tag-neutral-bg);
+    border: 1px solid var(--tag-neutral-border);
+    color: var(--tag-neutral-text);
+    white-space: nowrap;
   }
 
-  /* Alternatives */
+  /* ---------- Alternatives ---------- */
+  .alternatives {
+    margin-bottom: 0;
+  }
+
   .alternatives-head {
-    margin-bottom: 18px;
-    border-bottom: 2px solid var(--border-strong);
-    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-strong);
+    padding-bottom: var(--space-3);
+    margin-bottom: var(--space-2);
   }
 
   .alternatives-head h2 {
-    font-size: 1.4rem;
-    font-weight: 900;
+    font-size: 1.25rem;
+    font-weight: 700;
     letter-spacing: -0.02em;
+    margin-top: 6px;
   }
 
   .alternatives-head p {
-    font-size: 0.86rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
     margin-top: 4px;
   }
@@ -672,57 +922,51 @@
   .runner-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
   }
 
   .runner-row {
     display: flex;
-    align-items: stretch;
-    gap: 16px;
-    border: 1px solid var(--border-color);
-    padding: 0;
-    flex-wrap: wrap;
-    transition: border-color 0.1s ease, background-color 0.1s ease;
+    align-items: center;
+    gap: var(--space-4);
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--border-color);
+    transition: background-color var(--dur-1) var(--ease-out);
   }
 
   .runner-row:hover {
-    border-color: var(--border-strong);
     background-color: var(--surface-hover);
   }
 
-  .runner-thumb {
-    width: 160px;
+  .runner-rank {
+    width: 28px;
     flex-shrink: 0;
-    border-right: 1px solid var(--border-color);
-    background-color: var(--bg-tertiary);
+    color: var(--text-subtle);
+  }
+
+  .runner-thumb {
+    width: 140px;
+    flex-shrink: 0;
   }
 
   .runner-main {
-    flex: 1;
-    min-width: 200px;
-    padding: 12px 0;
+    flex: 1 1 220px;
+    min-width: 0;
   }
 
   .runner-title-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
     flex-wrap: wrap;
   }
 
-  .runner-rank {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: var(--text-subtle);
-  }
-
   .runner-name {
-    font-weight: 800;
-    font-size: 1.06rem;
+    font-weight: 700;
+    font-size: 0.98rem;
     color: var(--text-main);
     text-decoration: none;
     border-bottom: 1px solid transparent;
+    transition: border-color var(--dur-1) var(--ease-out);
   }
 
   .runner-name:hover {
@@ -730,156 +974,92 @@
   }
 
   .runner-tagline {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
     margin-top: 4px;
-    line-height: 1.4;
+    line-height: 1.45;
   }
 
   .runner-meta {
-    font-family: var(--font-label);
-    font-size: 0.7rem;
+    font-size: 0.66rem;
     color: var(--text-subtle);
     margin-top: 6px;
   }
 
-  .runner-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 14px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
+  .runner-score {
+    width: 58px;
+    flex-shrink: 0;
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-main);
   }
 
-  .runner-score {
-    font-family: var(--font-label);
-    font-weight: 900;
-    font-size: 1rem;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-tertiary);
-    padding: 4px 8px;
+  .runner-score span {
+    color: var(--text-subtle);
+  }
+
+  .runner-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
   }
 
   .also-considered {
-    margin-top: 20px;
-    border-top: 1px dashed var(--border-color);
-    padding-top: 16px;
-  }
-
-  .also-considered h3 {
-    font-family: var(--font-label);
-    font-size: 0.74rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-subtle);
-    margin-bottom: 10px;
+    margin-top: var(--space-5);
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-4);
   }
 
   .also-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
+    margin-top: var(--space-3);
   }
 
   .also-chip {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--space-2);
     border: 1px solid var(--border-color);
-    padding: 5px 10px;
-    font-size: 0.82rem;
-    text-decoration: none;
-    color: var(--text-main);
     background-color: var(--bg-secondary);
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: border-color var(--dur-1) var(--ease-out), color var(--dur-1) var(--ease-out);
   }
 
   .also-chip:hover {
     border-color: var(--border-strong);
+    color: var(--text-main);
   }
 
   .also-score {
-    font-family: var(--font-label);
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     color: var(--text-subtle);
   }
 
-  /* Empty state */
-  .eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: var(--accent-red);
-    margin-bottom: 8px;
-  }
-
-  .empty-result-card h1 {
-    font-size: 1.9rem;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
-  }
-
-  .empty-result-card p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
-    line-height: 1.55;
-    max-width: 70ch;
-  }
-
-  .empty-actions {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 18px;
-  }
-
-  .close-heading {
-    font-size: 1.1rem;
-    margin-top: 26px;
-    margin-bottom: 12px;
-  }
-
-  .close-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 10px;
-  }
-
-  .close-card {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    border: 1px solid var(--border-color);
-    padding: 10px 12px;
-  }
-
-  .close-name {
-    font-weight: 800;
-    font-size: 0.92rem;
-  }
-
-  .close-reason {
-    font-size: 0.76rem;
-    color: var(--accent-red);
-    margin-top: 2px;
-  }
-
   @media (max-width: 900px) {
-    .winner-columns {
+    .sheet-columns {
       grid-template-columns: 1fr;
+    }
+
+    .breakdown-block {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+      padding-left: 0;
+      padding-top: var(--space-5);
     }
   }
 
-  @media (max-width: 700px) {
-    .winner-card,
-    .persona-card,
-    .alternatives-card,
-    .empty-result-card {
-      padding: 20px;
+  @media (max-width: 720px) {
+    .sheet {
+      padding: var(--space-4);
     }
 
     .winner-name-row h1 {
-      font-size: 1.9rem;
+      font-size: 1.6rem;
     }
 
     .score-block {
@@ -887,12 +1067,12 @@
     }
 
     .runner-thumb {
-      width: 110px;
+      display: none;
     }
 
     .runner-actions {
+      width: 100%;
       justify-content: flex-start;
-      padding-top: 0;
     }
   }
 </style>

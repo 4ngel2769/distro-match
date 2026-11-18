@@ -6,6 +6,7 @@
    * `scripts/seo-build.mjs`; this component is the client-side twin so the
    * SPA shows the page instead of a 404 when a visitor navigates to it.
    */
+  import Icon from './Icon.svelte';
   import { LINUX_DISTROS } from '../data/distros.js';
   import { FAMILY_PAGES, USE_CASE_PAGES, HUB_PAGE, landingPath } from '../data/landingPages.js';
 
@@ -77,6 +78,7 @@
                 <span class="landing-item-meta">
                   {distro.initSystem} · {distro.packageManager.split('/')[0].trim()} · {distro.tagline}
                 </span>
+                <span class="landing-item-arrow"><Icon name="arrow-right" size={14} /></span>
               </a>
             </li>
           {/each}
@@ -101,8 +103,8 @@
     </div>
 
     <div class="landing-actions">
-      <a class="btn-primary" href="/quiz/">Find my Linux distribution</a>
-      <a class="btn-secondary" href="/directory/">Full directory</a>
+      <a class="btn-primary" href="/quiz/">Find my Linux distribution <Icon name="arrow-right" size={15} /></a>
+      <a class="btn-secondary" href="/directory/">Full directory <Icon name="arrow-right" size={15} /></a>
     </div>
   </nav>
 </div>
@@ -111,45 +113,50 @@
   .landing-crumbs {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-family: var(--font-label);
-    font-size: 0.8rem;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
     color: var(--text-subtle);
     flex-wrap: wrap;
-    margin-bottom: 18px;
+    margin-bottom: var(--space-5);
   }
 
   .landing-crumbs a {
     color: var(--text-muted);
     text-decoration: underline;
     text-underline-offset: 3px;
+    transition: color var(--dur-1) var(--ease-out);
+  }
+
+  .landing-crumbs a:hover {
+    color: var(--accent-ink);
   }
 
   .landing-header {
-    border: 2px solid var(--border-strong);
+    border: 1px solid var(--hairline);
+    border-top: 2px solid var(--border-strong);
     background-color: var(--card-bg);
-    box-shadow: var(--shadow-sharp);
-    padding: 30px 32px;
-    margin-bottom: 22px;
+    padding: var(--space-7) var(--space-6);
+    margin-bottom: var(--space-5);
   }
 
   .landing-eyebrow {
-    font-family: var(--font-label);
+    display: block;
+    font-family: var(--font-mono);
     font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--accent-color);
-    display: block;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-3);
   }
 
   .landing-header h1 {
     font-size: 2.1rem;
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.12;
     letter-spacing: -0.03em;
-    margin-bottom: 10px;
+    margin-bottom: var(--space-3);
     max-width: 22ch;
   }
 
@@ -161,8 +168,9 @@
   }
 
   .landing-count {
-    margin-top: 14px;
-    font-family: var(--font-label);
+    margin-top: var(--space-4);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
     font-size: 0.78rem;
     color: var(--text-subtle);
   }
@@ -174,61 +182,65 @@
   .landing-groups {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 18px;
-    margin-bottom: 22px;
+    gap: var(--space-5);
+    margin-bottom: var(--space-5);
   }
 
   .landing-group {
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--hairline);
     background-color: var(--card-bg);
-    padding: 18px 20px;
+    padding: var(--space-5);
   }
 
   .landing-group-title {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    font-family: var(--font-label);
-    font-size: 0.78rem;
-    font-weight: 800;
+    gap: var(--space-3);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
     color: var(--text-subtle);
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
-    margin-bottom: 12px;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-3);
   }
 
   .landing-group-count {
-    color: var(--accent-color);
+    font-variant-numeric: tabular-nums;
+    color: var(--accent-ink);
   }
 
   .landing-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+  }
+
+  .landing-list li + li {
+    border-top: 1px solid var(--hairline);
   }
 
   .landing-list a {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2px;
     text-decoration: none;
     color: inherit;
-    border-left: 2px solid transparent;
-    padding-left: 10px;
+    padding: var(--space-3) var(--space-6) var(--space-3) 0;
+    transition: background-color var(--dur-1) var(--ease-out);
   }
 
   .landing-list a:hover {
-    border-left-color: var(--accent-color);
-    background-color: transparent;
+    background-color: var(--surface-hover);
   }
 
   .landing-item-name {
     font-weight: 700;
-    font-size: 0.98rem;
+    font-size: 0.96rem;
   }
 
   .landing-item-meta {
@@ -238,27 +250,46 @@
     line-height: 1.4;
   }
 
+  .landing-item-arrow {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-flex;
+    color: var(--accent-color);
+    opacity: 0;
+    transition: opacity var(--dur-1) var(--ease-out), transform var(--dur-1) var(--ease-out);
+  }
+
+  .landing-list a:hover .landing-item-arrow {
+    opacity: 1;
+    transform: translate(2px, -50%);
+  }
+
   .landing-links {
-    border: 2px solid var(--border-strong);
+    border: 1px solid var(--hairline);
     background-color: var(--card-bg);
-    box-shadow: var(--shadow-subtle);
-    padding: 22px 24px;
+    padding: var(--space-6);
   }
 
   .landing-links-title {
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 800;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.09em;
     color: var(--text-subtle);
-    margin: 14px 0 8px;
+    margin: var(--space-4) 0 var(--space-2);
+  }
+
+  .landing-links-title:first-child {
+    margin-top: 0;
   }
 
   .landing-links-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--space-2);
   }
 
   .landing-links-row a {
@@ -269,6 +300,8 @@
     padding: 5px 11px;
     text-decoration: none;
     color: var(--text-main);
+    background-color: var(--tag-neutral-bg);
+    transition: border-color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
   }
 
   .landing-links-row a:hover {
@@ -278,16 +311,20 @@
 
   .landing-actions {
     display: flex;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
-    margin-top: 20px;
-    padding-top: 18px;
-    border-top: 1px solid var(--border-color);
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .landing-actions :global(svg) {
+    margin-left: var(--space-1);
   }
 
   @media (max-width: 560px) {
     .landing-header {
-      padding: 22px 20px;
+      padding: var(--space-5);
     }
 
     .landing-header h1 {

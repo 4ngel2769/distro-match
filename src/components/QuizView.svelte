@@ -1,5 +1,6 @@
 <script>
   import { QUIZ_STAGES } from '../data/questions.js';
+  import Icon from './Icon.svelte';
 
   let {
     question,
@@ -13,7 +14,9 @@
     onWeightChange,
     onPrev,
     onNext,
-    onSkip
+    onSkip,
+    expertMode = false,
+    onExpertModeChange
   } = $props();
 
   const IMPORTANCE = [
@@ -30,6 +33,9 @@
   let isMulti = $derived(Boolean(question.isMultiSelect));
   let hasSelection = $derived(
     isMulti ? Array.isArray(selectedAnswer) && selectedAnswer.length > 0 : selectedAnswer != null
+  );
+  let activeHint = $derived(
+    IMPORTANCE.find((level) => level.value === Number(currentWeight))?.hint ?? ''
   );
 
   function isSelected(optionId) {
@@ -48,6 +54,12 @@
     if (at >= 0) current.splice(at, 1);
     else current.push(optionId);
     onAnswer(question.id, current);
+  }
+
+  function switchMode(next) {
+    if (next !== expertMode && typeof onExpertModeChange === 'function') {
+      onExpertModeChange();
+    }
   }
 
   function handleKeydown(event) {
@@ -70,7 +82,24 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <div class="page-container quiz-page">
-  <!-- Stage + progress rail -->
+  <div class="mode-bar">
+    <div class="mode-switch" role="group" aria-label="Questionnaire mode">
+      <button
+        type="button"
+        class:active={!expertMode}
+        aria-pressed={!expertMode}
+        onclick={() => switchMode(false)}
+      >Newcomer</button>
+      <button
+        type="button"
+        class:active={expertMode}
+        aria-pressed={expertMode}
+        onclick={() => switchMode(true)}
+      >Expert</button>
+    </div>
+    <p class="mode-note">Expert adds kernel and security questions and skips beginner framing.</p>
+  </div>
+
   <div class="quiz-top">
     <div class="stage-rail" aria-label="Questionnaire stages">
       {#each QUIZ_STAGES as item, i}
@@ -79,7 +108,13 @@
           class:current={stage?.id === item.id}
           class:done={stage && item.id < stage.id}
         >
-          <span class="stage-index">{stage && item.id < stage.id ? '✓' : i + 1}</span>
+          <span class="stage-index">
+            {#if stage && item.id < stage.id}
+              <Icon name="check" size={12} />
+            {:else}
+              {i + 1}
+            {/if}
+          </span>
           <span class="stage-name">{item.short}</span>
         </div>
       {/each}
@@ -87,22 +122,26 @@
 
     <div class="progress-line">
       <div class="progress-track" aria-hidden="true">
-        <div class="progress-fill" style="width: {progressPercent}%"></div>
+        <div class="progress-fill" style="transform: scaleX({progressPercent / 100})"></div>
       </div>
-      <span class="progress-count">Question {index + 1} of {total}</span>
+      <span class="progress-count field-value">Question {index + 1} of {total}</span>
     </div>
   </div>
 
-  <section class="question-card">
-    <div class="question-heading">
-      <div class="eyebrow">
-        {stage?.title || 'Question'} · {isMulti ? 'select any that apply' : 'select one'}
-      </div>
-      <h1>{question.question}</h1>
-      <p class="hint">{question.hint}</p>
+  <section class="question-card surface">
+    <div class="card-top">
+      <span class="field-label">Stage {stage?.id} · {stage?.short || 'Question'}</span>
+      <span class="field-value select-mode">{isMulti ? 'Select any' : 'Select one'}</span>
     </div>
 
-    <div class="options" role={isMulti ? 'group' : 'radiogroup'} aria-label={question.question}>
+    <div class="question-heading">
+      <h1>{question.question}</h1>
+      {#if question.hint}
+        <p class="hint">{question.hint}</p>
+      {/if}
+    </div>
+
+    <div class="options stagger-in" role={isMulti ? 'group' : 'radiogroup'} aria-label={question.question}>
       {#each question.options as option, i}
         {@const selected = isSelected(option.id)}
         <button
@@ -113,25 +152,28 @@
           onclick={() => selectOption(option.id)}
         >
           <span class="marker" aria-hidden="true">
-            {isMulti ? (selected ? '✓' : '') : (selected ? '●' : '')}
+            {#if selected}
+              <Icon name="check" size={12} />
+            {/if}
           </span>
           <span class="option-text">
             <span class="option-label">{option.label}</span>
             <span class="option-detail">{option.detail}</span>
           </span>
-          <span class="option-key" aria-hidden="true">{i + 1}</span>
+          <span class="option-key field-value" aria-hidden="true">{i + 1}</span>
         </button>
       {/each}
     </div>
 
     <aside class="why-box">
-      <span class="why-label">Why we ask</span>
-      <span>{question.why}</span>
+      <span class="why-icon"><Icon name="info" size={14} /></span>
+      <span class="why-label field-label">Why we ask</span>
+      <span class="why-text">{question.why}</span>
     </aside>
 
     <fieldset class="importance">
-      <legend>How much does this matter?</legend>
-      <div class="importance-options">
+      <legend class="field-label">Importance</legend>
+      <div class="importance-options" role="radiogroup" aria-label="How much does this matter?">
         {#each IMPORTANCE as level}
           <label class="importance-choice" class:active={Number(currentWeight) === level.value}>
             <input
@@ -141,69 +183,114 @@
               checked={Number(currentWeight) === level.value}
               onchange={() => onWeightChange(question.id, level.value)}
             />
-            <span class="importance-dot" aria-hidden="true"></span>
-            <span class="importance-copy">
-              <strong>{level.label}</strong>
-              <small>{level.hint}</small>
-            </span>
+            <span class="importance-label">{level.label}</span>
           </label>
         {/each}
       </div>
+      <p class="importance-hint">{activeHint}</p>
     </fieldset>
 
     <div class="quiz-actions">
       <div class="left-actions">
         {#if index > 0}
-          <button class="btn-secondary" onclick={onPrev}>← Previous</button>
+          <button class="btn-secondary" onclick={onPrev}>
+            <Icon name="arrow-left" size={14} /> Previous
+          </button>
         {/if}
       </div>
       <div class="right-actions">
         <button class="skip-btn" onclick={onSkip}>Skip this question</button>
         <button class="btn-primary" onclick={onNext} disabled={!hasSelection}>
-          {index === total - 1 ? 'See my matches' : 'Continue →'}
+          {index === total - 1 ? 'See my matches' : 'Continue'}
+          <Icon name="arrow-right" size={14} />
         </button>
       </div>
     </div>
 
-    <div class="answered-note">
-      {answeredCount} of {total} answered so far · you can change any answer later
-    </div>
+    <p class="answered-note field-value">
+      {answeredCount} of {total} answered · any answer can be changed later
+    </p>
   </section>
 </div>
 
 <style>
   .quiz-page {
-    max-width: 880px;
+    max-width: 940px;
     margin: 0 auto;
   }
 
+  .mode-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--space-5);
+  }
+
+  .mode-switch {
+    display: inline-flex;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+  }
+
+  .mode-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 7px 14px;
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+  }
+
+  .mode-switch button + button {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .mode-switch button:hover {
+    color: var(--text-main);
+  }
+
+  .mode-switch button.active {
+    background-color: var(--card-bg);
+    color: var(--text-main);
+    box-shadow: inset 0 -2px 0 var(--accent-fill);
+  }
+
+  .mode-note {
+    font-size: 0.78rem;
+    color: var(--text-subtle);
+    line-height: 1.5;
+  }
+
   .quiz-top {
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5);
   }
 
   .stage-rail {
     display: flex;
-    gap: 8px;
-    margin-bottom: 14px;
+    gap: var(--space-2);
   }
 
   .stage-step {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
     border: 1px solid var(--border-color);
     background-color: var(--bg-secondary);
     color: var(--text-subtle);
-    font-family: var(--font-label);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 
   .stage-step.current {
-    border-color: var(--accent-color);
+    background-color: var(--card-bg);
     color: var(--text-main);
-    background-color: var(--accent-wash);
+    box-shadow: inset 0 -2px 0 var(--accent-fill);
   }
 
   .stage-step.done {
@@ -211,103 +298,105 @@
   }
 
   .stage-index {
+    width: 20px;
+    height: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
     flex-shrink: 0;
     border: 1px solid currentColor;
-    font-weight: 800;
-    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
   }
 
-  .stage-step.current .stage-index {
-    background-color: var(--accent-fill);
-    border-color: var(--accent-fill);
-    color: var(--accent-contrast);
+  .stage-step.done .stage-index {
+    color: var(--accent-color);
   }
 
   .progress-line {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
   }
 
   .progress-track {
     flex: 1;
-    height: 6px;
+    height: 3px;
     background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
   }
 
   .progress-fill {
+    width: 100%;
     height: 100%;
     background-color: var(--accent-fill);
-    transition: width 0.2s ease;
+    transform-origin: left center;
+    transition: transform var(--dur-2) var(--ease-out);
   }
 
   .progress-count {
-    font-family: var(--font-label);
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     color: var(--text-subtle);
     white-space: nowrap;
   }
 
   .question-card {
-    border: 2px solid var(--border-strong);
-    background-color: var(--card-bg);
-    box-shadow: var(--shadow-sharp);
-    padding: 30px;
+    padding: var(--space-6);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .select-mode {
+    font-size: 0.72rem;
+    color: var(--text-subtle);
   }
 
   .question-heading {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 18px;
-    margin-bottom: 20px;
-  }
-
-  .eyebrow {
-    font-family: var(--font-label);
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-color);
-    margin-bottom: 10px;
+    padding-top: var(--space-6);
+    margin-bottom: var(--space-5);
   }
 
   .question-heading h1 {
-    font-size: 1.75rem;
-    font-weight: 900;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
+    font-size: clamp(1.5rem, 3vw, 1.95rem);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    max-width: 34ch;
   }
 
   .hint {
-    margin-top: 8px;
+    margin-top: var(--space-2);
     font-size: 0.94rem;
     color: var(--text-muted);
+    max-width: 68ch;
+    line-height: 1.55;
   }
 
   .options {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-2);
   }
 
   .option {
     width: 100%;
     display: flex;
     align-items: flex-start;
-    gap: 14px;
+    gap: var(--space-3);
     text-align: left;
-    padding: 14px 16px;
-    background-color: var(--bg-primary);
+    padding: var(--space-4);
+    background-color: var(--card-bg);
     border: 1px solid var(--border-color);
     color: var(--text-main);
-    cursor: pointer;
-    transition: border-color 0.1s ease, background-color 0.1s ease;
+    transition: background-color var(--dur-1) var(--ease-out),
+      border-color var(--dur-1) var(--ease-out), box-shadow var(--dur-1) var(--ease-out);
   }
 
   .option:hover {
@@ -322,17 +411,15 @@
   }
 
   .marker {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     flex-shrink: 0;
-    border: 2px solid var(--border-color);
+    border: 1px solid var(--border-color);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
-    font-weight: 800;
     color: var(--accent-color);
-    margin-top: 1px;
+    margin-top: 2px;
   }
 
   .option.selected .marker {
@@ -342,25 +429,25 @@
   .option-text {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 2px;
     flex: 1;
     min-width: 0;
   }
 
   .option-label {
-    font-size: 1rem;
-    font-weight: 700;
-    line-height: 1.3;
+    font-size: 0.98rem;
+    font-weight: 600;
+    line-height: 1.35;
   }
 
   .option-detail {
-    font-size: 0.85rem;
+    font-size: 0.84rem;
     color: var(--text-muted);
-    line-height: 1.45;
+    line-height: 1.5;
+    max-width: 68ch;
   }
 
   .option-key {
-    font-family: var(--font-label);
     font-size: 0.7rem;
     color: var(--text-subtle);
     border: 1px solid var(--border-color);
@@ -370,66 +457,69 @@
 
   .why-box {
     display: flex;
-    gap: 10px;
     align-items: baseline;
-    margin-top: 18px;
-    padding: 12px 14px;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+    padding: var(--space-3) var(--space-4);
     background-color: var(--bg-secondary);
-    border-left: 3px solid var(--accent-color);
+    border-top: 1px solid var(--border-color);
     font-size: 0.86rem;
     color: var(--text-muted);
-    line-height: 1.5;
+    line-height: 1.55;
+  }
+
+  .why-icon {
+    display: inline-flex;
+    align-items: center;
+    color: var(--accent-color);
   }
 
   .why-label {
-    font-family: var(--font-label);
-    font-size: 0.68rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-subtle);
     white-space: nowrap;
   }
 
   .importance {
-    border: 1px solid var(--border-color);
-    padding: 14px 16px 16px;
-    margin: 22px 0 0;
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: var(--space-5) 0 0;
+    padding: var(--space-5) 0 0;
+    min-width: 0;
   }
 
   .importance legend {
-    font-family: var(--font-label);
-    font-size: 0.76rem;
-    font-weight: 700;
-    color: var(--text-subtle);
-    padding: 0 6px;
+    padding: 0 var(--space-2) 0 0;
+    margin-bottom: var(--space-3);
   }
 
   .importance-options {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
+    border: 1px solid var(--border-color);
   }
 
   .importance-choice {
     position: relative;
     display: flex;
-    align-items: flex-start;
-    gap: 9px;
+    align-items: center;
+    justify-content: center;
     padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    background-color: var(--bg-primary);
+    background-color: var(--card-bg);
     cursor: pointer;
-    transition: border-color 0.1s ease, background-color 0.1s ease;
+    text-align: center;
+    transition: background-color var(--dur-1) var(--ease-out);
+  }
+
+  .importance-choice + .importance-choice {
+    border-left: 1px solid var(--border-color);
   }
 
   .importance-choice:hover {
-    border-color: var(--border-strong);
+    background-color: var(--surface-hover);
   }
 
   .importance-choice.active {
-    border-color: var(--accent-color);
     background-color: var(--accent-wash);
+    box-shadow: inset 0 -2px 0 var(--accent-fill);
   }
 
   .importance-choice:focus-within {
@@ -443,67 +533,51 @@
     pointer-events: none;
   }
 
-  .importance-dot {
-    width: 14px;
-    height: 14px;
-    margin-top: 2px;
-    border: 2px solid var(--border-color);
-    flex-shrink: 0;
-  }
-
-  .importance-choice.active .importance-dot {
-    border-color: var(--accent-color);
-    background-color: var(--accent-fill);
-    box-shadow: inset 0 0 0 2px var(--bg-primary);
-  }
-
-  .importance-copy {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .importance-copy strong {
+  .importance-label {
     font-size: 0.84rem;
-    font-weight: 700;
+    font-weight: 600;
+    color: var(--text-muted);
   }
 
-  .importance-copy small {
-    font-size: 0.72rem;
+  .importance-choice.active .importance-label {
+    color: var(--text-main);
+  }
+
+  .importance-hint {
+    margin-top: var(--space-2);
+    font-size: 0.75rem;
     color: var(--text-subtle);
-    line-height: 1.35;
   }
 
   .quiz-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    gap: var(--space-3);
     flex-wrap: wrap;
     border-top: 1px solid var(--border-color);
-    margin-top: 24px;
-    padding-top: 18px;
+    margin-top: var(--space-5);
+    padding-top: var(--space-5);
   }
 
   .left-actions,
   .right-actions {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-3);
     flex-wrap: wrap;
   }
 
   .skip-btn {
     background: transparent;
-    border: none;
+    border: 0;
     color: var(--text-subtle);
-    font-family: var(--font-label);
     font-size: 0.84rem;
     text-decoration: underline;
     text-underline-offset: 3px;
     cursor: pointer;
     padding: 6px 4px;
+    transition: color var(--dur-1) var(--ease-out);
   }
 
   .skip-btn:hover {
@@ -518,15 +592,18 @@
   }
 
   .answered-note {
-    margin-top: 14px;
-    font-family: var(--font-label);
+    margin-top: var(--space-4);
     font-size: 0.72rem;
     color: var(--text-subtle);
   }
 
   @media (max-width: 720px) {
     .question-card {
-      padding: 20px;
+      padding: var(--space-5);
+    }
+
+    .question-heading {
+      padding-top: var(--space-5);
     }
 
     .question-heading h1 {
@@ -545,13 +622,18 @@
       grid-template-columns: 1fr;
     }
 
+    .importance-choice + .importance-choice {
+      border-left: 0;
+      border-top: 1px solid var(--border-color);
+    }
+
     .option-key {
       display: none;
     }
 
     .why-box {
-      flex-direction: column;
-      gap: 4px;
+      flex-wrap: wrap;
+      gap: var(--space-1) var(--space-2);
     }
   }
 </style>

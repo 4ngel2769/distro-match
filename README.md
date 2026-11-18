@@ -41,15 +41,15 @@ An encyclopedic, precision Linux distribution picker and triangulation engine co
    - Shareable comparison URLs in the form `/compare/<distro-id>+<distro-id>/`, with canonical redirects and duplicate handling.
    - Side-by-side comparison across 14 architectural and hardware dimensions.
 
-6. **Refined Dark Mode & Smooth Transitions**:
-   - Warm near-black surfaces with an orange → pink → blue gradient accent inspired by the Instagram logo, plus subtle pink traces.
-   - Minimalist SVG Sun / Moon icon button with persisted theme preference.
-   - Snappy thin top loading progress bar that animates across the viewport during page navigation.
-   - Snappy, smooth fade transitions between views.
+6. **Field Guide Design System**:
+   - A modern specimen-catalogue language: paper-like grounds, hairline rules, labelled screenshot plates, tabular metadata and a single lime annotation ink (`#A0F002`).
+   - Public Sans for interface and reading, Geist Mono for measurements, ranks and codes.
+   - Proper light and dark themes with persisted preference, visible focus, reduced-motion support and one authored view entrance.
+   - Thin top loading bar and SVG icon set; no gradients, glow, emoji icons or hard offset shadows.
 
-7. **Strict Utilitarian Minimalism**:
-   - Maintained sharp corners (`border-radius: 0px`) throughout.
-   - Gradient accents are limited to buttons, badges, the top loader, and navigation highlights; typography stays high-contrast and clean.
+7. **Branching Questionnaire and Expert Path**:
+   - Questions form a dialogue tree: NVIDIA driver handling is skipped for non-NVIDIA GPUs, gaming-depth questions only appear for gaming/handheld paths, and server-role questions only appear for servers.
+   - A visible Newcomer / Expert switch adds kernel-policy and security-model questions without changing the newcomer flow.
 
 8. **GDPR Compliant & Zero Data Retention**:
    - 100% client-side in-browser execution.

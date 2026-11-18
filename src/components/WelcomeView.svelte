@@ -1,142 +1,365 @@
 <script>
   import { LINUX_DISTROS } from '../data/distros.js';
   import SteeringPanel from './SteeringPanel.svelte';
+  import Icon from './Icon.svelte';
 
-  let { onStartQuiz, onNavigate, steering = {}, onSteeringChange } = $props();
+  let {
+    onStartQuiz,
+    onNavigate,
+    steering = {},
+    onSteeringChange,
+    expertMode = false,
+    onExpertModeChange
+  } = $props();
+
+  const FEATURED_IDS = ['linux-mint', 'fedora-workstation', 'arch-linux'];
+  const featured = FEATURED_IDS
+    .map((id) => LINUX_DISTROS.find((distro) => distro.id === id))
+    .filter(Boolean);
+
+  function prettyModel(model) {
+    if (!model) return '—';
+    return String(model)
+      .split('-')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join('-');
+  }
+
+  function switchMode(next) {
+    if (next !== expertMode && typeof onExpertModeChange === 'function') {
+      onExpertModeChange();
+    }
+  }
 </script>
 
-<div class="page-container">
-  <div class="welcome-hero-card">
-    <span class="hero-badge">MATHEMATICAL SYSTEM TRIANGULATION</span>
-    <h1 class="welcome-heading">
-      Find Your Ideal Linux Distribution With Mathematical Precision.
-    </h1>
-    <p class="welcome-subtext">
-      Linux isn't one operating system — it's a universe of distributions built for different hardware, philosophies and workflows. Stop distro-hopping blindly. A short, focused questionnaire narrows the field to the handful that actually fit.
-    </p>
+<div class="page-container welcome">
+  <div class="lead">
+    <section class="promise">
+      <span class="field-label">Distribution field guide</span>
+      <h1>Find a Linux distro that actually fits.</h1>
+      <p class="promise-copy">
+        A short, focused questionnaire maps your hardware, work and principles to a
+        verified catalogue of {LINUX_DISTROS.length} distributions — then shows the
+        shortlist and the reasoning behind it.
+      </p>
 
-    <div class="stats-grid">
-      <div class="stat-box">
-        <div class="stat-number">{LINUX_DISTROS.length}+</div>
-        <div class="stat-label">Distributions in Catalog</div>
+      <div class="actions">
+        <button class="btn-primary" onclick={onStartQuiz}>
+          Find my distro <Icon name="arrow-right" size={14} />
+        </button>
+        <button class="btn-secondary" onclick={() => onNavigate('directory')}>
+          Browse the catalogue <Icon name="chevron-right" size={14} />
+        </button>
       </div>
-      <div class="stat-box">
-        <div class="stat-number">16</div>
-        <div class="stat-label">Pinpoint Questions</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">3</div>
-        <div class="stat-label">Short Stages</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-number">0%</div>
-        <div class="stat-label">Data Retention (100% Client-Side)</div>
-      </div>
-    </div>
 
-    <!-- Live Steering Controls on Welcome -->
-    <div style="margin-bottom: 24px;">
-      <SteeringPanel {steering} {onSteeringChange} />
-    </div>
+      <button class="quiet-link" onclick={() => onNavigate('compare')}>
+        Or compare two distributions side by side <Icon name="arrow-right" size={13} />
+      </button>
 
-    <div class="hero-buttons">
-      <button class="btn-primary" onclick={onStartQuiz}>
-        Find my distro ›
-      </button>
-      <button class="btn-secondary" onclick={() => onNavigate('directory')}>
-        Browse All {LINUX_DISTROS.length}+ Distros
-      </button>
-      <button class="btn-secondary" onclick={() => onNavigate('compare')}>
-        Side-by-Side Comparison Tool
-      </button>
-    </div>
+      <div class="mode-block">
+        <div class="mode-head">
+          <span class="field-label">Path</span>
+          <p class="mode-note">Expert adds kernel and security questions and skips beginner framing.</p>
+        </div>
+        <div class="mode-switch" role="group" aria-label="Questionnaire mode">
+          <button
+            type="button"
+            class:active={!expertMode}
+            aria-pressed={!expertMode}
+            onclick={() => switchMode(false)}
+          >Newcomer</button>
+          <button
+            type="button"
+            class:active={expertMode}
+            aria-pressed={expertMode}
+            onclick={() => switchMode(true)}
+          >Expert</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="field-sheet surface" aria-label="Reference specimens">
+      <div class="sheet-head">
+        <span class="field-label">Field sheet</span>
+        <span class="field-value sheet-code">03 / {LINUX_DISTROS.length}</span>
+      </div>
+      <p class="sheet-intro">Three reference specimens drawn from the catalogue.</p>
+
+      <div class="spec-head" aria-hidden="true">
+        <span class="field-label">Specimen</span>
+        <span class="field-label">Family</span>
+        <span class="field-label">Release</span>
+        <span class="field-label rank-col">Rank</span>
+      </div>
+      <div class="spec-rows">
+        {#each featured as distro}
+          <div class="spec-row">
+            <span class="spec-name">{distro.name}</span>
+            <span class="field-value spec-family">{distro.family}</span>
+            <span class="field-value spec-release">{prettyModel(distro.releaseModel)}</span>
+            <span class="field-value rank-col">#{distro.dwRank}</span>
+          </div>
+        {/each}
+      </div>
+      <div class="caption-strip">
+        <span><strong>Ranks</strong> DistroWatch, current</span>
+        <span><strong>Fields</strong> name · family · release · rank</span>
+      </div>
+    </section>
   </div>
 
-  <div class="methodology-card">
-    <h3 style="font-size: 1.15rem; font-weight: 800; margin-bottom: 12px;">
-      How the Triangulation System Operates:
-    </h3>
-    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px; line-height: 1.6;">
-      Each question maps to a real field in the catalogue: GPU drivers, memory budget, update cadence, init system, software freedom, desktop style and package ecosystem. Skip what does not apply, and mark what matters as a must-have.
-    </p>
-    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6;">
-      After each short stage you get a quick look at the current front-runners. The result then shows the score breakdown, the trade-offs you accepted and a diversified shortlist — not just a single name.
-    </p>
+  <div class="refine">
+    <SteeringPanel {steering} {onSteeringChange} />
   </div>
+
+  <section class="method">
+    <h2>How the field is narrowed</h2>
+    <p>
+      Each answer maps to a real catalogue field — graphics support, memory budget,
+      update cadence, init system, software freedom, desktop style and package
+      tooling. Skip what does not apply; mark what matters as a must-have.
+    </p>
+    <p>
+      After each short stage you get a field report of the current front-runners.
+      The final result shows the score breakdown, the trade-offs you accepted and a
+      diversified shortlist — not a single asserted winner.
+    </p>
+  </section>
 </div>
 
 <style>
-  .welcome-hero-card {
-    border: 2px solid var(--border-strong);
-    background-color: var(--card-bg);
-    padding: 36px;
-    box-shadow: var(--shadow-sharp);
-    margin-bottom: 28px;
+  .welcome {
+    max-width: 1160px;
+    margin: 0 auto;
   }
 
-  .hero-badge {
-    font-family: var(--font-label);
-    font-size: 0.8rem;
-    font-weight: 800;
-    background-color: var(--border-strong);
-    color: var(--bg-primary);
-    padding: 4px 8px;
-    display: inline-block;
-    margin-bottom: 16px;
-  }
-
-  .welcome-heading {
-    font-size: 2.4rem;
-    font-weight: 900;
-    line-height: 1.18;
-    letter-spacing: -0.03em;
-    margin-bottom: 16px;
-  }
-
-  .welcome-subtext {
-    font-size: 1.15rem;
-    color: var(--text-muted);
-    max-width: 760px;
-    line-height: 1.5;
-    margin-bottom: 28px;
-  }
-
-  .stats-grid {
+  .lead {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
-    border-top: 1px solid var(--border-color);
-    padding-top: 24px;
-    margin-bottom: 28px;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: var(--space-7);
+    align-items: start;
+    margin-bottom: var(--space-7);
   }
 
-  .stat-box {
-    border-left: 3px solid var(--border-strong);
-    padding-left: 12px;
+  .promise h1 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.13;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+    margin: var(--space-5) 0 var(--space-3);
   }
 
-  .stat-number {
-    font-family: var(--font-label);
-    font-size: 1.8rem;
-    font-weight: 900;
-    line-height: 1;
+  .promise-copy {
+    font-size: 1.02rem;
+    color: var(--text-muted);
+    max-width: 68ch;
+    line-height: 1.6;
+    margin-bottom: var(--space-6);
   }
 
-  .stat-label {
-    font-size: 0.85rem;
-    color: var(--text-subtle);
-    margin-top: 4px;
-  }
-
-  .hero-buttons {
+  .actions {
     display: flex;
-    gap: 16px;
     flex-wrap: wrap;
+    gap: var(--space-3);
   }
 
-  .methodology-card {
+  .quiet-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-4);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.84rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .quiet-link:hover {
+    color: var(--text-main);
+  }
+
+  .mode-block {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    border-top: 1px solid var(--border-color);
+    margin-top: var(--space-7);
+    padding-top: var(--space-4);
+  }
+
+  .mode-head {
+    max-width: 44ch;
+  }
+
+  .mode-note {
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    line-height: 1.5;
+    margin-top: var(--space-1);
+  }
+
+  .mode-switch {
+    display: inline-flex;
     border: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+  }
+
+  .mode-switch button {
+    border: 0;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 8px 16px;
+    transition: color var(--dur-1) var(--ease-out), background-color var(--dur-1) var(--ease-out);
+  }
+
+  .mode-switch button + button {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .mode-switch button:hover {
+    color: var(--text-main);
+  }
+
+  .mode-switch button.active {
     background-color: var(--card-bg);
-    padding: 24px;
+    color: var(--text-main);
+    box-shadow: inset 0 -2px 0 var(--accent-fill);
+  }
+
+  .sheet-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    border-bottom: 1px solid var(--border-color);
+    background-color: var(--bg-secondary);
+  }
+
+  .sheet-code {
+    font-size: 0.72rem;
+    color: var(--text-subtle);
+  }
+
+  .sheet-intro {
+    padding: var(--space-4) var(--space-5);
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    max-width: 56ch;
+  }
+
+  .spec-head,
+  .spec-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding: var(--space-3) var(--space-5);
+  }
+
+  .spec-head {
+    border-bottom: 1px solid var(--border-color);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
+  }
+
+  .spec-row {
+    border-bottom: 1px solid var(--hairline);
+    font-size: 0.88rem;
+  }
+
+  .spec-row:last-child {
+    border-bottom: 0;
+  }
+
+  .spec-name {
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .spec-row .field-value {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+  }
+
+  .rank-col {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .refine {
+    margin-bottom: var(--space-7);
+  }
+
+  .method {
+    max-width: 72ch;
+    border-top: 1px solid var(--border-color);
+    padding-top: var(--space-5);
+  }
+
+  .method h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: var(--space-2) 0 var(--space-3);
+  }
+
+  .method p {
+    font-size: 0.94rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    max-width: 70ch;
+  }
+
+  .method p + p {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 860px) {
+    .lead {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .spec-head {
+      display: none;
+    }
+
+    .spec-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: 2px;
+    }
+
+    .spec-name {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .spec-row .rank-col {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .spec-family {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .spec-release {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: right;
+    }
   }
 </style>
