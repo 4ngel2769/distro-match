@@ -187,18 +187,108 @@ export function compatibilityFor(distro, specs) {
   return { score, tone, verdict: verdicts[tone], notes, blockers };
 }
 
+const GAMING_SPECIALISTS = new Set([
+  'bazzite', 'nobara', 'cachyos', 'pop-os', 'steamos', 'garuda-linux',
+  'manjaro', 'endeavouros', 'batocera', 'lakka', 'recalbox', 'chimeraos'
+]);
+const BOARD_DISTROS = new Set([
+  'raspberry-pi-os', 'armbian', 'dietpi', 'openwrt', 'libreelec',
+  'batocera', 'lakka', 'recalbox', 'postmarketos', 'mobian', 'alpine-linux'
+]);
+
 function popularityPrior(distro) {
   const rank = distro.dwRank || 999;
-  if (rank <= 20) return 6;
-  if (rank <= 50) return 4;
-  if (rank <= 100) return 2;
+  if (rank <= 10) return 2;
+  if (rank <= 30) return 1.5;
+  if (rank <= 70) return 0.75;
   return 0;
 }
 
 function tierPrior(distro) {
-  if (distro.tier === 'flagship') return 3;
-  if (distro.tier === 'specialist') return 1.5;
+  if (distro.tier === 'flagship') return 1.5;
+  if (distro.tier === 'specialist') return 1;
   return 0;
+}
+
+/** Positive evidence that a distro fits the chosen needs, platform and hardware. */
+function specificity(distro, specs) {
+  const signals = [];
+  const add = (points, text) => signals.push({ points, text });
+  const needs = specs.needs || [];
+  const platform = specs.platform;
+  const ram = Number(specs.ramGB) || 0;
+  const cpuScore = specs.cpu?.score || 0;
+  const proprietary = Boolean(specs.gpu?.proprietary);
+  const integrated = Boolean(specs.gpu?.integrated);
+
+  // Needs.
+  if (needs.includes('gaming')) {
+    if (GAMING_SPECIALISTS.has(distro.id)) add(16, 'Built for gaming');
+    else if (hasFeature(distro, ['gamescope', 'handheld', 'hdr-and-vrr', 'steam'])) add(11, 'Gaming-focused desktop');
+    else if (hasUseCase(distro, ['gaming'])) add(7, 'Supports gaming');
+  }
+  if (needs.includes('development')) {
+    const packages = (distro.packageManager || '').toLowerCase();
+    if (hasFeature(distro, ['aur', 'nix', 'developer'])) add(10, 'Developer-friendly tooling');
+    else if (/aur|nix|flatpak/.test(packages)) add(6, 'Useful package tooling for development');
+    else if (hasUseCase(distro, ['software-development'])) add(5, 'Suits software development');
+  }
+  if (needs.includes('privacy')) {
+    if (distro.freeSoftwareStrictness === '100-libre-fsf') add(12, 'Fully free software');
+    if (hasUseCase(distro, ['privacy-anonymity'])) add(9, 'Privacy-focused by design');
+    if (hasFeature(distro, ['tor', 'amnesic'])) add(8, 'Privacy features built in');
+  }
+  if (needs.includes('daily')) {
+    if (hasUseCase(distro, ['daily-driver'])) add(9, 'Made for everyday use');
+    if (distro.userLevel === 'beginner') add(4, 'Easy for newcomers');
+  }
+  if (needs.includes('creative') && hasUseCase(distro, ['creative-multimedia', 'multimedia-creation'])) {
+    add(10, 'Geared toward creative work');
+  }
+  if (needs.includes('learning')) {
+    if (distro.userLevel === 'beginner') add(11, 'A friendly first Linux distro');
+    if (hasUseCase(distro, ['education'])) add(7, 'Used in education');
+  }
+
+  // Platform.
+  if (platform === 'handheld') {
+    if (hasFeature(distro, ['handheld-editions', 'dedicated-handheld'])) add(22, 'Dedicated handheld edition');
+    else if (hasFeature(distro, ['gamescope'])) add(13, 'Gamescope session for controllers');
+  } else if (platform === 'server') {
+    if (hasUseCase(distro, ['server-homelab', 'enterprise-stability'])) add(13, 'Built for server use');
+    if ((distro.desktopEnvironments || []).some((env) => /headless|cli/i.test(env))) add(8, 'Runs headless');
+  } else if (platform === 'arm-board') {
+    if (BOARD_DISTROS.has(distro.id)) add(20, 'Designed for single board computers');
+    if (hasUseCase(distro, ['tinkering-minimalism', 'low-spec-hardware', 'server-homelab'])) add(6, 'Fits small ARM hardware');
+  } else if (platform === 'mini-pc') {
+    if (distro.hardwareSpec === 'lightweight') add(9, 'Light on resources');
+    if (distro.apuSupport === 'low-power-apu') add(7, 'Tuned for low-power graphics');
+  } else if (platform === 'laptop') {
+    if (hasFeature(distro, ['laptop', 'wifi', 'power'])) add(8, 'Good laptop support');
+    if (distro.hardwareSpec === 'lightweight') add(5, 'Kind to battery and thermals');
+  } else if (platform === 'desktop' && cpuScore >= 70 && distro.hardwareSpec === 'high-end-workstation') {
+    add(8, 'Can use your processor fully');
+  }
+
+  // Hardware.
+  if (proprietary) {
+    if (distro.gpuSupport === 'excellent-nvidia') add(12, 'Excellent NVIDIA driver support');
+    if (hasFeature(distro, ['preinstalled-nvidia', 'dedicated-nvidia-iso'])) add(10, 'NVIDIA drivers included');
+    else if (distro.gpuSupport === 'standard-nvidia') add(4, 'NVIDIA drivers supported');
+  }
+  if (integrated) {
+    if (distro.apuSupport === 'stellar-apu-gaming') add(12, 'Tuned for integrated graphics');
+    else if (distro.apuSupport === 'low-power-apu') add(6, 'Good with integrated graphics');
+  }
+  if (ram && ram <= 4 && ['lightweight', 'potatoes-vintage'].includes(distro.hardwareSpec)) {
+    add(13, 'Runs well with limited memory');
+  }
+  if (cpuScore && cpuScore < 25 && ['lightweight', 'potatoes-vintage'].includes(distro.hardwareSpec)) {
+    add(10, 'Suits older processors');
+  }
+
+  const points = Math.min(45, signals.reduce((sum, signal) => sum + signal.points, 0));
+  return { points, reasons: signals.sort((a, b) => b.points - a.points).map((signal) => signal.text) };
 }
 
 /**
@@ -231,29 +321,41 @@ export function recommendBySpecs(specs, count = 5) {
       platformScore = hasUseCase(distro, ['daily-driver', 'gaming', 'software-development']) ? 90 : 45;
     }
 
-    const base = compatibility.score * 0.6 + needScore * 0.25 + platformScore * 0.15;
-    const matchPercentage = Math.max(0, Math.min(100, Math.round(base + popularityPrior(distro) + tierPrior(distro))));
+    const fit = specificity(distro, specs);
+    const base = compatibility.score * 0.4 + needScore * 0.15 + platformScore * 0.12 + fit.points * 0.45;
+    const matchPercentage = Math.max(
+      0,
+      Math.min(100, Math.round(base + popularityPrior(distro) + tierPrior(distro)))
+    );
 
-    const reasons = compatibility.notes
-      .filter((note) => !/not specifically|not primarily|no dedicated|may need setup|would feel|may be better|would suit/i.test(note))
-      .slice(0, 3);
+    const compatibilityReasons = compatibility.notes.filter((note) =>
+      !/not specifically|not primarily|no dedicated|may need setup|would feel|may be better|would suit/i.test(note)
+    );
+    const reasons = [...fit.reasons, ...compatibilityReasons].slice(0, 4);
 
-    return { distro, compatibility, matchPercentage, reasons };
+    return { distro, compatibility, matchPercentage, reasons, fit: fit.points };
   }).filter(Boolean);
 
-  scored.sort((a, b) => b.matchPercentage - a.matchPercentage || (a.distro.dwRank || 999) - (b.distro.dwRank || 999));
+  scored.sort(
+    (a, b) => b.matchPercentage - a.matchPercentage || b.fit - a.fit ||
+      (a.distro.dwRank || 999) - (b.distro.dwRank || 999)
+  );
 
-  // Keep the shortlist varied by family.
+  // Keep the shortlist varied by family, then by base distribution.
   const perFamily = Math.ceil(count / 3);
   const familyCounts = new Map();
+  const baseCounts = new Map();
   const picks = [];
   const leftovers = [];
   for (const result of scored) {
     const family = result.distro.family;
-    const used = familyCounts.get(family) || 0;
-    if (used < perFamily && picks.length < count) {
+    const base = result.distro.base || family;
+    const familyUsed = familyCounts.get(family) || 0;
+    const baseUsed = baseCounts.get(base) || 0;
+    if (familyUsed < perFamily && baseUsed < 2 && picks.length < count) {
       picks.push(result);
-      familyCounts.set(family, used + 1);
+      familyCounts.set(family, familyUsed + 1);
+      baseCounts.set(base, baseUsed + 1);
     } else {
       leftovers.push(result);
     }

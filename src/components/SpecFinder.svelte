@@ -18,7 +18,10 @@
     clearSpecs,
     getActivePlatform,
     setActivePlatform,
-    hasSpecsFor
+    hasSpecsFor,
+    loadDraft,
+    saveDraft,
+    clearDraft
   } from '../lib/specState.js';
   import { recommendBySpecs, describeSpecs } from '../lib/specMatching.js';
 
@@ -30,6 +33,7 @@
   let error = $state('');
   let platformMessage = $state('');
   let savedPlatforms = $state([]);
+  let hydrated = $state(false);
 
   let needs = $state([]);
   let platform = $state('laptop');
@@ -127,16 +131,37 @@
     });
   }
 
+  function formState() {
+    return {
+      needs: [...needs],
+      cpuBrand,
+      cpuGeneration,
+      cpuId,
+      gpuId,
+      ramValue
+    };
+  }
+
+  function restoreForm(state) {
+    needs = Array.isArray(state.needs) ? [...state.needs] : [];
+    cpuBrand = state.cpuBrand || '';
+    cpuGeneration = state.cpuGeneration || '';
+    cpuId = state.cpuId || '';
+    gpuId = state.gpuId || '';
+    ramValue = state.ramValue || '';
+  }
+
   function resetForm() {
-    needs = [];
-    cpuBrand = '';
-    cpuGeneration = '';
-    cpuId = '';
-    gpuId = '';
-    ramValue = '';
+    restoreForm({});
     results = [];
     showResults = false;
     error = '';
+  }
+
+  function allowedBrandsFor(targetPlatform) {
+    if (targetPlatform === 'handheld') return ['intel', 'amd'];
+    if (targetPlatform === 'arm-board') return ['arm'];
+    return CPU_BRANDS.map((brand) => brand.id);
   }
 
   function refreshSavedPlatforms() {
@@ -148,23 +173,48 @@
     refreshSavedPlatforms();
     const stored = loadSpecs(targetPlatform);
     savedSpecs = stored;
-    if (!stored) {
-      platformMessage = `No specs saved for ${targetPlatform} yet. Add them below and they will be kept separately.`;
-      return;
+    let restored = null;
+
+    if (stored) {
+      restored = {
+        needs: stored.needs,
+        cpuBrand: stored.cpu?.brand || '',
+        cpuGeneration: stored.cpu?.generation || '',
+        cpuId: stored.cpu?.id || '',
+        gpuId: stored.gpu?.id || '',
+        ramValue: String(stored.ramGB || '')
+      };
+      platformMessage = `Loaded your saved ${targetPlatform} specs.`;
+    } else {
+      restored = loadDraft(targetPlatform);
+      platformMessage = restored
+        ? `Restored your unfinished ${targetPlatform} picks.`
+        : `Nothing picked for ${targetPlatform} yet. Your choices are kept separately for each platform.`;
     }
-    needs = Array.isArray(stored.needs) ? [...stored.needs] : [];
-    ramValue = String(stored.ramGB || '');
-    cpuBrand = stored.cpu?.brand || '';
-    cpuGeneration = stored.cpu?.generation || '';
-    cpuId = stored.cpu?.id || '';
-    gpuId = stored.gpu?.id || '';
-    platformMessage = `Loaded your saved ${targetPlatform} specs.`;
+
+    if (restored) {
+      restoreForm(restored);
+      if (!allowedBrandsFor(targetPlatform).includes(cpuBrand)) {
+        cpuBrand = '';
+        cpuGeneration = '';
+        cpuId = '';
+        gpuId = '';
+      }
+    }
     if (gpuId && gpuId !== 'integrated') ensureGpus();
   }
+
+  // Picks are saved as a draft on every change, so switching platform or
+  // refreshing never loses unfinished work.
+  $effect(() => {
+    if (!hydrated) return;
+    saveDraft(platform, formState());
+  });
 
   onMount(() => {
     platform = getActivePlatform();
     applyStoredSpecs(platform);
+    hydrated = true;
   });
 
   function toggleNeed(id) {
@@ -173,6 +223,7 @@
 
   function setPlatform(next) {
     if (next === platform) return;
+    saveDraft(platform, formState());
     platform = next;
     setActivePlatform(next);
     applyStoredSpecs(next);
@@ -260,6 +311,7 @@
     };
 
     saveSpecs(specs);
+    clearDraft(platform);
     refreshSavedPlatforms();
     savedSpecs = specs;
     results = recommendBySpecs(specs, 5);
@@ -268,6 +320,7 @@
 
   function handleClear() {
     clearSpecs(platform);
+    clearDraft(platform);
     applyStoredSpecs(platform);
   }
 
@@ -291,23 +344,7 @@
 
   <div class="spec-form">
     <div class="field-block">
-      <span class="block-label">What will you use it for?</span>
-      <div class="chip-row" role="group" aria-label="What you will use the computer for">
-        {#each NEEDS as need}
-          <button
-            type="button"
-            class="choice-chip"
-            class:active={needs.includes(need.id)}
-            aria-pressed={needs.includes(need.id)}
-            title={need.note}
-            onclick={() => toggleNeed(need.id)}
-          >{need.label}</button>
-        {/each}
-      </div>
-    </div>
-
-    <div class="field-block">
-      <span class="block-label">What kind of computer?</span>
+      <span class="block-label">1. What kind of computer?</span>
       <div class="chip-row" role="group" aria-label="Computer type">
         {#each PLATFORMS as item}
           <button
@@ -327,7 +364,7 @@
       {/if}
       {#if savedPlatforms.length}
         <p class="saved-platforms">
-          Saved for:
+          Sets saved for:
           {#each savedPlatforms as saved}
             <button
               type="button"
@@ -339,6 +376,23 @@
       {/if}
     </div>
 
+    <div class="field-block">
+      <span class="block-label">2. What will you use it for?</span>
+      <div class="chip-row" role="group" aria-label="What you will use the computer for">
+        {#each NEEDS as need}
+          <button
+            type="button"
+            class="choice-chip"
+            class:active={needs.includes(need.id)}
+            aria-pressed={needs.includes(need.id)}
+            title={need.note}
+            onclick={() => toggleNeed(need.id)}
+          >{need.label}</button>
+        {/each}
+      </div>
+    </div>
+
+    <span class="block-label hardware-label">3. Your hardware</span>
     <div class="spec-grid">
       <SearchableSelect
         id="cpu-brand"
@@ -549,6 +603,10 @@
     background-color: var(--accent-fill);
     border-color: var(--accent-fill);
     color: var(--accent-contrast);
+  }
+
+  .hardware-label {
+    margin-top: var(--space-3);
   }
 
   .spec-grid {

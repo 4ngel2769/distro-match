@@ -93,7 +93,7 @@ export function routeTitle(view, distro) {
     case 'welcome':
       return 'LinuxMatch: Find the Best Linux Distribution for You (116+ Distros)';
     case 'quiz':
-      return 'Linux Distribution Finder Quiz: 23 Questions | LinuxMatch';
+      return 'Linux Distribution Finder Quiz: Adaptive | LinuxMatch';
     case 'results':
       return 'Your Linux Distribution Matches | LinuxMatch';
     case 'directory':

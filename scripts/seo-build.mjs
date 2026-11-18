@@ -71,13 +71,20 @@ const KEYWORDS = [
   'linux distribution directory',
   'compare linux distros',
   'linux os list',
-  'linux kernel distributions'
+  'linux kernel distributions',
+  'will my pc run linux',
+  'linux compatibility checker',
+  'best linux distro for my pc',
+  'linux distro finder by hardware',
+  'linux distro for my cpu and gpu',
+  'linux for handheld devices',
+  'linux for raspberry pi'
 ].join(', ');
 
 const HOME_TITLE =
   'LinuxMatch: Find the Best Linux Distribution for You (116+ Distros Compared)';
 const HOME_DESCRIPTION =
-  'LinuxMatch is a free Linux distribution finder and comparison tool. Take the 23-question triangulation quiz or browse 116+ distributions (Ubuntu, Linux Mint, Arch, Fedora, openSUSE, Gentoo, NixOS) with package managers, init systems, desktop environments, pros, cons and official links.';
+  'LinuxMatch is a free, private Linux distribution finder. Take a short adaptive quiz or enter your CPU, GPU and RAM to see which of 116+ distros fit, with a clear "Will my computer run this well?" verdict, match reasons, verified screenshots and official links.';
 
 function abs(path) {
   const clean = path === '/' ? '' : path.replace(/\/+$/, '');
@@ -154,7 +161,7 @@ const FAQ = {
       name: 'How do I choose between Linux distributions?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Match the distribution to your hardware, your tolerance for maintenance and your package-format preferences. LinuxMatch asks 23 questions across four rounds about GPUs, init system, software freedom, memory budget and workflow, then ranks all 116+ distributions against your answers.'
+        text: 'Match the distribution to your hardware, your tolerance for maintenance and your package-format preferences. LinuxMatch offers a short adaptive quiz and a hardware picker for CPU, GPU and memory, then ranks 116+ distributions against your answers and explains every match.'
       }
     },
     {
@@ -162,7 +169,15 @@ const FAQ = {
       name: 'Does LinuxMatch store my data?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. LinuxMatch runs entirely in your browser. There are no accounts, no analytics and no tracking cookies. A single cookie remembers your light or dark theme choice if you make one, and nothing is sent to a server. Your answers never leave your device.'
+        text: 'No. LinuxMatch runs entirely in your browser. There are no accounts, no analytics and no tracking cookies. A single cookie remembers your light or dark theme choice if you make one, and hardware specs you choose to save stay in local storage, one set per platform. Nothing is sent to a server.'
+      }
+    },
+    {
+      '@type': 'Question',
+      name: 'How does the "Will my computer run this well?" check work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Enter your processor, graphics card and memory in the spec finder, and LinuxMatch compares them with each distribution architecture, memory targets, GPU driver support and hardware focus. You get a plain-language verdict and the reasons behind it, and saved specs are reused on every distro profile.'
       }
     }
   ]
@@ -181,10 +196,10 @@ function buildRoutes() {
     jsonLd: [WEBSITE, ORGANIZATION, FAQ],
     content: `
       <h1>Find your ideal Linux distribution</h1>
-      <p>LinuxMatch is a free, private Linux distribution finder. Answer 23 technical
-      questions across four rounds: hardware, GPUs, init system, package format and
-      workflow, and get a ranked shortlist drawn from more than 116 Linux
-      distributions, each scored against your actual setup.</p>
+      <p>LinuxMatch is a free, private Linux distribution finder. Take a short adaptive
+      quiz, or tell us your processor, graphics card and memory to see which of 116+
+      distributions match your needs and hardware. Every match comes with a clear
+      "Will my computer run this well?" verdict and the reasons behind it.</p>
       <h2>Search the complete Linux distribution directory</h2>
       <p>Browse every distribution we track: Ubuntu, Debian, Arch Linux, Fedora, openSUSE,
       Gentoo, Linux Mint, Manjaro, NixOS, Kali Linux, Tails, elementary OS, Proxmox VE,
@@ -200,9 +215,9 @@ function buildRoutes() {
 
   routes.push({
     path: '/quiz',
-    title: 'Linux Distribution Finder Quiz: 23 Questions, 116+ Distros | LinuxMatch',
+    title: 'Linux Distribution Finder Quiz: Adaptive, 116+ Distros | LinuxMatch',
     description:
-      'Take the LinuxMatch finder quiz: 23 questions in 4 rounds about your hardware, GPU, init system, software philosophy and workflow. Get a personalised ranking of 116+ Linux distributions with match scores and reasons.',
+      'Take the LinuxMatch finder quiz: a short adaptive interview about your hardware, GPU, init system, software philosophy and workflow. Get a personalised ranking of 116+ Linux distributions with match scores and reasons.',
     priority: '0.9',
     changefreq: 'monthly',
     jsonLd: [
@@ -220,10 +235,10 @@ function buildRoutes() {
     ],
     content: `
       <h1>Linux distribution finder quiz</h1>
-      <p>Twenty-three questions in four rounds: foundation and user profile, hardware
-      topology, ecosystem and package philosophy, and workflow priorities. Every answer
-      is weighted. You can mark a question as normal, high priority or a dealbreaker. 
-      and the matching engine re-ranks 116+ Linux distributions live.</p>
+      <p>A short adaptive interview across three stages: your setup, system behaviour and
+      principles. Questions that cannot change the answer are skipped automatically. Every
+      answer is weighted, from nice to have to must-have, and the matching engine re-ranks
+      116+ Linux distributions live with a transparent score breakdown.</p>
       <ul>
         <li><a href="/directory/">Browse all Linux distributions</a></li>
         <li><a href="/compare/">Compare two distributions side by side</a></li>
@@ -667,11 +682,16 @@ function buildManifest() {
   );
 }
 
+const LOGO_PATH = join(__dirname, '..', 'public', 'logo.png');
+const LOGO_DATA = existsSync(LOGO_PATH)
+  ? `data:image/png;base64,${readFileSync(LOGO_PATH).toString('base64')}`
+  : '';
+
 const OG_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#16151B"/>
-      <stop offset="100%" stop-color="#241F3A"/>
+      <stop offset="0%" stop-color="#0D0C11"/>
+      <stop offset="100%" stop-color="#1B1730"/>
     </linearGradient>
     <linearGradient id="a" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="#A394FF"/>
@@ -680,11 +700,16 @@ const OG_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630
   </defs>
   <rect width="1200" height="630" fill="url(#g)"/>
   <rect x="0" y="0" width="1200" height="8" fill="url(#a)"/>
-  <text x="80" y="210" font-family="Helvetica,Arial,sans-serif" font-size="86" font-weight="800" fill="#F6F4F8">LINUXMATCH</text>
-  <text x="80" y="290" font-family="Helvetica,Arial,sans-serif" font-size="34" fill="#B5A8FF">Find the best Linux distribution for you.</text>
-  <text x="80" y="360" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#BDB9C8">116+ distributions compared &#183; package managers, init systems,</text>
-  <text x="80" y="398" font-family="Helvetica,Arial,sans-serif" font-size="24" fill="#BDB9C8">desktops, pros and cons &#183; 100% client-side, zero tracking.</text>
-  <text x="80" y="540" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#F6F4F8">linuxmatch.adev0.eu</text>
+  <circle cx="1080" cy="90" r="220" fill="#6C5CE7" opacity="0.14"/>
+  <circle cx="1010" cy="560" r="170" fill="#C9A77A" opacity="0.08"/>
+  ${LOGO_DATA ? `<image href="${LOGO_DATA}" x="80" y="92" width="104" height="104"/>` : ''}
+  <text x="208" y="158" font-family="Helvetica,Arial,sans-serif" font-size="62" font-weight="800" fill="#F4F2F7">LinuxMatch</text>
+  <text x="80" y="298" font-family="Helvetica,Arial,sans-serif" font-size="52" font-weight="700" fill="#F4F2F7">Find a Linux distro that fits.</text>
+  <text x="80" y="352" font-family="Helvetica,Arial,sans-serif" font-size="28" fill="#BDB9FF">Adaptive quiz or hardware matching with CPU, GPU and RAM</text>
+  <text x="80" y="398" font-family="Helvetica,Arial,sans-serif" font-size="28" fill="#BDB9C8">116+ distributions &#183; compatibility verdicts &#183; zero tracking</text>
+  <rect x="80" y="446" width="432" height="52" rx="10" fill="#6C5CE7"/>
+  <text x="104" y="480" font-family="Helvetica,Arial,sans-serif" font-size="22" font-weight="700" fill="#FFFFFF">Will my computer run this well?</text>
+  <text x="80" y="556" font-family="Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#F4F2F7">linuxmatch.adev0.eu</text>
 </svg>`;
 
 async function writeOgImage(distDir) {

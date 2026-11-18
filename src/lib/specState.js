@@ -1,4 +1,5 @@
 const STORAGE_KEY = 'distromatch_specs';
+const DRAFTS_KEY = 'distromatch_spec_drafts';
 const ACTIVE_KEY = 'distromatch_active_platform';
 const DEFAULT_PLATFORM = 'laptop';
 
@@ -78,6 +79,43 @@ export function clearSpecs(platform = null) {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(ACTIVE_KEY);
     }
+  } catch {
+    // Ignore storage errors.
+  }
+}
+
+function readDrafts() {
+  try {
+    const raw = localStorage.getItem(DRAFTS_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+/** In-progress picks for one platform, kept separately from saved specs. */
+export function loadDraft(platform) {
+  return readDrafts()[platform] || null;
+}
+
+export function saveDraft(platform, draft) {
+  if (!platform) return;
+  try {
+    const all = readDrafts();
+    all[platform] = draft;
+    localStorage.setItem(DRAFTS_KEY, JSON.stringify(all));
+  } catch {
+    // Ignore storage errors.
+  }
+}
+
+export function clearDraft(platform) {
+  try {
+    const all = readDrafts();
+    delete all[platform];
+    localStorage.setItem(DRAFTS_KEY, JSON.stringify(all));
   } catch {
     // Ignore storage errors.
   }

@@ -61,37 +61,53 @@
   }
 
   let filteredDistros = $derived.by(() => {
-    let list = LINUX_DISTROS.filter((d) => {
-      const q = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !q ||
-        d.name.toLowerCase().includes(q) ||
-        d.tagline.toLowerCase().includes(q) ||
-        d.packageManager.toLowerCase().includes(q) ||
-        d.initSystem.toLowerCase().includes(q) ||
-        d.family.toLowerCase().includes(q) ||
-        (d.desktopEnvironments || []).some((de) => de.toLowerCase().includes(q)) ||
-        (d.specialFeatures || []).some((f) => f.toLowerCase().includes(q)) ||
-        (d.primaryUseCases || []).some((u) => u.toLowerCase().includes(q));
+    const query = searchQuery.toLowerCase().trim();
+    const byFamily = (distro) => selectedFamily === 'all' || distro.family === selectedFamily;
+    const missingLast = (value, fallback) => (value == null ? fallback : value);
+    const byPopularity = (a, b) =>
+      missingLast(rankFor(a), Number.POSITIVE_INFINITY) -
+        missingLast(rankFor(b), Number.POSITIVE_INFINITY) ||
+      a.name.localeCompare(b.name);
 
-      const matchesFamily = selectedFamily === 'all' || d.family === selectedFamily;
+    let list;
 
-      return matchesSearch && matchesFamily;
-    });
+    if (query) {
+      // A name match wins outright. Only when nothing matches a name do we
+      // look at taglines, packages, desktops and the other descriptive fields.
+      const nameMatches = LINUX_DISTROS.filter(
+        (distro) => byFamily(distro) && distro.name.toLowerCase().includes(query)
+      );
+      if (nameMatches.length) {
+        return [...nameMatches].sort((a, b) => {
+          const aStarts = a.name.toLowerCase().startsWith(query) ? 0 : 1;
+          const bStarts = b.name.toLowerCase().startsWith(query) ? 0 : 1;
+          return aStarts - bStarts || byPopularity(a, b);
+        });
+      }
+
+      list = LINUX_DISTROS.filter(
+        (distro) =>
+          byFamily(distro) &&
+          (distro.tagline.toLowerCase().includes(query) ||
+            distro.packageManager.toLowerCase().includes(query) ||
+            distro.initSystem.toLowerCase().includes(query) ||
+            distro.family.toLowerCase().includes(query) ||
+            (distro.desktopEnvironments || []).some((de) => de.toLowerCase().includes(query)) ||
+            (distro.specialFeatures || []).some((feature) => feature.toLowerCase().includes(query)) ||
+            (distro.primaryUseCases || []).some((useCase) => useCase.toLowerCase().includes(query)))
+      );
+    } else {
+      list = LINUX_DISTROS.filter(byFamily);
+    }
 
     const direction = sortDir === 'asc' ? 1 : -1;
-    const missingLast = (value, fallback) => (value == null ? fallback : value);
 
     if (sortBy === 'alphabetical') {
       return [...list].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     if (sortBy === 'popularity') {
-      return [...list].sort((a, b) => {
-        const ra = missingLast(rankFor(a), Number.POSITIVE_INFINITY);
-        const rb = missingLast(rankFor(b), Number.POSITIVE_INFINITY);
-        return ra - rb || a.name.localeCompare(b.name);
-      });
+      return [...list].sort(byPopularity);
     }
 
     const key = sortBy === 'age' ? 'firstRelease' : 'latestRelease';
@@ -105,6 +121,11 @@
       return (da - db) * direction || a.name.localeCompare(b.name);
     });
   });
+
+  function mediaAspect(distro) {
+    const ratio = Number(distro.screenshotAspect) || 16 / 10;
+    return Math.min(1.8, Math.max(1.35, ratio)).toFixed(3);
+  }
 
   function primaryPackageManager(value) {
     // Card specs are deliberately terse; the full, multi-part value lives in
@@ -276,7 +297,11 @@
           onclick={(event) => handleClick(event, distro)}
           aria-label={`Open the ${distro.name} profile`}
         >
-          <div class="card-media">
+          <div
+            class="card-media"
+            style="aspect-ratio: {mediaAspect(distro)}; --shot-url: url('{distro.screenshotUrl || ''}')"
+          >
+            <span class="card-blur" aria-hidden="true"></span>
             <DistroScreenshot {distro} height={190} compact={true} fit="contain" showName={false} />
             <span class="tier-badge tier-{distro.tier} card-tier">{distro.tier}</span>
           </div>
@@ -665,23 +690,40 @@
 
   .card-media {
     position: relative;
-    aspect-ratio: 16 / 9;
     border-bottom: 1px solid var(--border-color);
-    background-color: var(--image-void);
+    background-color: var(--bg-secondary);
     overflow: hidden;
+  }
+
+  /* Screenshots that do not fill the frame exactly get a soft, blurred copy
+     of themselves behind them rather than dark letterbox bars. */
+  .card-blur {
+    position: absolute;
+    inset: -28px;
+    z-index: 0;
+    background-image: var(--shot-url);
+    background-size: cover;
+    background-position: center;
+    filter: blur(22px) saturate(1.35) brightness(0.78);
+    opacity: 0.9;
+    pointer-events: none;
   }
 
   /* Flush media sits inside the card corners, so it inherits the outer radius. */
   .card-media :global(.screenshot-shell) {
+    position: relative;
+    z-index: 1;
     height: 100%;
     border: 0;
     border-radius: 0;
+    background-color: transparent;
   }
 
   .card-media :global(.screenshot-shell img) {
     height: 100%;
     object-fit: contain;
     object-position: center;
+    background-color: transparent;
   }
 
   .card-tier {
