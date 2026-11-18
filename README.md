@@ -62,7 +62,7 @@ The default first experience is the pinpoint questionnaire: 16 branching questio
 
 The hero uses a ported Wayglim WebGL background, loaded as its own chunk only when the home page mounts. It pauses offscreen and respects reduced motion, with the page background as a fallback when WebGL2 is unavailable.
 
-The welcome page also includes a hardware-first finder. Pick what you will use the computer for (gaming, development, privacy, daily use and more), choose a platform, then select a CPU through a lazy-loaded brand / generation / model cascade and a searchable GPU list. Memory is a searchable list that also accepts a custom value such as `12 GB`. The finder ranks distributions with a plain-language "Runs great" to "Not a good fit" verdict and saves the specs locally. Saved specs then power the same compatibility breakdown on every distro profile. CPU families and the GPU catalog are loaded as separate chunks on demand, so the initial page stays small.
+The welcome page also includes a hardware-first finder. Pick what you will use the computer for (gaming, development, privacy, daily use and more), choose a platform, then select a CPU through a lazy-loaded brand / generation / model cascade and a searchable GPU list. Memory is a searchable list that also accepts a custom value such as `12 GB`. The finder ranks distributions with a plain-language "Runs great" to "Not a good fit" verdict and saves the specs locally. Saved specs then power the same compatibility breakdown on every distro profile. The catalog covers 198 CPUs across Intel, AMD, Apple Silicon and ARM/SBC boards plus 101 GPUs. CPU families and the GPU catalog are loaded as separate chunks on demand, so the initial page stays small.
 
 ---
 

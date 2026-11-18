@@ -16,7 +16,7 @@
 
 <details class="tuning surface" bind:open aria-label="Fine-tune your results">
   <summary>
-    <span class="summary-icon"><Icon name="sliders" size={17} /></span>
+    <Icon name="sliders" size={17} />
     <span class="summary-text">
       <strong>Fine-tune your results</strong>
       <small>Optional. Tell us what matters to you</small>
@@ -111,16 +111,9 @@
     display: none;
   }
 
-  .summary-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 38px;
-    height: 38px;
-    flex-shrink: 0;
+  summary > :global(svg:first-child) {
     color: var(--accent-ink);
-    background-color: var(--accent-soft);
-    border-radius: var(--radius-md);
+    flex-shrink: 0;
   }
 
   .summary-text {

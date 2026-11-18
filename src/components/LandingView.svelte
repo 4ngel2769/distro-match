@@ -43,7 +43,6 @@
     return [...groups.entries()].sort((a, b) => b[1].length - a[1].length);
   });
 
-  let glyph = $derived(kind === 'hub' ? 'grid' : kind === 'family' ? 'layers' : 'tag');
   let kindLabel = $derived(kind === 'hub' ? 'The full catalogue' : kind === 'family' ? 'Family guide' : 'Use case guide');
 </script>
 
@@ -66,7 +65,6 @@
         <span class="meta-note">Grouped by family, with verified screenshots and full profiles</span>
       </div>
     </div>
-    <span class="landing-glyph" aria-hidden="true"><Icon name={glyph} size={34} /></span>
   </header>
 
   <div class="landing-section-head">
@@ -232,20 +230,6 @@
   .meta-note {
     font-size: 0.82rem;
     color: var(--text-muted);
-  }
-
-  .landing-glyph {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 64px;
-    height: 64px;
-    border-radius: var(--radius-md);
-    background-color: var(--card-bg);
-    color: var(--accent-ink);
-    box-shadow: var(--shadow-subtle);
-    position: relative;
-    z-index: 1;
   }
 
   .landing-section-head h2 {
@@ -417,10 +401,6 @@
 
     .landing-header h1 {
       font-size: 1.6rem;
-    }
-
-    .landing-glyph {
-      display: none;
     }
 
     .landing-links {

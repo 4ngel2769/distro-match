@@ -649,10 +649,16 @@ function buildManifest() {
       lang: 'en',
       icons: [
         {
-          src: '/og-image.png',
-          sizes: '1200x630',
+          src: '/favicon.png',
+          sizes: '64x64',
           type: 'image/png',
           purpose: 'any'
+        },
+        {
+          src: '/logo-256.png',
+          sizes: '256x256',
+          type: 'image/png',
+          purpose: 'any maskable'
         }
       ]
     },

@@ -198,7 +198,7 @@
           <ul class="mark-list">
             {#each winner.matchReasons as reason}
               <li>
-                <span class="mark-icon mark-good" aria-hidden="true"><Icon name="check" size={15} /></span>
+                <Icon name="check" size={15} class="mark-good" />
                 <span>{reason}</span>
               </li>
             {/each}
@@ -209,7 +209,7 @@
             <ul class="mark-list">
               {#each winner.tradeoffs as gap}
                 <li>
-                  <span class="mark-icon mark-warn" aria-hidden="true"><Icon name="alert" size={15} /></span>
+                  <Icon name="alert" size={15} class="mark-warn" />
                   <span>{gap}</span>
                 </li>
               {/each}
@@ -732,12 +732,6 @@
     display: flex;
     gap: 10px;
     align-items: flex-start;
-  }
-
-  .mark-icon {
-    display: inline-flex;
-    flex-shrink: 0;
-    padding-top: 2px;
   }
 
   .mark-good { color: var(--accent-green); }

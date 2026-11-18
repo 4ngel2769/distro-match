@@ -75,7 +75,7 @@
 {#if !distro}
   <div class="page-container">
     <div class="not-found">
-      <div class="not-found-mark"><Icon name="alert" size={18} /></div>
+      <Icon name="alert" size={18} class="not-found-mark" />
       <div class="eyebrow">404: UNKNOWN DISTRIBUTION</div>
       <h1>This profile does not exist</h1>
       <p>The distribution may have been renamed or the link is incomplete.</p>
@@ -672,7 +672,6 @@
   }
 
   .not-found-mark {
-    display: inline-flex;
     color: var(--accent-red);
     margin-bottom: var(--space-3);
   }

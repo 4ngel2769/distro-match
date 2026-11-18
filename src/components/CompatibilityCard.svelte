@@ -1,28 +1,46 @@
 <script>
   import { onMount } from 'svelte';
   import Icon from './Icon.svelte';
-  import { loadSpecs } from '../lib/specState.js';
+  import { loadSpecs, getActivePlatform, setActivePlatform } from '../lib/specState.js';
   import { compatibilityFor, describeSpecs } from '../lib/specMatching.js';
+  import { PLATFORMS } from '../data/specOptions.js';
 
   let { distro, onNavigate = () => {} } = $props();
 
   let specs = $state(null);
+  let platform = $state('laptop');
 
   onMount(() => {
-    specs = loadSpecs();
+    platform = getActivePlatform();
+    specs = loadSpecs(platform);
   });
+
+  function changePlatform(next) {
+    platform = next;
+    setActivePlatform(next);
+    specs = loadSpecs(next);
+  }
 
   let result = $derived(specs && distro ? compatibilityFor(distro, specs) : null);
 </script>
 
 <section class="compat-card" aria-labelledby="compat-title">
   <div class="compat-head">
-    <span class="compat-icon" aria-hidden="true"><Icon name="check" size={18} /></span>
+    <Icon name="check" size={17} />
     <div>
       <h2 id="compat-title">Will my computer run this well?</h2>
       <p>{specs ? 'Checked against the specs you saved.' : 'Add your specs once and check every distribution.'}</p>
     </div>
   </div>
+
+  <label class="platform-picker">
+    <span>Using specs for</span>
+    <select value={platform} onchange={(event) => changePlatform(event.currentTarget.value)}>
+      {#each PLATFORMS as item}
+        <option value={item.id}>{item.label}</option>
+      {/each}
+    </select>
+  </label>
 
   {#if !specs}
     <div class="compat-empty">
@@ -73,18 +91,34 @@
   .compat-head {
     display: flex;
     align-items: flex-start;
-    gap: var(--space-3);
+    gap: var(--space-2);
   }
 
-  .compat-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 34px;
-    height: 34px;
-    border-radius: var(--radius-md);
-    background-color: var(--accent-soft);
+  .compat-head :global(svg) {
     color: var(--accent-ink);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .platform-picker {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .platform-picker select {
+    flex: 1;
+    min-height: 34px;
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    font-size: 0.8rem;
+    font-weight: 600;
   }
 
   .compat-head h2 {

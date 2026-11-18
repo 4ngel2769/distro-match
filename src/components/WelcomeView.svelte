@@ -160,9 +160,9 @@
           real distributions to how you actually use a machine and show you why each one fits.
         </p>
         <div class="hero-meta">
-          <span class="meta-chip"><Icon name="check" size={13} /> About 3 minutes</span>
-          <span class="meta-chip"><Icon name="check" size={13} /> No sign-up or tracking</span>
-          <span class="meta-chip"><Icon name="check" size={13} /> {LINUX_DISTROS.length} real distros</span>
+          <span class="meta-chip">About 3 minutes</span>
+          <span class="meta-chip">No sign-up or tracking</span>
+          <span class="meta-chip">{LINUX_DISTROS.length} real distros</span>
         </div>
       </div>
 
@@ -196,7 +196,7 @@
 
     <div class="path-options">
       <button class="path-option featured" onclick={onStartQuiz}>
-        <span class="path-icon"><Icon name="list" size={19} /></span>
+        <Icon name="list" size={19} />
         <span class="path-text">
           <strong>Take the finder quiz</strong>
           <small>A short interview that adapts to your answers</small>
@@ -204,7 +204,7 @@
         <Icon name="arrow-right" size={16} />
       </button>
       <button class="path-option" onclick={scrollToSpecs}>
-        <span class="path-icon"><Icon name="layers" size={19} /></span>
+        <Icon name="layers" size={19} />
         <span class="path-text">
           <strong>Use my computer specs</strong>
           <small>Match by hardware, needs and platform</small>
@@ -212,7 +212,7 @@
         <Icon name="arrow-right" size={16} />
       </button>
       <button class="path-option" onclick={() => onNavigate('directory')}>
-        <span class="path-icon"><Icon name="grid" size={19} /></span>
+        <Icon name="grid" size={19} />
         <span class="path-text">
           <strong>Browse the directory</strong>
           <small>Search and compare all {LINUX_DISTROS.length} distros</small>
@@ -223,7 +223,7 @@
 
     <div class="mode-picker">
       <div class="mode-picker-head">
-        <span class="mode-picker-icon"><Icon name="sliders" size={16} /></span>
+        <Icon name="sliders" size={17} />
         <div>
           <strong>Quiz mode: newcomer or expert?</strong>
           <span>You can change this at any point before you finish.</span>
@@ -422,15 +422,9 @@
     background-color: var(--accent-soft);
   }
 
-  .path-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 38px;
-    height: 38px;
-    border-radius: var(--radius-sm);
-    background-color: var(--card-bg);
+  .path-option :global(svg:last-child) {
     color: var(--accent-ink);
+    flex-shrink: 0;
   }
 
   .path-text {
@@ -470,15 +464,9 @@
     flex: 1 1 280px;
   }
 
-  .mode-picker-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 34px;
-    height: 34px;
-    border-radius: var(--radius-sm);
-    background-color: var(--accent-soft);
+  .mode-picker-head :global(svg) {
     color: var(--accent-ink);
+    flex-shrink: 0;
   }
 
   .mode-picker-head strong,
@@ -589,10 +577,6 @@
     border: 1px solid var(--border-color);
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow-subtle);
-  }
-
-  .meta-chip :global(svg) {
-    color: var(--accent-color);
   }
 
   .lead {

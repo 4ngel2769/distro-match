@@ -55,6 +55,40 @@ describe('compatibilityFor', () => {
   });
 });
 
+describe('platform and Apple Silicon constraints', () => {
+  const appleSpecs = {
+    needs: ['daily'],
+    platform: 'laptop',
+    cpu: { id: 'apple-m1', name: 'Apple M1', brand: 'apple', generation: 'm1', arch: 'arm64', score: 60, cores: 8, igpu: 'Apple 8-core GPU' },
+    gpu: { id: 'integrated', name: 'Apple 8-core GPU', brand: 'Integrated', score: 58, vram: 0, proprietary: false },
+    ramGB: 16
+  };
+
+  test('blocks an Apple chip on a distro without a Mac build', () => {
+    const result = compatibilityFor(DISTRO_MAP['linux-mint'], appleSpecs);
+    expect(result.blockers.join(' ')).toContain('Apple Silicon');
+  });
+
+  test('accepts an Apple chip on a distro with a Mac build', () => {
+    const result = compatibilityFor(DISTRO_MAP['ubuntu'], appleSpecs);
+    expect(result.notes.join(' ')).toContain('Apple Silicon');
+    expect(result.blockers).toHaveLength(0);
+  });
+
+  test('rejects a handheld with an Apple chip', () => {
+    const result = compatibilityFor(DISTRO_MAP['bazzite'], { ...appleSpecs, platform: 'handheld' });
+    expect(result.blockers.join(' ')).toContain('Handheld');
+  });
+
+  test('rejects an x86 processor on an ARM board', () => {
+    const result = compatibilityFor(DISTRO_MAP['raspberry-pi-os'], {
+      ...modernSpecs,
+      platform: 'arm-board'
+    });
+    expect(result.blockers.join(' ')).toContain('ARM board');
+  });
+});
+
 describe('recommendBySpecs', () => {
   test('returns five distinct eligible distros with match percentages', () => {
     const picks = recommendBySpecs(modernSpecs, 5);

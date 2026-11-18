@@ -33,7 +33,7 @@
 
       <h2>6. Saved Specs and Theme</h2>
       <p>
-        If you use the spec finder, the hardware details you enter are stored only in your browser's local storage so compatibility checks can appear on distribution pages. Your theme choice is kept in a small cookie. Both stay on your device and are never uploaded. You can remove them at any time with the clear button on the Privacy page, or by clearing your browser's local storage and cookies.
+        If you use the spec finder, the hardware details you enter are stored only in your browser's local storage, with a separate set for each platform, so compatibility checks can appear on distribution pages. Your theme choice is kept in a small cookie. Both stay on your device and are never uploaded. You can remove them at any time with the clear button on the Privacy page, or by clearing your browser's local storage and cookies.
       </p>
     </div>
   </article>

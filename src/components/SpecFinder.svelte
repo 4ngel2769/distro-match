@@ -12,7 +12,14 @@
     loadGpus,
     igpuProfile
   } from '../data/hardware/index.js';
-  import { loadSpecs, saveSpecs, clearSpecs } from '../lib/specState.js';
+  import {
+    loadSpecs,
+    saveSpecs,
+    clearSpecs,
+    getActivePlatform,
+    setActivePlatform,
+    hasSpecsFor
+  } from '../lib/specState.js';
   import { recommendBySpecs, describeSpecs } from '../lib/specMatching.js';
 
   let { onOpenDistro = () => {} } = $props();
@@ -21,6 +28,8 @@
   let results = $state([]);
   let showResults = $state(false);
   let error = $state('');
+  let platformMessage = $state('');
+  let savedPlatforms = $state([]);
 
   let needs = $state([]);
   let platform = $state('laptop');
@@ -118,18 +127,44 @@
     });
   }
 
-  onMount(() => {
-    const stored = loadSpecs();
-    if (!stored) return;
+  function resetForm() {
+    needs = [];
+    cpuBrand = '';
+    cpuGeneration = '';
+    cpuId = '';
+    gpuId = '';
+    ramValue = '';
+    results = [];
+    showResults = false;
+    error = '';
+  }
+
+  function refreshSavedPlatforms() {
+    savedPlatforms = PLATFORMS.filter((item) => hasSpecsFor(item.id)).map((item) => item.id);
+  }
+
+  function applyStoredSpecs(targetPlatform) {
+    resetForm();
+    refreshSavedPlatforms();
+    const stored = loadSpecs(targetPlatform);
     savedSpecs = stored;
+    if (!stored) {
+      platformMessage = `No specs saved for ${targetPlatform} yet. Add them below and they will be kept separately.`;
+      return;
+    }
     needs = Array.isArray(stored.needs) ? [...stored.needs] : [];
-    platform = stored.platform || 'laptop';
     ramValue = String(stored.ramGB || '');
     cpuBrand = stored.cpu?.brand || '';
     cpuGeneration = stored.cpu?.generation || '';
     cpuId = stored.cpu?.id || '';
     gpuId = stored.gpu?.id || '';
-    if (gpuId) ensureGpus();
+    platformMessage = `Loaded your saved ${targetPlatform} specs.`;
+    if (gpuId && gpuId !== 'integrated') ensureGpus();
+  }
+
+  onMount(() => {
+    platform = getActivePlatform();
+    applyStoredSpecs(platform);
   });
 
   function toggleNeed(id) {
@@ -137,14 +172,10 @@
   }
 
   function setPlatform(next) {
+    if (next === platform) return;
     platform = next;
-    const allowed = new Set(brandOptions.map((brand) => brand.value));
-    if (cpuBrand && !allowed.has(cpuBrand)) {
-      cpuBrand = '';
-      cpuGeneration = '';
-      cpuId = '';
-    }
-    if (gpuId === 'integrated') gpuId = '';
+    setActivePlatform(next);
+    applyStoredSpecs(next);
   }
 
   function handleBrandChange() {
@@ -229,24 +260,15 @@
     };
 
     saveSpecs(specs);
+    refreshSavedPlatforms();
     savedSpecs = specs;
     results = recommendBySpecs(specs, 5);
     showResults = true;
   }
 
   function handleClear() {
-    clearSpecs();
-    savedSpecs = null;
-    results = [];
-    showResults = false;
-    needs = [];
-    platform = 'laptop';
-    cpuBrand = '';
-    cpuGeneration = '';
-    cpuId = '';
-    gpuId = '';
-    ramValue = '';
-    error = '';
+    clearSpecs(platform);
+    applyStoredSpecs(platform);
   }
 
   function openProfile(event, id) {
@@ -265,7 +287,6 @@
         fit and tell you how well each one should run.
       </p>
     </div>
-    <span class="spec-icon" aria-hidden="true"><Icon name="layers" size={22} /></span>
   </div>
 
   <div class="spec-form">
@@ -303,6 +324,18 @@
         <p class="platform-note">ARM boards only list ARM processors. Apple M-series chips are not board CPUs.</p>
       {:else if platform === 'handheld'}
         <p class="platform-note">Handhelds use x86 processors from Intel or AMD, not Apple M-series chips.</p>
+      {/if}
+      {#if savedPlatforms.length}
+        <p class="saved-platforms">
+          Saved for:
+          {#each savedPlatforms as saved}
+            <button
+              type="button"
+              class:active={saved === platform}
+              onclick={() => setPlatform(saved)}
+            >{PLATFORMS.find((item) => item.id === saved)?.label || saved}</button>
+          {/each}
+        </p>
       {/if}
     </div>
 
@@ -358,7 +391,7 @@
         Show my matches <Icon name="arrow-right" size={15} />
       </button>
       {#if savedSpecs}
-        <button class="text-btn" onclick={handleClear}>Clear saved specs</button>
+        <button class="text-btn" onclick={handleClear}>Forget {platform} specs</button>
       {/if}
       {#if error}
         <p class="spec-error" role="alert">{error}</p>
@@ -366,8 +399,11 @@
     </div>
   </div>
 
+  {#if platformMessage}
+    <p class="saved-note">{platformMessage}</p>
+  {/if}
   {#if savedSpecs && describeSpecs(savedSpecs)}
-    <p class="saved-note">Saved specs: {describeSpecs(savedSpecs)}</p>
+    <p class="saved-note"><strong>{platform}</strong> specs: {describeSpecs(savedSpecs)}</p>
   {/if}
 
   {#if showResults}
@@ -438,17 +474,6 @@
     margin-top: 6px;
   }
 
-  .spec-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 40px;
-    height: 40px;
-    border-radius: var(--radius-md);
-    background-color: var(--accent-soft);
-    color: var(--accent-ink);
-  }
-
   .spec-form {
     margin-top: var(--space-5);
   }
@@ -475,6 +500,32 @@
     margin-top: var(--space-2);
     font-size: 0.78rem;
     color: var(--text-muted);
+  }
+
+  .saved-platforms {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--space-2);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .saved-platforms button {
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    color: var(--text-muted);
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+  }
+
+  .saved-platforms button.active {
+    border-color: var(--accent-color);
+    background-color: var(--accent-soft);
+    color: var(--accent-ink);
   }
 
   .choice-chip {
