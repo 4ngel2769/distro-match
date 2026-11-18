@@ -91,13 +91,15 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 9px;
+    justify-self: start;
     font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--accent-tertiary);
-    background-color: var(--accent-tertiary-soft);
-    border-radius: var(--radius-pill);
+    font-weight: 600;
+    color: var(--text-muted);
     white-space: nowrap;
+  }
+
+  .privacy-badge :global(svg) {
+    color: var(--accent-tertiary);
   }
 
   .footer-copyright {

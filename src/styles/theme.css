@@ -29,8 +29,8 @@
   --accent-ink: #4A3AC9;
   --accent-soft: #E4DFFF;
   --accent-wash: rgba(91, 75, 224, 0.10);
-  --accent-tertiary: #B26A12;
-  --accent-tertiary-soft: #FBEBD4;
+  --accent-tertiary: #8C6B3F;
+  --accent-tertiary-soft: #F2EADF;
 
   /* Semantic states: friendly, legible, never decorative */
   --accent-green: #1E8E63;
@@ -481,7 +481,7 @@ button:disabled {
 }
 
 .main-wrapper.main-connected {
-  padding-bottom: 0;
+  padding-bottom: var(--space-6);
 }
 
 /* ---------- Motion: one authored entrance, used on view changes ---------- */
@@ -683,14 +683,12 @@ button:disabled {
   max-width: 1160px;
   margin: 0 auto;
   border: 1px solid var(--border-color);
-  border-top: 0;
   border-radius: 0;
   padding-top: var(--space-6);
 }
 
-.main-connected .welcome {
-  border-radius: 0;
-  border-bottom: 0;
+body main.main-connected .welcome {
+  border-radius: var(--section-radius);
 }
 
 .footer-container {

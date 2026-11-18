@@ -270,8 +270,8 @@ distance.
 - **Indigo** (`#5B4BE0` light, `#A394FF` dark): primary buttons, active tabs and pills,
   focus rings. It appears where something can be done or has been chosen. It never acts as a
   background wash on static panels.
-- **Amber** (`#B26A12` light, `#F2B45E` dark): the complementary tertiary, used only for
-  quiet privacy and reassurance accents such as the footer's "No trackers" badge.
+- **Sand** (`#8C6B3F` light, `#C9A77A` dark): the complementary tertiary, used sparingly
+  for quiet reassurance accents such as the icon beside the footer's "No trackers" note.
 
 ### Neutrals
 - Light: Paper `#F7F6F3`, surface white, secondary `#EFEDE8`, tertiary `#E7E4DD`.

@@ -5,7 +5,7 @@
   "extensions": {
     "colorMeta": {
       "accent": { "role": "primary", "displayName": "Indigo", "tonalRamp": ["#EEEBFF", "#C5B9FF", "#A394FF", "#6C5CE7", "#5B4BE0", "#4938CF"] },
-      "accentTertiary": { "role": "complementary", "displayName": "Amber", "tonalRamp": ["#FBEBD4", "#F2B45E", "#B26A12"] },
+      "accentTertiary": { "role": "complementary", "displayName": "Sand", "tonalRamp": ["#F2EADF", "#C9A77A", "#8C6B3F"] },
       "paper": { "role": "neutral", "displayName": "Warm Stone", "tonalRamp": ["#FFFFFF", "#F7F6F3", "#EFEDE8", "#E7E4DD", "#E5E2DC"] },
       "graphite": { "role": "neutral", "displayName": "Warm Graphite", "tonalRamp": ["#262530", "#1D1C24", "#1F1E27", "#16151B", "#100F15"] }
     },
