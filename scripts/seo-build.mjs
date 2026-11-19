@@ -85,7 +85,7 @@ const KEYWORDS = [
 const HOME_TITLE =
   'LinuxMatch: Find the Best Linux Distribution for You (116+ Distros Compared)';
 const HOME_DESCRIPTION =
-  'LinuxMatch is a free, private Linux distribution finder. Take a short adaptive quiz or enter your CPU, GPU and RAM to see which of 116+ distros fit, with a clear "Will my computer run this well?" verdict, match reasons, verified screenshots and official links.';
+  'LinuxMatch is a free, private Linux distribution finder. Take a short adaptive quiz or enter your CPU, GPU and RAM to see which of 116+ distros fit, with a clear compatibility verdict and the reasons behind every match.';
 
 function abs(path) {
   const clean = path === '/' ? '' : path.replace(/\/+$/, '');
@@ -109,7 +109,9 @@ const ORGANIZATION = {
   name: SITE.name,
   url: SITE.primary,
   logo: `${SITE.primary}/og-image.png`,
-  sameAs: [SITE.mirror, 'https://adev0.eu']
+  // Do not link to the personal site here: it declares an "Angel Capra"
+  // site name, and sameAs merges this Organization with that identity.
+  sameAs: [SITE.mirror]
 };
 
 const WEBSITE = {
